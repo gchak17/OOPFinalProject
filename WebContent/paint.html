@@ -3,6 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>PaintPage</title>
+<link href="paint.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<script type="text/javascript">
@@ -87,29 +88,30 @@
         }
     }
     </script>
+    
     <body onload="init()">
-    	<div style="position:absolute;top:5%;left:21%;">painter canvas:</div>
-        <canvas id="can" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
+        <div id="paintercanvastitle">painter canvas</div>
+        <canvas id="can" width="400" height="400"></canvas>
 
-        <div style="position:absolute;top:80%;left:10%;">choose color:</div>
-        <div style="position:absolute;top:83%;left:10%;width:10px;height:10px;background:green;" id="green" onclick="color(this)"></div>
-        <div style="position:absolute;top:83%;left:11%;width:10px;height:10px;background:blue;" id="blue" onclick="color(this)"></div>
-        <div style="position:absolute;top:83%;left:12%;width:10px;height:10px;background:red;" id="red" onclick="color(this)"></div>
-        <div style="position:absolute;top:85%;left:10%;width:10px;height:10px;background:yellow;" id="yellow" onclick="color(this)"></div>
-        <div style="position:absolute;top:85%;left:11%;width:10px;height:10px;background:orange;" id="orange" onclick="color(this)"></div>
-        <div style="position:absolute;top:85%;left:12%;width:10px;height:10px;background:black;" id="black" onclick="color(this)"></div>
-        <div style="position:absolute;top:83%;left:13%;width:10px;height:10px;background:gray;" id="gray" onclick="color(this)"></div>
-        <div style="position:absolute;top:85%;left:13%;width:10px;height:10px;background:purple;" id="purple" onclick="color(this)"></div>        
-        <div style="position:absolute;top:83%;left:14%;width:10px;height:10px;background:brown;" id="brown" onclick="color(this)"></div>
-        <div style="position:absolute;top:85%;left:14%;width:10px;height:10px;background:aqua;" id="aqua" onclick="color(this)"></div>
+        <div id="choosecolor">choose color</div>
+        <div id="green" onclick="color(this)"></div>
+        <div id="blue" onclick="color(this)"></div>
+        <div id="red" onclick="color(this)"></div>
+        <div id="yellow" onclick="color(this)"></div>
+        <div id="orange" onclick="color(this)"></div>
+        <div id="black" onclick="color(this)"></div>
+        <div id="gray" onclick="color(this)"></div>
+        <div id="purple" onclick="color(this)"></div>
+        <div id="brown" onclick="color(this)"></div>
+        <div id="aqua" onclick="color(this)"></div>
         
-        <div style="position:absolute;top:80%;left:18%;">get eraser:</div>
-        <div style="position:absolute;top:83%;left:18%;width:10px;height:10px;background:white;border:1px solid;" id="white" onclick="color(this)"></div>
+        <div id="eraser">get eraser:</div>
+        <div id="white" onclick="color(this)"></div>
 
-        <div style="position:absolute;top:5%;left:63%;">guesser canvas:</div>
-        <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
+        <div id="guessercanvastitle">guesser canvas:</div>
+        <img id="canvasimg">
 
-        <input type="button" value="clear" id="clr" size="23" onclick="clear()" style="position:absolute;top:76%;left:10%;">
+        <input type="button" value="clear" id="clr" size="23" onclick="clear()">
     </body>
 </body>
 </html>
