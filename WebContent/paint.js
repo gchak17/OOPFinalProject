@@ -1,14 +1,16 @@
-var canvas, ctx, flag = false,
-	prevX = 0,
-	currX = 0,
+var canvas, 
+    ctx, 
+    flag = false,
+    prevX = 0,
+    currX = 0,
     prevY = 0,
     currY = 0,
-    dot_flag = false;
-
-var x = "black", y = 2;
+    dot_flag = false,
+    currCol = "black", 
+    currWidth = 2;
 
 function init() {
-    canvas = document.getElementById('can');
+    canvas = document.getElementById('paintercanvas');
     ctx = canvas.getContext("2d");
     w = canvas.width;
     h = canvas.height;
@@ -20,16 +22,16 @@ function init() {
 }
 
 function color(obj) {
-	y = (obj.id == "white") ? 14 : 2
-	x = obj.id;
+    currWidth = (obj.id == "white") ? 14 : 2
+    currCol = obj.id;
 }
 
 function draw() {
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);
     ctx.lineTo(currX, currY);
-    ctx.strokeStyle = x;
-    ctx.lineWidth = y;
+    ctx.strokeStyle = currCol;
+    ctx.lineWidth = currWidth;
     ctx.stroke();
     ctx.closePath();
     send();
@@ -58,7 +60,7 @@ function findxy(res, e) {
         dot_flag = true;
         if (dot_flag) {
             ctx.beginPath();
-            ctx.fillStyle = x;
+            ctx.fillStyle = currCol;
             ctx.fillRect(currX, currY, 2, 2);
             ctx.closePath();
             dot_flag = false;
