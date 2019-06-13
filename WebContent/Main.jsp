@@ -4,6 +4,8 @@
 <%@ page import="nonDefaultPackage.Account"%>
 <%@	page import="java.util.ArrayList"%>
 <%@	page import="java.util.Iterator"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +16,7 @@
 
 	<% AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		Account currAccount = accountData.getAccount(request.getParameter("userName"), request.getParameter("password"));
-		Iterator<Account> friends = currAccount.getFriendsList();
+		List<Account> friends = accountData.getFriendsFor(currAccount.getUsername());
 	%>
 
 	<img src="<%=currAccount.getAvatar() %>">
@@ -28,9 +30,9 @@
 	</form>
 
 	<ul>
-		<% while(friends.hasNext()) {
+		<% for(int i = 0; i < friends.size(); i++){
 			%>
-			<li>"<%= friends.next().getUsername() %>"</li>
+			<li>"<%= friends.get(i).getUsername() %>"</li>
 			<%
 		}%>
 	  

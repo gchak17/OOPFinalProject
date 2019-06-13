@@ -29,7 +29,7 @@ public class Listener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent arg0)  {
-    	AccountData accountData = new AccountData();
+    	AccountData accountData = AccountData.getInstance();
     	arg0.getServletContext().setAttribute("accountData", accountData);
     }
 	
