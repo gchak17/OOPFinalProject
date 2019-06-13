@@ -16,8 +16,15 @@
 		Password: <input type="password" name="password"/><br>
 		<select name="avatar">
 			<!-- avatar images must be shown  -->
-			<option value="./avatars/1.png">avatar1</option>
-			<option value="./avatars/2.png">avatar2</option>
+			<option value="1.png">avatar1</option>
+			<option value="2.png">avatar2</option>
+			<option value="3.png">avatar3</option>
+			<option value="4.png">avatar4</option>
+			<option value="5.png">avatar5</option>
+			<option value="6.png">avatar6</option>
+			<option value="7.png">avatar7</option>
+			<option value="8.png">avatar8</option>
+			<option value="9.png">avatar9</option>
 		</select> <br>
 		<input type="submit" value="Sign Up">
 	</form>
