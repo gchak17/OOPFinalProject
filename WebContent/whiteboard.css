@@ -1,16 +1,10 @@
 @charset "ISO-8859-1";
 
-#paintercanvas{
+#myCanvas{
 	position:absolute;
 	top:10%;
 	left:10%;
 	border:2px solid;
-}
-
-#paintercanvastitle{
-	position:absolute;
-	top:5%;
-	left:21%;
 }
 
 #choosecolor{
@@ -123,19 +117,6 @@
 	height:10px;
 	background:white;
 	border:1px solid;
-}
-
-#guessercanvastitle{
-	position:absolute;
-	top:5%;
-	left:63%;"
-}
-
-#canvasimg{
-	position:absolute;
-	top:10%;
-	left:52%;
-	display:none;
 }
 
 #clr{

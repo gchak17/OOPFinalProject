@@ -35,13 +35,4 @@ public class Whiteboard {
             }
         }
     }
-
-    @OnMessage
-    public void broadcastSnapshot(ByteBuffer data, Session session) throws IOException {
-        for (Session peer : peers) {
-            if (!peer.equals(session)) {
-                peer.getBasicRemote().sendBinary(data);
-            }
-        }
-    }
 }

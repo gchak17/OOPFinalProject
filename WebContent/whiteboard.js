@@ -1,36 +1,52 @@
 var canvas = document.getElementById("myCanvas");
 var context = canvas.getContext("2d");
-canvas.addEventListener("click", defineImage, false);
-            
-function getCurrentPos(evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-    };
-}
-            
-function defineImage(evt) {
-    var currentPos = getCurrentPos(evt);
+var offsetLeft = canvas.offsetLeft;
+var offsetTop  = canvas.offsetTop;
+
+var drawing = false;
+var lastPos = null;
+
+listen(canvas, 'mousedown', function(event) {
+    drawing = true;
+    lastPos = getPos(event);
+});
+
+listen(canvas, 'mousemove', function(event) {
+    if (!drawing) {
+        return;
+    }
+    
+    var p = getPos(event);
     
     var json = JSON.stringify({
-        "shape": "circle",
-        "color": "black",
-        "coords": {
-            "x": currentPos.x,
-            "y": currentPos.y
-        }
+        "start": { "x": lastPos[0], "y": lastPos[1]},
+	    "end": { "x": p[0], "y": p[1]}
     });
     
     drawImageText(json);
     sendText(json);
-}
-
+    
+    lastPos = p;
+});
 
 function drawImageText(image) {
     var json = JSON.parse(image);
-    context.fillStyle = json.color;
     context.beginPath();
-    context.arc(json.coords.x, json.coords.y, 5, 0, 2 * Math.PI, false);
-    context.fill();
+    context.moveTo(json.start.x, json.start.y);
+    context.lineTo(json.end.x, json.end.y);
+    context.stroke();
+}
+
+listen(document, 'mouseup', function(event) {
+    drawing = false;
+});
+
+function listen(elem, type, listener) {
+    elem.addEventListener(type, listener, false);
+}
+
+function getPos(event) {
+    var x = event.clientX - offsetLeft;
+    var y = event.clientY - offsetTop;
+    return [x, y];
 }
