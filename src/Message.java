@@ -1,4 +1,3 @@
-package room;
 
 import java.io.StringWriter;
 import javax.json.Json;

@@ -16,12 +16,11 @@ var offsetLeft = canvas.offsetLeft;
 var offsetTop  = canvas.offsetTop;
 
 var drawing = false;
+var isArtist = false;
 var lastPos = null;
 
 var currCol = "black";
 var currWidth = 4;
-
-var isArtist = false;
 
 listen(canvas, 'mousedown', function(event) {
     drawing = true;
@@ -29,7 +28,7 @@ listen(canvas, 'mousedown', function(event) {
 });
 
 listen(canvas, 'mousemove', function(event) {
-    if (!drawing) {
+    if (!drawing || !isArtist) {
         return;
     }
     
@@ -48,6 +47,10 @@ listen(canvas, 'mousemove', function(event) {
     
     lastPos = p;
 });
+
+function changeRole(){
+	isArtist = !isArtist;
+}
 
 function color(obj){
 	currCol = obj.id;

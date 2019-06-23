@@ -1,4 +1,3 @@
-package room;
 
 import java.io.StringReader;
 import javax.json.Json;
