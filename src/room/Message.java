@@ -4,10 +4,10 @@ import java.io.StringWriter;
 import javax.json.Json;
 import javax.json.JsonObject;
 
-public class Figure {
+public class Message {
     private JsonObject json;
 
-    public Figure(JsonObject json) {
+    public Message(JsonObject json) {
         this.json = json;
     }
     
