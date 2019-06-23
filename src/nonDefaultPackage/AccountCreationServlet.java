@@ -39,11 +39,12 @@ public class AccountCreationServlet extends HttpServlet {
 		String userName = request.getParameter("userName");
 		String password = request.getParameter("password");
 		String avatar = request.getParameter("avatar");
+		System.out.println(request.getParameter("avatar"));
 		if(accountData.getAccount(userName, password) == null) {
 			accountData.addAccount(userName, password, avatar);
 			request.getRequestDispatcher("Main.jsp").forward(request, response);
 		} else {
-			request.getRequestDispatcher("NameInUse.jsp").forward(request, response);
+			request.getRequestDispatcher("NameInUse.html").forward(request, response);
 		}
 	}
 

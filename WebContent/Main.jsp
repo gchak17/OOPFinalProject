@@ -21,6 +21,10 @@
 
 	<img src="<%=currAccount.getAvatar() %>">
 	
+	<form action="DeleteAccountServlet" method="post">
+		<input type = "submit" value = "Delete Account">
+	</form>
+	
 	<form action="CreateRoom" method="post">
 		<input type="submit" value="Create Room">
 	</form>
@@ -28,6 +32,8 @@
 	<form action="GameServlet" method="post">
 		<input type="submit" value="Join Room">
 	</form>
+	
+	
 
 	<ul>
 		<% for(int i = 0; i < friends.size(); i++){

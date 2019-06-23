@@ -1,5 +1,7 @@
 package nonDefaultPackage;
 
+import java.sql.SQLException;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -29,8 +31,15 @@ public class Listener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent arg0)  {
-    	AccountData accountData = AccountData.getInstance();
-    	arg0.getServletContext().setAttribute("accountData", accountData);
+    	AccountData accountData;
+		try {
+			accountData = AccountData.getInstance();
+			arg0.getServletContext().setAttribute("accountData", accountData);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     }
 	
 }

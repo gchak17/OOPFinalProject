@@ -21,7 +21,7 @@ public class AccountData {
 	private static AccountData manager;
 	
 	
-	private AccountData() {
+	private AccountData() throws SQLException{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + MyDBInfo.MYSQL_DATABASE_NAME,
@@ -32,7 +32,7 @@ public class AccountData {
 	}
 	
 	
-	public static AccountData getInstance() {
+	public static AccountData getInstance() throws SQLException {
 		if(manager == null) {
 			synchronized(AccountData.class) {
 				if(manager == null) {
@@ -88,6 +88,26 @@ public class AccountData {
 		}
 		
 		return 1;
+	}
+	
+	
+	/*
+	 * 
+	 */
+	public boolean removeAccount(String username) {
+		try {
+			Statement st = conn.createStatement();
+			int res = st.executeUpdate("delete from accounts where user_name = '" + username + "';");
+			
+			st.close();
+			System.out.println(username);
+			return res != 0;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		
 	}
 	
 	
@@ -157,4 +177,5 @@ public class AccountData {
 		}
 		return count;
 	}
+
 }
