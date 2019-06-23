@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	<meta charset="ISO-8859-1">
-	<title>Login Page</title>
-	</head>
-	<body>
-		username:<br>
-	  	<input type="text" name="username" value="">
-	  	<br>
-	  	password:<br>
-	  	<input type="text" name="password" value="">
-	  	<br><br>
-	  	<input type="submit" value="Login">
-	  	<input type="submit" value="Sign Up">
-	</body>
+<head>
+	<meta charset="UTF-8">
+	<title>Welcome</title>
+</head>
+<body>
+	<h1>Welcome to Our Game!</h1>
+	
+	<p>Please log in.</p>
+	
+    <form action="LoginServlet" method="post">
+		User Name: <input type="text" name="userName"/><br>
+		Password: <input type="password" name="password"/>
+		<input type="submit" value="Login">
+	</form>
+    
+    <a href="CreateAccount.jsp">Create new Account</a>
+</body>
 </html>
