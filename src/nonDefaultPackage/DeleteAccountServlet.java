@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class DeleteAccountServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/DeleteAccountServlet")
+public class DeleteAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public DeleteAccountServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,16 +36,12 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		String userName = request.getParameter("userName");
-		String password = request.getParameter("password");
-//		System.out.println(userName + " " + password);
-		if(accountData.getAccount(userName, password) != null) {
-			request.getSession().setAttribute("username", userName);
-			request.getSession().setAttribute("password", password);
-			request.getRequestDispatcher("Main.jsp").forward(request, response);
-		} else {
-			request.getRequestDispatcher("TryAgain.html").forward(request, response);;
+		if(!accountData.removeAccount((String)request.getSession().getAttribute("username"))) {
+			System.out.println("an attempt to delete " + (String)request.getSession().getAttribute("username") + "was unsuccessful");
+			
 		}
+		request.getRequestDispatcher("Login.html").forward(request, response);
+		
 	}
 
 }
