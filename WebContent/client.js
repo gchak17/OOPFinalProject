@@ -23,12 +23,12 @@ var currCol = "black";
 var currWidth = 4;
 
 listen(canvas, 'mousedown', function(event) {
-    drawing = true;
+    drawing = isArtist;
     lastPos = getPos(event);
 });
 
 listen(canvas, 'mousemove', function(event) {
-    if (!drawing /*|| !isArtist*/) {
+    if (!drawing) {
         return;
     }
     
