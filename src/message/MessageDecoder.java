@@ -1,9 +1,6 @@
 package message;
 
-import java.io.StringReader;
-import javax.json.Json;
-import javax.json.JsonException;
-import javax.json.JsonObject;
+import org.json.*;
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
@@ -11,16 +8,16 @@ import javax.websocket.EndpointConfig;
 public class MessageDecoder implements Decoder.Text<Message> {
     @Override
     public Message decode(String string) throws DecodeException {
-        JsonObject jsonObject = Json.createReader(new StringReader(string)).readObject();
-        return new Message(jsonObject);
+        JSONObject json = new JSONObject(string);
+        return new Message(json);
     }
 
     @Override
     public boolean willDecode(String string) {
         try {
-            Json.createReader(new StringReader(string)).readObject();
+        	new JSONObject(string).toString();
             return true;
-        } catch (JsonException ex) {
+        } catch (JSONException ex) {
             return false;
         }
     }

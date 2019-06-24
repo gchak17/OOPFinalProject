@@ -6,8 +6,8 @@ import javax.websocket.EndpointConfig;
 
 public class MessageEncoder implements Encoder.Text<Message> {
     @Override
-    public String encode(Message figure) throws EncodeException {
-        return figure.getJson().toString();
+    public String encode(Message message) throws EncodeException {
+        return message.getJson().toString();
     }
 
     @Override

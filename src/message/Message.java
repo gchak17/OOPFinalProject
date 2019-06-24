@@ -1,28 +1,24 @@
 package message;
 
-import java.io.StringWriter;
-import javax.json.Json;
-import javax.json.JsonObject;
+import org.json.*;
 
 public class Message {
-    private JsonObject json;
+    private JSONObject json;
 
-    public Message(JsonObject json) {
+    public Message(JSONObject json) {
         this.json = json;
     }
     
-    public JsonObject getJson() {
+    public JSONObject getJson() {
         return json;
     }
 
-    public void setJson(JsonObject json) {
+    public void setJson(JSONObject json) {
         this.json = json;
     }
     
     @Override
     public String toString() {
-        StringWriter writer = new StringWriter();
-        Json.createWriter(writer).write(json);
-        return writer.toString();
+        return json.toString();
     }
 }
