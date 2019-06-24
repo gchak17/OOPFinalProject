@@ -1,3 +1,4 @@
+package message;
 
 import java.io.StringReader;
 import javax.json.Json;

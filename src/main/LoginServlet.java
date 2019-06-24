@@ -1,4 +1,4 @@
-package nonDefaultPackage;
+package main;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,17 +7,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import account.AccountData;
+
 /**
- * Servlet implementation class AccountCreationServlet
+ * Servlet implementation class LoginServlet
  */
-@WebServlet("/AccountCreationServlet")
-public class AccountCreationServlet extends HttpServlet {
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AccountCreationServlet() {
+    public LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,13 +40,13 @@ public class AccountCreationServlet extends HttpServlet {
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		String userName = request.getParameter("userName");
 		String password = request.getParameter("password");
-		String avatar = request.getParameter("avatar");
-		System.out.println(request.getParameter("avatar"));
-		if(accountData.getAccount(userName, password) == null) {
-			accountData.addAccount(userName, password, avatar);
+//		System.out.println(userName + " " + password);
+		if(accountData.getAccount(userName, password) != null) {
+			request.getSession().setAttribute("username", userName);
+			request.getSession().setAttribute("password", password);
 			request.getRequestDispatcher("Main.jsp").forward(request, response);
 		} else {
-			request.getRequestDispatcher("NameInUse.html").forward(request, response);
+			request.getRequestDispatcher("TryAgain.html").forward(request, response);;
 		}
 	}
 

@@ -1,3 +1,4 @@
+package game;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,8 +7,10 @@ import java.util.List;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
+import message.*;
+
 @ServerEndpoint(value = "/websocket", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
-public class Endpoint {
+public class GameEndpoint {
     private static List<Session> peers = Collections.synchronizedList(new ArrayList<Session>());
     
     @OnOpen

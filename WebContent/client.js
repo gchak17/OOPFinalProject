@@ -16,7 +16,7 @@ var offsetLeft = canvas.offsetLeft;
 var offsetTop  = canvas.offsetTop;
 
 var drawing = false;
-var isArtist = false;
+var isArtist = true;
 var lastPos = null;
 
 var currCol = "black";
@@ -28,7 +28,7 @@ listen(canvas, 'mousedown', function(event) {
 });
 
 listen(canvas, 'mousemove', function(event) {
-    if (!drawing || !isArtist) {
+    if (!drawing /*|| !isArtist*/) {
         return;
     }
     

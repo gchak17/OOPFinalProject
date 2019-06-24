@@ -1,6 +1,8 @@
+package game;
+
 import java.util.Timer;
 
-import nonDefaultPackage.Account;
+import account.Account;
 
 public class Player {
 	private Account account;
