@@ -1,4 +1,3 @@
-package room;
 
 import java.io.StringReader;
 import javax.json.Json;
@@ -8,11 +7,11 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-public class FigureDecoder implements Decoder.Text<Figure> {
+public class MessageDecoder implements Decoder.Text<Message> {
     @Override
-    public Figure decode(String string) throws DecodeException {
+    public Message decode(String string) throws DecodeException {
         JsonObject jsonObject = Json.createReader(new StringReader(string)).readObject();
-        return new Figure(jsonObject);
+        return new Message(jsonObject);
     }
 
     @Override

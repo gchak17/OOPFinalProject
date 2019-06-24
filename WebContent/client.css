@@ -17,90 +17,100 @@
 	position:absolute;
 	top:83%;
 	left:10%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:green;
+	border-radius:50%;
 }
 
 #blue{
 	position:absolute;
 	top:83%;
 	left:11%;
-	width:10px;
-	height:10px;
-	background:blue;	
+	width:11px;
+	height:11px;
+	background:blue;
+	border-radius:50%;	
 }
 
 #red{
 	position:absolute;
 	top:83%;
 	left:12%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:red;
+	border-radius:50%;
 }
 
 #yellow{
 	position:absolute;
 	top:85%;
 	left:10%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:yellow;
+	border-radius:50%;
 }
 
 #orange{
 	position:absolute;
 	top:85%;
 	left:11%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:orange;
+	border-radius:50%;
 }
 
 #black{
 	position:absolute;
 	top:85%;
 	left:12%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:black;
+	border-radius:50%;
 }
 
 #gray{
 	position:absolute;
 	top:83%;
 	left:13%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:gray;
+	border-radius:50%;
 }
 
 #purple{
 	position:absolute;
 	top:85%;
 	left:13%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:purple;
+	border-radius:50%;
 }
 
 #brown{
 	position:absolute;
 	top:83%;
 	left:14%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:brown;
+	border-radius:50%;
 }
 
 #aqua{
 	position:absolute;
 	top:85%;
 	left:14%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:aqua;
+	border-radius:50%;
 }
 
 #eraser{
@@ -113,14 +123,54 @@
 	position:absolute;
 	top:83%;
 	left:18%;
-	width:10px;
-	height:10px;
+	width:11px;
+	height:11px;
 	background:white;
 	border:1px solid;
+	border-radius:50%;
 }
 
 #clr{
 	position:absolute;
 	top:76%;
 	left:10%;
+}
+
+#choosewidth{
+	position:absolute;
+	top:80%;
+	left:24%;
+}
+
+#w4{
+	position:absolute;
+	top:83.9%;
+	left:24%;
+	width:4px;
+	height:4px;
+	background:white;
+	border:solid 1px;
+	border-radius:50%;
+}
+
+#w8{
+	position:absolute;
+	top:83.5%;
+	left:24.75%;
+	width:8px;
+	height:8px;
+	background:white;
+	border:solid 1px;
+	border-radius:50%;
+}
+
+#w16{
+	position:absolute;
+	top:83%;
+	left:25.8%;
+	width:16px;
+	height:16px;
+	border-radius:50%;
+	background:white;
+	border:solid 1px;
 }
