@@ -1,16 +1,15 @@
 package game;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Game {
-	private Player player1, player2;
+	ArrayList<Player> players;
 	private Player artist, winner;
 	private String id;
 	private boolean isGameOver = false;
 	
-	public Game(Player player1, Player player2, String id) {
-		this.player1 = player1;
-		this.player2 = player2;
+	public Game(ArrayList<Player> players, String id) {
+		this.players = players;
 		this.id = id;
 	}
 	

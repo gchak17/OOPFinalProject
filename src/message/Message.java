@@ -4,7 +4,7 @@ import org.json.*;
 
 public class Message {
     private JSONObject json;
-
+    
     public Message(JSONObject json) {
         this.json = json;
     }
@@ -12,7 +12,8 @@ public class Message {
     public JSONObject getJson() {
         return json;
     }
-
+    
+   
     public void setJson(JSONObject json) {
         this.json = json;
     }
@@ -21,4 +22,5 @@ public class Message {
     public String toString() {
         return json.toString();
     }
+    
 }

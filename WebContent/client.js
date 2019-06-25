@@ -7,6 +7,10 @@ function sendText(json) {
 }
 
 function onMessage(evt) {
+	var json = JSON.parse(evt.data);
+	if(json.type === "isArtist?"){
+		if(json.answer)isArtist = true;
+	}
     drawImageText(evt.data);
 }
 
@@ -16,13 +20,15 @@ var offsetLeft = canvas.offsetLeft;
 var offsetTop  = canvas.offsetTop;
 
 var drawing = false;
-var isArtist = true;
+var isArtist = false;
 var lastPos = null;
 
 var currCol = "black";
 var currWidth = 4;
 
 listen(canvas, 'mousedown', function(event) {
+	checkIfIsArtist();
+	
     drawing = isArtist;
     lastPos = getPos(event);
 });
@@ -35,6 +41,7 @@ listen(canvas, 'mousemove', function(event) {
     var p = getPos(event);
     
     var json = JSON.stringify({
+    	"type" : "drawing",
     	"clear": false,
         "start": { "x": lastPos[0], "y": lastPos[1]},
 	    "end": { "x": p[0], "y": p[1]},
@@ -43,13 +50,17 @@ listen(canvas, 'mousemove', function(event) {
     });
     
     drawImageText(json);
+    //string aris es json
     sendText(json);
     
     lastPos = p;
 });
 
-function changeRole(){
-	isArtist = !isArtist;
+function checkIfIsArtist(){
+	var json = JSON.stringify({
+    	"type" : "isArtist?",
+    });
+	sendText(json);
 }
 
 function color(obj){
