@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GameManager {
 	private ConcurrentHashMap<String, Game> games;
+	public ArrayList<Game> waitingRooms;
 	private static final int CODE_LEN = 60;
 	private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	public GameManager() {

@@ -45,4 +45,9 @@ public class Account {
 		return this.username == otherAcc.username;
 	}
 	
+	public String toString() {
+		
+		return "User: " + this.username + " Pass: " + this.password;
+		
+	}
 }

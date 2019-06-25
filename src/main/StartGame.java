@@ -7,19 +7,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import account.AccountData;
-
 /**
- * Servlet implementation class CreateRoom
+ * Servlet implementation class StartGame
  */
-@WebServlet("/CreateRoom")
-public class CreateRoom extends HttpServlet {
+@WebServlet("/StartGame")
+public class StartGame extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateRoom() {
+    public StartGame() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,8 +34,8 @@ public class CreateRoom extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = (String) request.getSession().getAttribute("username");
-		request.getRequestDispatcher("createRoom.jsp").forward(request, response);
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }
