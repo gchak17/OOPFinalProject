@@ -13,7 +13,7 @@ import message.*;
 
 @ServerEndpoint(value = "/websocket", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
 public class GameEndpoint {
-    private static List<Session> peers = Collections.synchronizedList(new ArrayList<Session>());
+    public static List<Session> peers = Collections.synchronizedList(new ArrayList<Session>());
     
     @OnOpen
     public void onOpen(Session peer) {
