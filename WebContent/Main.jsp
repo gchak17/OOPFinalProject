@@ -29,8 +29,8 @@
 		<input type="submit" value="Create Room">
 	</form>
 	
-	<form action="GameServlet" method="post">
-		<input type="submit" value="Join Room">
+	<form action="WaitingRoomsServlet" method="post">
+		<input type="submit" value="Show Rooms">
 	</form>
 	
 	

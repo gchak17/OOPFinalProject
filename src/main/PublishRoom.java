@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import account.Account;
 import account.AccountData;
+import game.GameManager;
+import game.Room;
 
 /**
  * Servlet implementation class PublishRoom
@@ -49,6 +51,12 @@ public class PublishRoom extends HttpServlet {
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		Account admin  = accountData.getAccount( (String)request.getSession().getAttribute("username"), (String)request.getSession().getAttribute("password"));
 		//System.out.println(admin.toString());
+		
+		Room waitingRoom = new Room(admin, Rounds, selectedTime, MaxPlayer);
+		
+		GameManager.getInstance().getWaitingRooms().add(waitingRoom);
+		
+		System.out.println(GameManager.getInstance().getWaitingRooms());
 		
 		request.getRequestDispatcher("WaintingForOpponents.jsp").forward(request, response);
 		//mgoni im waiting pageze socketis damateba dachirdeba

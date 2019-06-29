@@ -34,13 +34,8 @@ public class Listener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent arg0)  {
     	AccountData accountData;
-		try {
-			accountData = AccountData.getInstance();
-			arg0.getServletContext().setAttribute("accountData", accountData);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		accountData = AccountData.getInstance();
+		arg0.getServletContext().setAttribute("accountData", accountData);
     	
     }
 	

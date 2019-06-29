@@ -32,11 +32,17 @@ public class AccountData {
 	}
 	
 	
-	public static AccountData getInstance() throws SQLException {
+	public static AccountData getInstance() //throws SQLException 
+	{
 		if(manager == null) {
 			synchronized(AccountData.class) {
 				if(manager == null) {
-					manager = new AccountData();
+					try {
+						manager = new AccountData();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}

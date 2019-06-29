@@ -3,13 +3,20 @@ package game;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import account.AccountData;
+
 public class GameManager {
 	private ConcurrentHashMap<String, Game> games;
-	public ArrayList<Game> waitingRooms;
+	private ArrayList<Room> waitingRooms = new ArrayList<Room>();
 	private static final int CODE_LEN = 60;
 	private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	public GameManager() {
+	private AccountData databaseManager; 
+	private static GameManager mainInstance = new GameManager(AccountData.getInstance());
+
+	
+	private GameManager(AccountData baseManager) {
 		games = new ConcurrentHashMap<String, Game>();
+		this.databaseManager = baseManager;
 	}
 	
 	public String addGame(ArrayList<Player> players) {
@@ -35,5 +42,13 @@ public class GameManager {
 	
     public void endGame(String gameID){
         games.remove(gameID);
+    }
+    
+    public static GameManager getInstance() {
+    	return mainInstance;
+    }
+    
+    public ArrayList<Room> getWaitingRooms() {
+    	return waitingRooms;
     }
 }
