@@ -2,14 +2,19 @@ package dao;
 
 public class Avatar {
 	
+	private long avatarID;
 	private String path;
 	private String filename;
 	
-	public Avatar(String filename, String path) {
+	public Avatar(long avatarID, String filename, String path) {
+		this.avatarID = avatarID;
 		this.path = path;
 		this.filename = filename;
 	}
 	
+	public long getID() {
+		return avatarID;
+	}
 	
 	public String getFilename() {
 		return filename;

@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,14 +11,14 @@ public class Account {
 	private String username;
 	private String password;
 	private Avatar avatar;
-	private List<Account> friendList;
+	private HashMap<Long, Account> friendList;
 	
 	public Account(long userID, String username, String password, Avatar avatar) {
 		this.userID = userID;
 		this.username = username;
 		this.password = password;
 		this.avatar = avatar;
-		friendList = new ArrayList<Account>();
+		friendList = new HashMap<Long, Account>();
 	}
 	
 	public long getID() {
@@ -46,14 +47,12 @@ public class Account {
 	
 	
 	public void addFriend(Account friend) {
-		friendList.add(friend);
+		friendList.put(friend.getID(), friend);
 	}
 	
 	public Account getFriendByID(long userID) {
-		for(int i = 0; i < friendList.size(); i++){
-			if(friendList.get(i).getID() == userID) {
-				return friendList.get(i);
-			}
+		if(friendList.containsKey(userID)) {
+			return friendList.get(userID);
 		}
 		return null;
 	}

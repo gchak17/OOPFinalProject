@@ -6,7 +6,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import account.AccountData;
+import managers.AccountData;
 
 /**
  * Application Lifecycle Listener implementation class Listener

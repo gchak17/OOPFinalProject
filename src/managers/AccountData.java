@@ -1,4 +1,4 @@
-package account;
+package managers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,13 +20,25 @@ public class AccountData {
 	
 	private Connection conn;
 	private static AccountData manager;
+	private AvatarManager avatarManager;
+	private HashMap<Long, Account> accounts;
 	
 	
 	private AccountData() throws SQLException{
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + MyDBInfo.MYSQL_DATABASE_NAME,
-					MyDBInfo.MYSQL_USERNAME, MyDBInfo.MYSQL_PASSWORD);
+			conn = ConnectionManager.getDBConnection();
+			avatarManager = AvatarManager.getInstance();
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select * from accounts;");
+			while(rs.next()) {
+				long userID = rs.getLong(1);// id
+				String username = rs.getString(2);// username
+				String password = rs.getString(3);// password
+				long avatarID = rs.getLong(5);// avatarID
+				
+				accounts.put(userID, new Account(userID, username, password, avatarManager.getAvatarByID(avatarID)));
+			}
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -121,7 +133,7 @@ public class AccountData {
 	/*
 	 * 
 	 */
-	public Account getAccount(String userName, String password) {
+	public Account loginUser(String userName, String password) {
 		Account acc = null;
 		try {
 			Statement st = conn.createStatement();

@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import account.AccountData;
 import dao.Account;
 import game.GameManager;
 import game.Room;
+import managers.AccountData;
 
 /**
  * Servlet implementation class PublishRoom

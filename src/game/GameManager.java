@@ -3,7 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import account.AccountData;
+import managers.AccountData;
 
 public class GameManager {
 	private ConcurrentHashMap<String, Game> games;
