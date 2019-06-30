@@ -1,4 +1,4 @@
-package account;
+package servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
 import managers.AccountData;
 
 /**
@@ -38,11 +39,12 @@ public class DeleteAccountServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		if(!accountData.removeAccount((String)request.getSession().getAttribute("username"))) {
+		if(!accountData.removeAccount((Account)request.getSession().getAttribute("user"))) {
 			System.out.println("an attempt to delete " + (String)request.getSession().getAttribute("username") + "was unsuccessful");
 			
 		}
-		request.getRequestDispatcher("Login.html").forward(request, response);
+		request.getSession().removeAttribute("user");
+		request.getRequestDispatcher("login.html").forward(request, response);
 		
 	}
 

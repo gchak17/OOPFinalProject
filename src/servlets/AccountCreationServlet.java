@@ -1,4 +1,4 @@
-package account;
+package servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,7 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
+import dao.Avatar;
 import managers.AccountData;
+import managers.AvatarManager;
+import managers.IDGenerator;
 
 /**
  * Servlet implementation class AccountCreationServlet
@@ -38,12 +42,18 @@ public class AccountCreationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
+		AvatarManager avatarManager = (AvatarManager)getServletContext().getAttribute("avatarManager");
+		IDGenerator generator = (IDGenerator)getServletContext().getAttribute("idGenerator");
+		
 		String userName = request.getParameter("userName");
 		String password = request.getParameter("password");
-		String avatar = request.getParameter("avatar");
-		System.out.println(request.getParameter("avatar"));
-		if(accountData.getAccount(userName, password) == null) {
-			accountData.addAccount(userName, password, avatar);
+		long avatar_id = Long.valueOf(request.getParameter("avatar_id"));
+		Avatar avatar = avatarManager.getAvatarByID(avatar_id);
+		
+		if(!accountData.nameInUse(userName)) {
+			Account account = new Account(generator.generateID(), userName, password, avatar);
+			accountData.addAccount(account);
+			request.getSession().setAttribute("user", account);
 			request.getRequestDispatcher("Main.jsp").forward(request, response);
 		} else {
 			request.getRequestDispatcher("NameInUse.html").forward(request, response);

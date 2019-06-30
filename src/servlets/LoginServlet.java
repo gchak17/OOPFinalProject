@@ -1,4 +1,4 @@
-package main;
+package servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
 import managers.AccountData;
 
 /**
@@ -41,9 +42,9 @@ public class LoginServlet extends HttpServlet {
 		String userName = request.getParameter("userName");
 		String password = request.getParameter("password");
 //		System.out.println(userName + " " + password);
-		if(accountData.getAccount(userName, password) != null) {
-			request.getSession().setAttribute("username", userName);
-			request.getSession().setAttribute("password", password);
+		Account user = accountData.authenticate(userName, password);
+		if(user != null) {
+			request.getSession().setAttribute("user", user);
 			request.getRequestDispatcher("Main.jsp").forward(request, response);
 		} else {
 			request.getRequestDispatcher("TryAgain.html").forward(request, response);;

@@ -57,6 +57,14 @@ public class Account {
 		return null;
 	}
 	
+	public List<Account> getFriendList(){
+		List<Account> res = new ArrayList<Account>();
+		for(Account a : friendList.values()) {
+			res.add(a);
+		}
+		return res;
+	}
+	
 	@Override
 	public boolean equals(Object other) {
 		if (other == this) {

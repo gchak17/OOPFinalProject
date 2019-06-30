@@ -20,10 +20,12 @@ public class ConnectionManager {
 	
 	public static Connection getDBConnection() {
 		if(conn == null) {
-			synchronized(conn) {
+			synchronized(ConnectionManager.class) {
 				if(conn == null) {
 					try {
-						initializeConnection();
+						Class.forName("com.mysql.cj.jdbc.Driver");
+						conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + MyDBInfo.MYSQL_DATABASE_NAME,
+								MyDBInfo.MYSQL_USERNAME, MyDBInfo.MYSQL_PASSWORD);
 					}catch(Exception e) {
 						e.printStackTrace();
 					}

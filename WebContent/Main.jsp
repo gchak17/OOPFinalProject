@@ -15,11 +15,11 @@
 <body>
 
 	<% AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		Account currAccount = accountData.getAccount(request.getParameter("userName"), request.getParameter("password"));
-		List<Account> friends = accountData.getFriendsFor(currAccount.getUsername());
+		Account currAccount = (Account)session.getAttribute("user");
+		List<Account> friends = currAccount.getFriendList();
 	%>
 
-	<img src="<%=currAccount.getAvatar() %>">
+	<img src="<%=currAccount.getAvatar().getFullPath() %>">
 	
 	<form action="DeleteAccountServlet" method="post">
 		<input type = "submit" value = "Delete Account">

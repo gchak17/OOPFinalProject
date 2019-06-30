@@ -112,11 +112,6 @@ select a.id,
 	from avatars a
     join avatar_paths ap
     on (a.relative_path_id = ap.id);
-    
-
-
-
-
 
 
 

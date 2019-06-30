@@ -14,6 +14,7 @@ import java.util.List;
 import com.mysql.jdbc.Driver;
 
 import dao.Account;
+import dao.Avatar;
 import db.MyDBInfo;
 
 public class AccountData {
@@ -25,6 +26,7 @@ public class AccountData {
 	
 	
 	private AccountData() throws SQLException{
+		accounts = new HashMap<Long, Account>();
 		try {
 			conn = ConnectionManager.getDBConnection();
 			avatarManager = AvatarManager.getInstance();
@@ -38,7 +40,8 @@ public class AccountData {
 				
 				accounts.put(userID, new Account(userID, username, password, avatarManager.getAvatarByID(avatarID)));
 			}
-			
+			rs.close();
+			st.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -67,40 +70,18 @@ public class AccountData {
 	/*
 	 * 
 	 */
-	public int addAccount(String userName, String password, String avatar) {
-		//check if the account is already registered
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select * from acc_info where binary user_name = '" + userName + "';");
-			boolean isEmpty = true;
-			while(rs.next()) {
-				isEmpty = false;
-			}
-			if(!isEmpty)
-				return -1;
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-				
+	public int addAccount(Account account) {
+		//TODO check if the account is already registered
 		/* 
 		 * insert into database  
 		 */
-		String avatar_file = "./avatars/1.png";
 		try {
 			Statement st  = conn.createStatement();
-			st.executeUpdate("insert into accounts(user_name, authentication_string, avatar_id) values\n" + 
-					"('"+ userName + "', '" + password + "', (select id from avatars where binary avatar_filename = '"+ avatar + "'));");
+			st.executeUpdate("insert into accounts(id, user_name, authentication_string, avatar_id) values\n" + 
+					"(" + account.getID() + ", '" + account.getUsername() + "', '" + account.getPassword() + "', " + account.getAvatar().getID() + ");");
+						
 			st.close();
-			
-			Statement st1 = conn.createStatement();
-			ResultSet rs = st1.executeQuery("select * from acc_info where binary user_name = '" + userName + "' and binary authentication_string = '" + password + "';");
-			
-			while(rs.next()) {
-				avatar_file = rs.getString(3);
-			}
-			
-			rs.close();
-			st1.close();
+			accounts.put(account.getID(), account);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,88 +94,63 @@ public class AccountData {
 	/*
 	 * 
 	 */
-	public boolean removeAccount(String username) {
+	public boolean removeAccount(Account account) {
 		try {
 			Statement st = conn.createStatement();
-			int res = st.executeUpdate("delete from accounts where user_name = '" + username + "';");
-			
+			int res = st.executeUpdate("delete from accounts where id = '" + account.getID() + "';");
+			accounts.remove(account.getID());
 			st.close();
-			System.out.println(username);
+			System.out.println(account.getUsername());
 			return res != 0;
 		}catch(SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
 		
-		
+		return false;
 	}
 	
 	
 	/*
 	 * 
 	 */
-	public Account loginUser(String userName, String password) {
-		Account acc = null;
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select * from acc_info where binary user_name = '" 
-										+ userName + "' and binary authentication_string ='" + password + "';");
-			int count = 0;
-			while(rs.next()) {
-				count++;
-				acc = new Account(rs.getString(1), rs.getString(2), rs.getString(3));
-			}
-			if(count > 1) {
-				System.out.println("More than one row was returned");
-				return null;
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
+	public Account getAccountByID(long userID) {
+		//TODO
+		if(accounts.containsKey(userID)) {
+			return accounts.get(userID);
 		}
-		
-		return acc;
+		return null;
 	}
 	
-	
-	public List<Account> getFriendsFor(String userName){
-		List<Account> res = new ArrayList<Account>();
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select a.user_name, a.authentication_string, concat(ap.pathname, '/', av.avatar_filename) avatar\n" + 
-					"	from accounts a \n" + 
-					"	left join avatars av\n" + 
-					"    on a.avatar_id = av.id\n" + 
-					"    join avatar_paths ap\n" + 
-					"    on av.relative_path_id = ap.id\n" + 
-					"    where a.id in \n" + 
-					"(select user2_id from friendships where user1_id = (select id from accounts where user_name = '" + userName + "'));");
-					
-			while(rs.next()) {
-				res.add(new Account(rs.getString(1), rs.getString(2), rs.getString(3)));
+	/*
+	 * 
+	 */
+	public Account authenticate(String username, String password) {
+		//TODO
+		for(Account a : accounts.values()) {
+			if(a.getUsername().equals(username) && a.getPassword().equals(password)) {
+				return a;
 			}
-		}catch(SQLException e) {
-			e.printStackTrace();
 		}
-		return res;
+		return null;
 	}
 	
+	/*
+	 * 
+	 */
+	public boolean nameInUse(String username) {
+		for(Account a : accounts.values()) {
+			if(a.getUsername().equals(username)) {
+				return true;
+			}
+		}
+		return true;
+	}
 	
 	/*
 	 * 
 	 */
 	public int numAccounts() {
-		int count = 0;
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select id from accounts");
-			
-			while(rs.next()) {
-				count++;
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return count;
+		return accounts.size();
 	}
 
 }

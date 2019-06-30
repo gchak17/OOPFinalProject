@@ -13,6 +13,7 @@ public class AvatarManager {
 	private HashMap<Long, Avatar> avatars;
 	
 	private AvatarManager() throws SQLException{
+		avatars = new HashMap<Long, Avatar>();
 		try {
 			conn = ConnectionManager.getDBConnection();
 			Statement st = conn.createStatement();
@@ -26,7 +27,8 @@ public class AvatarManager {
 				String path = rs.getString(3);// path
 				avatars.put(id, new Avatar(id, filename, path));
 			}
-			 
+			rs.close();
+			st.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

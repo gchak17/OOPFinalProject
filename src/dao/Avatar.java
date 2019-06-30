@@ -25,7 +25,7 @@ public class Avatar {
 	}
 	
 	public String getFullPath() {
-		return path + "\\" + filename;
+		return path + "/" + filename;
 	}
 	
 	public void setFilename(String filename) {
