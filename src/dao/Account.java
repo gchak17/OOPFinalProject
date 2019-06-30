@@ -77,7 +77,7 @@ public class Account {
 		
 		Account otherAcc = (Account) other;
 		
-		return this.username == otherAcc.username;
+		return this.username.equals(otherAcc.username);
 	}
 	
 	public String toString() {
