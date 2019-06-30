@@ -48,10 +48,16 @@ public class JoinRoomServlet extends HttpServlet {
 		
 		int RoomId = Integer.parseInt(request.getParameter("id").substring(5));
 		
-		
 		Room r = GameManager.getInstance().getWaitingRooms().get(RoomId);
-		r.addPlayer(newPlayer);
-
+		
+		
+		if(r.addPlayer(newPlayer)) {
+			request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
+		}else {
+			//utxras ro daarefreshos an sxva airchios
+			//igive pageze rom fanjara amoxtes egrec gamova 	
+			//request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request, response);
+		}
 		
 		
 	}

@@ -29,18 +29,16 @@ public class Room {
 		return "Players: " + players.toString() + " Rounds: " + Rounds + " Time: " + roundDuration ; 
 	}
 	
-	public void addPlayer(Player newPlayer) {
+	public boolean addPlayer(Player newPlayer) {
 		if(curPlayers < MaxPlayer) {
-			if(players.contains(newPlayer))return;
+			if(players.contains(newPlayer))return false;
 			curPlayers++;
 			players.add(newPlayer);
-			//dastartvas vinc elodeba imattanac gamochndes.. da soketi gvinda albat iq
-		} else {
-			//utxras ro reload gauketos gverds radgan waiting room ebis sia shecvlilia
-			//tu ar dagvezara avtomaturad ganaxlebac chavamatot
+			return true;
 		}
-			
+			//dastartvas vinc elodeba imattanac gamochndes.. da soketi gvinda albat iq
 		
+		return false;	
 	}
 	
 	
