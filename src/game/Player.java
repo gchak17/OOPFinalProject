@@ -54,4 +54,20 @@ public class Player {
         return account;
     }
 	
+	public String toString() {
+		return account.getUsername();
+	}
+	
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this) {
+			return true;
+		}
+		
+		if(!(other instanceof Player)) {
+			return false;
+		}
+        return (this.account.equals(((Player)other).account));
+	}
 }

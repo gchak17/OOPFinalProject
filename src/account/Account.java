@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import game.Player;
+
 
 public class Account {
 	private String username;
@@ -32,6 +34,8 @@ public class Account {
 	
 	@Override
 	public boolean equals(Object other) {
+		System.out.println("aqac");
+		System.out.println(this.username + " " + ((Account)other).username);
 		if (other == this) {
 			return true;
 		}
@@ -40,9 +44,7 @@ public class Account {
 			return false;
 		}
 		
-		Account otherAcc = (Account) other;
-		
-		return this.username == otherAcc.username;
+		return (this.username).equals(((Account) other).username);
 	}
 	
 	public String toString() {
@@ -50,4 +52,6 @@ public class Account {
 		return "User: " + this.username + " Pass: " + this.password;
 		
 	}
+	
+	
 }

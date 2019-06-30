@@ -1,8 +1,6 @@
 package main;
 
 import java.io.IOException;
-import java.util.StringTokenizer;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,19 +10,20 @@ import javax.servlet.http.HttpServletResponse;
 import account.Account;
 import account.AccountData;
 import game.GameManager;
+import game.Player;
 import game.Room;
 
 /**
- * Servlet implementation class PublishRoom
+ * Servlet implementation class JoinRoomServlet
  */
-@WebServlet("/PublishRoom")
-public class PublishRoom extends HttpServlet {
+@WebServlet("/JoinRoomServlet")
+public class JoinRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PublishRoom() {
+    public JoinRoomServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,26 +40,19 @@ public class PublishRoom extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int Rounds = Integer.parseInt(request.getParameter("Rounds"));
-		
-		int selectedTime = Integer.parseInt(request.getParameter("time"));
-		
-		int MaxPlayer = Integer.parseInt(request.getParameter("MaxPlayers"));
-		//pre game klasi gvchirdeba ragac rac amat chaimaxsovrebs
-		
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		Account admin  = accountData.getAccount( (String)request.getSession().getAttribute("username"), (String)request.getSession().getAttribute("password"));
-		//System.out.println(admin.toString());
+		String userName = (String) request.getSession().getAttribute("username");
+		String password = (String) request.getSession().getAttribute("password");
+		Account user = accountData.getAccount(userName, password);
+		Player newPlayer = new Player(user);
 		
-		//int id = GameManager.getInstance().getWaitingRooms().size();
-		Room waitingRoom = new Room(admin, Rounds, selectedTime, MaxPlayer);
+		int RoomId = Integer.parseInt(request.getParameter("id").substring(5));
 		
-		GameManager.getInstance().getWaitingRooms().add(waitingRoom);
 		
-		System.out.println(GameManager.getInstance().getWaitingRooms());
-		
-		request.getRequestDispatcher("WaintingForOpponents.jsp").forward(request, response);
-		//mgoni im waiting pageze socketis damateba dachirdeba
-	}
+		Room r = GameManager.getInstance().getWaitingRooms().get(RoomId);
+		r.addPlayer(newPlayer);
 
+		
+		
+	}
 }
