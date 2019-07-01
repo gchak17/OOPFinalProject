@@ -12,14 +12,19 @@
 </head>
 <body>
          
-         		<form action="JoinRoomServlet" method="post"  >>
-				<input type = "submit" value = "Start Game">
-				</form>
+         		
 				
          <%
 	         response.setIntHeader("Refresh", 2);
 	         int RoomId = (Integer)request.getAttribute("id");
-	        
+	     %>
+	         <form action="StartGameServlet" method="post"  >>
+      		<input type="hidden" name="id" value="<%= RoomId %>" />
+				<input type = "submit" value = "Start Game">
+				</form>
+	     
+	     
+	     <%    
 	         Room r = GameManager.getInstance().getWaitingRooms().get(RoomId);
 	         ArrayList<Player> players = r.getPlayers();
 	         %>

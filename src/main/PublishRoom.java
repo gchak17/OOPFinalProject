@@ -52,6 +52,7 @@ public class PublishRoom extends HttpServlet {
 		Account admin = (Account)request.getSession().getAttribute("user");
 		//System.out.println(admin.toString());
 		
+		
 		//int id = GameManager.getInstance().getWaitingRooms().size();
 		Room waitingRoom = new Room(admin, Rounds, selectedTime, MaxPlayer);
 		

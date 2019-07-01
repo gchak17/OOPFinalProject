@@ -14,6 +14,7 @@ public class Room {
 	int Rounds;
 	int roundDuration;
 	int MaxPlayer;
+	
 	private ArrayList<Player> players = new ArrayList<Player>();
 	
 	public Room(Account admin, int Rounds, int roundDuration, int MaxPlayer) {
@@ -45,5 +46,15 @@ public class Room {
 		return this.players;
 	}
 	
+	public Account getAdmin() {
+		return this.admin;
+	}
+	public int getRounds() {
+		return this.Rounds;
+	}
+	
+	public int getTime() {
+		return this.roundDuration;
+	}
 	
 }

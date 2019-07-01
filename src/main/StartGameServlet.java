@@ -1,23 +1,31 @@
 package main;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
+import game.Game;
+import game.GameManager;
+import game.Player;
+import game.Room;
+
 /**
- * Servlet implementation class StartGame
+ * Servlet implementation class StartGameServlet
  */
-@WebServlet("/StartGame")
-public class StartGame extends HttpServlet {
+@WebServlet("/StartGameServlet")
+public class StartGameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public StartGame() {
+    public StartGameServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,8 +42,19 @@ public class StartGame extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		int id = Integer.parseInt(request.getParameter("id"));
+		Room r = GameManager.getInstance().getWaitingRooms().get(id);
+		Account admin = r.getAdmin();
+		if(((Account)request.getSession().getAttribute("user")).equals(admin)) {
+			
+			Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime());
+			GameManager.getInstance().addGame(g);
+			
+			request.getRequestDispatcher("client.html").forward(request, response);
+			//g.startGame();
+		}else {
+			//only admin can start
+		}
 	}
 
 }
