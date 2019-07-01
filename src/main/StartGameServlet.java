@@ -46,12 +46,15 @@ public class StartGameServlet extends HttpServlet {
 		Room r = GameManager.getInstance().getWaitingRooms().get(id);
 		Account admin = r.getAdmin();
 		if(((Account)request.getSession().getAttribute("user")).equals(admin)) {
-			
-			Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime());
-			GameManager.getInstance().addGame(g);
-			
-			request.getRequestDispatcher("client.html").forward(request, response);
-			//g.startGame();
+			if(r.getPlayers().size() < 2) {
+				//utxras daelodos oponentebs
+			}else {
+				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime());
+				GameManager.getInstance().addGame(g);
+				
+				request.getRequestDispatcher("client.html").forward(request, response);
+				//g.startGame(); dawyebas ideashi soketi mixvdeba albat da aq aseTi meTodi ar iqneba sachiro
+	 		}
 		}else {
 			//only admin can start
 		}
