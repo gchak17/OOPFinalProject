@@ -7,8 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import account.Account;
-import account.AccountData;
+import dao.Account;
 import game.GameManager;
 import game.Player;
 import game.Room;
@@ -41,10 +40,7 @@ public class JoinRoomServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		String userName = (String) request.getSession().getAttribute("username");
-		String password = (String) request.getSession().getAttribute("password");
-		Account user = accountData.getAccount(userName, password);
+		Account user = (Account)request.getSession().getAttribute("user");
 		Player newPlayer = new Player(user);
 		
 		int RoomId = Integer.parseInt(request.getParameter("id").substring(5));

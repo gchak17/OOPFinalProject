@@ -3,7 +3,7 @@ package game;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import account.Account;
+import dao.Account;
 
 public class Player {
 	private Account account;

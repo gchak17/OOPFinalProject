@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import account.AccountData;
+import managers.AccountData;
 
 /**
  * Servlet implementation class CreateRoom

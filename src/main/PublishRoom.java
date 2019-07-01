@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import account.Account;
-import account.AccountData;
+import dao.Account;
 import game.GameManager;
 import game.Room;
+import managers.AccountData;
 
 /**
  * Servlet implementation class PublishRoom
@@ -49,8 +49,7 @@ public class PublishRoom extends HttpServlet {
 		int MaxPlayer = Integer.parseInt(request.getParameter("MaxPlayers"));
 		//pre game klasi gvchirdeba ragac rac amat chaimaxsovrebs
 		
-		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		Account admin  = accountData.getAccount( (String)request.getSession().getAttribute("username"), (String)request.getSession().getAttribute("password"));
+		Account admin = (Account)request.getSession().getAttribute("user");
 		//System.out.println(admin.toString());
 		
 		//int id = GameManager.getInstance().getWaitingRooms().size();

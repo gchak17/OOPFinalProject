@@ -96,17 +96,22 @@ create view acc_info
 as
 select ac.user_name,
 		ac.authentication_string,
-        concat (pathname, '/', avatar_filename) avatar
+        pathname,
+        avatar_filename
 	from accounts ac
     left join avatars a
     on (ac.avatar_id = a.id)
     left join avatar_paths ap
     on (a.relative_path_id = ap.id);
 
-
-
-
-
+create view avatar_info
+as
+select a.id,
+		a.avatar_filename,
+        ap.pathname
+	from avatars a
+    join avatar_paths ap
+    on (a.relative_path_id = ap.id);
 
 
 
