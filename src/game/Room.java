@@ -40,7 +40,9 @@ public class Room {
 		
 		return false;	
 	}
-	
+	public ArrayList<Player> getPlayers(){
+		return this.players;
+	}
 	
 	
 }

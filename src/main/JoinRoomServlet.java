@@ -33,6 +33,7 @@ public class JoinRoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("shesvlis");
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -52,6 +53,7 @@ public class JoinRoomServlet extends HttpServlet {
 		
 		
 		if(r.addPlayer(newPlayer)) {
+			
 			request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 		}else {
 			//utxras ro daarefreshos an sxva airchios

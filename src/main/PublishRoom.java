@@ -34,7 +34,8 @@ public class PublishRoom extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		System.out.println("sheqmna ");
+		request.getRequestDispatcher("WaintingForOppenents.jsp").forward(request, response);
 	}
 
 	/**
@@ -55,11 +56,13 @@ public class PublishRoom extends HttpServlet {
 		//int id = GameManager.getInstance().getWaitingRooms().size();
 		Room waitingRoom = new Room(admin, Rounds, selectedTime, MaxPlayer);
 		
+		
+		request.setAttribute("id", "Room:"+GameManager.getInstance().getWaitingRooms().size());	
 		GameManager.getInstance().getWaitingRooms().add(waitingRoom);
 		
 		System.out.println(GameManager.getInstance().getWaitingRooms());
-		
-		request.getRequestDispatcher("WaintingForOpponents.jsp").forward(request, response);
+		System.out.println("aq movida");
+		request.getRequestDispatcher("WaintingForOppenents.jsp").forward(request, response);
 		//mgoni im waiting pageze socketis damateba dachirdeba
 	}
 
