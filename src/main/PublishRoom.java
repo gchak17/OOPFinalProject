@@ -34,8 +34,8 @@ public class PublishRoom extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("sheqmna ");
-		request.getRequestDispatcher("WaintingForOppenents.jsp").forward(request, response);
+		request.setAttribute("id", id);	
+		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 	}
 
 	/**
@@ -55,14 +55,16 @@ public class PublishRoom extends HttpServlet {
 		//int id = GameManager.getInstance().getWaitingRooms().size();
 		Room waitingRoom = new Room(admin, Rounds, selectedTime, MaxPlayer);
 		
-		
-		request.setAttribute("id", "Room:"+GameManager.getInstance().getWaitingRooms().size());	
+		id = GameManager.getInstance().getWaitingRooms().size();
+		request.setAttribute("id", GameManager.getInstance().getWaitingRooms().size());	
 		GameManager.getInstance().getWaitingRooms().add(waitingRoom);
+//		
+//		System.out.println(GameManager.getInstance().getWaitingRooms());
+//		System.out.println("aq movida");
 		
-		System.out.println(GameManager.getInstance().getWaitingRooms());
-		System.out.println("aq movida");
-		request.getRequestDispatcher("WaintingForOppenents.jsp").forward(request, response);
+		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 		//mgoni im waiting pageze socketis damateba dachirdeba
 	}
 
+	private Object id;
 }
