@@ -42,19 +42,18 @@ public class StartGameServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
-		Room r = GameManager.getInstance().getWaitingRooms().get(id);
+		String id = request.getParameter("id");
+		Room r = GameManager.getInstance().getRoomById(id);
 		Account admin = r.getAdmin();
 		if(((Account)request.getSession().getAttribute("user")).equals(admin)) {
 			if(r.getPlayers().size() < 2) {
 				//utxras daelodos oponentebs
 			}else {
-				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime());
+				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
 				GameManager.getInstance().addGame(g);
 				
 				request.getRequestDispatcher("client.html").forward(request, response);
 				
-				//g.startGame(); dawyebas ideashi soketi mixvdeba albat da aq aseTi meTodi ar iqneba sachiro
 	 		}
 		}else {
 			//only admin can start

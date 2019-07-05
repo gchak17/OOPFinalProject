@@ -9,13 +9,15 @@ import dao.Account;
 
 public class Room {
 
-	Account admin;
-	int curPlayers;
-	int Rounds;
-	int roundDuration;
-	int MaxPlayer;
+	private Account admin;
+	private int curPlayers;
+	private int Rounds;
+	private int roundDuration;
+	private int MaxPlayer;
+	private String roomId;
 	
 	private ArrayList<Player> players = new ArrayList<Player>();
+	
 	
 	public Room(Account admin, int Rounds, int roundDuration, int MaxPlayer) {
 		this.admin  = admin;
@@ -34,7 +36,9 @@ public class Room {
 		if(curPlayers < MaxPlayer) {
 			if(players.contains(newPlayer))return false;
 			curPlayers++;
+			newPlayer.setRoom();
 			players.add(newPlayer);
+			
 			return true;
 		}
 			//dastartvas vinc elodeba imattanac gamochndes.. da soketi gvinda albat iq
@@ -57,4 +61,7 @@ public class Room {
 		return this.roundDuration;
 	}
 	
+	public void setRoomId(String roomId) {
+		this.roomId = roomId;
+	}
 }

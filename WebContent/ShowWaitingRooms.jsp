@@ -14,16 +14,17 @@
 </head>
 <body>
 	<% 
-		ArrayList<Room> rooms = GameManager.getInstance().getWaitingRooms();
+		ArrayList<String> rooms = GameManager.getInstance().getWaitingRooms();
 	%>
 	
 		<ul>
 		<% for(int i = 0; i < rooms.size(); i++){
 			%>
-			<li> <%= rooms.get(i).toString() %>
+			<li> <%= rooms.get(i) %>
 				
 				<form action="JoinRoomServlet" method="post"  >>
-				<input type = "submit" name="id" value = <%= "Room:" + i %>>
+				<input type = "submit" name="id" value = "Enter Room" >
+				<input type="hidden" name="id" value="<%= rooms.get(i) %>" />
 				</form>
 			<li>
 			<%

@@ -12,14 +12,15 @@ public class Game {
 	
 	private boolean isGameOver = false;
 	
-	public Game(ArrayList<Player> players, int round, int time) {
+	public Game(ArrayList<Player> players, int round, int time, String id) {
 		this.players = players;			
 		this.numRounds = round;
 		this.time = time;
+		this.id = id;
 	}
 	
-	public void setId(String id) {
-		this.id = id;
+	public String getId() {
+		return this.id;
 	}
 	
 

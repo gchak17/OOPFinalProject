@@ -7,7 +7,7 @@ import managers.AccountData;
 
 public class GameManager {
 	private ConcurrentHashMap<String, Game> games;
-	private ArrayList<Room> waitingRooms = new ArrayList<Room>();
+	private ConcurrentHashMap<String, Room>  waitingRooms = new ConcurrentHashMap<String, Room>();
 	private static final int CODE_LEN = 60;
 	private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	private AccountData databaseManager; 
@@ -19,11 +19,8 @@ public class GameManager {
 		this.databaseManager = baseManager;
 	}
 	
-	public String addGame(Game game) {
-		String id = generateRandomCode();
-		game.setId(id);
-		games.put(id, game);
-		return id;
+	public void addGame(Game game) {
+		games.put(game.getId(), game);
 	}
 	
 	private String generateRandomCode() {
@@ -34,6 +31,13 @@ public class GameManager {
             bldr.append(charToAppend);
         }
         return bldr.toString();
+    }
+	
+	public String registerRoom(Room room) {
+        //id damtxvevis shansebi imdenad mcirea, rom ugulvebelvyoft;
+        String id = generateRandomCode();
+        waitingRooms.put(id,room);
+        return id;
     }
 	
 	public Game getGame(String id){
@@ -48,7 +52,14 @@ public class GameManager {
     	return mainInstance;
     }
     
-    public ArrayList<Room> getWaitingRooms() {
-    	return waitingRooms;
+    public Room getRoomById(String id) {
+    	return waitingRooms.get(id);
+    }
+    public ArrayList<String> getWaitingRooms(){
+    	ArrayList<String> rooms =  new ArrayList<String>();
+    	for (String key : waitingRooms.keySet()) { 
+    		rooms.add(key); 
+    	}
+    	return rooms;
     }
 }

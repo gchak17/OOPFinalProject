@@ -32,8 +32,7 @@ public class JoinRoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.setAttribute("id", id);	
-		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
+		System.out.println("joinRoomis geti");
 	}
 
 	/**
@@ -43,10 +42,11 @@ public class JoinRoomServlet extends HttpServlet {
 		Account user = (Account)request.getSession().getAttribute("user");
 		Player newPlayer = new Player(user);
 		
-		id = Integer.parseInt(request.getParameter("id").substring(5));
+		String id = request.getParameter("id");
 		
-		Room r = GameManager.getInstance().getWaitingRooms().get((Integer)id);
+		Room r = GameManager.getInstance().getRoomById(id);
 		
+		request.getSession().setAttribute("gameId", id);//game id da room id erti da igiveebia 
 		
 		request.setAttribute("id", id);
 		
@@ -62,5 +62,4 @@ public class JoinRoomServlet extends HttpServlet {
 		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 	}
 
-	private Object id;
 }

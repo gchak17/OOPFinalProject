@@ -70,4 +70,13 @@ public class Player {
 		}
         return (this.account.equals(((Player)other).account));
 	}
+	
+	public Game getGame() {
+		return this.game;
+	}
+
+	public void setRoom() {
+		// TODO Auto-generated method stub
+		
+	}
 }

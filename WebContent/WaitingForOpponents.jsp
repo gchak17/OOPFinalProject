@@ -15,8 +15,7 @@
          		
 				
          <%
-	         response.setIntHeader("Refresh", 2);
-	         int RoomId = (Integer)request.getAttribute("id");
+	         String RoomId = (String)request.getAttribute("id");
 	     %>
 	         <form action="StartGameServlet" method="post"  >>
       		<input type="hidden" name="id" value="<%= RoomId %>" />
@@ -25,7 +24,7 @@
 	     
 	     
 	     <%    
-	         Room r = GameManager.getInstance().getWaitingRooms().get(RoomId);
+	         Room r = GameManager.getInstance().getRoomById(RoomId);
 	         ArrayList<Player> players = r.getPlayers();
 	         %>
 	         <ul>
@@ -42,7 +41,22 @@
 	 	  
 	 	</ul>
 
-	         
+	<script>
+	//var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
+
+	var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/PublishRoom");
+	websocket.onmessage = function(evt) { onMessage(evt) };
+
+	function sendText(json) {
+	    websocket.send(json);
+	}
+
+	function onMessage(evt) {
+		//daarefreshos gadmocemuli informaciis mixedvit..principshi arc chirdeba gadmocema.. prosta unda utxras ro ganaxsldes
+	}
+
+
+	</script>    
       
 </body>
 </html>

@@ -13,6 +13,7 @@ public class Account {
 	private Avatar avatar;
 	private HashMap<Long, Account> friendList;
 	
+	
 	public Account(long userID, String username, String password, Avatar avatar) {
 		this.userID = userID;
 		this.username = username;
@@ -83,4 +84,5 @@ public class Account {
 	public String toString() {
 		return "User: " + this.username + " Pass: " + this.password;
 	}
+	
 }
