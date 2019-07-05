@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
+import managers.AccountData;
+
 
 /**
  * Servlet implementation class EnterChatServlet
@@ -38,9 +41,11 @@ public class EnterChatServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Chat.html");
-		dispatcher.forward(request, response);
+		String userName = request.getParameter("userName");
 		
+		request.getSession().setAttribute("username", userName);
+		request.getRequestDispatcher("Chat.html").forward(request, response);
+				
 		doGet(request, response);
 	}
 

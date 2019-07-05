@@ -5,7 +5,13 @@
 <title>Chat</title>
 </head>
 <body>
-	<input type="text" placeholder="text message" id="text"> 
-	<button type="submit">Send</button><br>
+	<form onsubmit = "clickOnSend()">
+		<div id="chatBox" class="chat=box"></div>
+		<input type="text" placeholder="text message" id="chatText" size="30">
+		<button type="submit">Send</button>
+		<br>
+	</form>
+	
+	<script src="client.js"></script>
 </body>
 </html>
