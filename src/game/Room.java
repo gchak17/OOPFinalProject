@@ -9,7 +9,7 @@ import dao.Account;
 
 public class Room {
 
-	private Account admin;
+	private Player admin;
 	private int curPlayers;
 	private int Rounds;
 	private int roundDuration;
@@ -19,13 +19,13 @@ public class Room {
 	private ArrayList<Player> players = new ArrayList<Player>();
 	
 	
-	public Room(Account admin, int Rounds, int roundDuration, int MaxPlayer) {
+	public Room(Player admin, int Rounds, int roundDuration, int MaxPlayer) {
 		this.admin  = admin;
 		this.Rounds = Rounds;
 		this.roundDuration = roundDuration;
 		this.MaxPlayer = MaxPlayer;
 		curPlayers = 1;
-		players.add(new Player(admin));
+		players.add(admin);
 	}
 	
 	public String toString() {
@@ -50,7 +50,7 @@ public class Room {
 		return this.players;
 	}
 	
-	public Account getAdmin() {
+	public Player getAdmin() {
 		return this.admin;
 	}
 	public int getRounds() {

@@ -47,19 +47,18 @@ public class JoinRoomServlet extends HttpServlet {
 		Room r = GameManager.getInstance().getRoomById(id);
 		
 		request.getSession().setAttribute("gameId", id);//game id da room id erti da igiveebia 
+		request.getSession().setAttribute("player", newPlayer);
 		
 		request.setAttribute("id", id);
 		
 		if(r.addPlayer(newPlayer)) {
-			
-			//request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
+			request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 		}else {
 			//utxras ro daarefreshos an sxva airchios
 			//igive pageze rom fanjara amoxtes egrec gamova 	
 			//request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request, response);
 		}
 		
-		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 	}
 
 }

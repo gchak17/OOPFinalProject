@@ -15,6 +15,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.json.JSONObject;
 
+import dao.Account;
 import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
@@ -35,6 +36,14 @@ public class PlayerEnteredSocket {
     @OnClose
     public void onClose(Session peer) {
         peers.remove(peer);
+        HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+        Player user = (Player) httpSession.getAttribute("player");
+        if(user.equals(GameManager.getInstance().getRoomById((String)httpSession.getAttribute("gameId")).getAdmin())){
+        	System.out.println("waishalos otaxi");
+        }
+        
+        user.leftGame();
+        
     }
 
     @OnMessage

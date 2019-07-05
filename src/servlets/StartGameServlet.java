@@ -44,10 +44,12 @@ public class StartGameServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id");
 		Room r = GameManager.getInstance().getRoomById(id);
-		Account admin = r.getAdmin();
-		if(((Account)request.getSession().getAttribute("user")).equals(admin)) {
+		Player admin = r.getAdmin();
+		Player curPlayer  = (Player) (request.getSession().getAttribute("player")) ;
+		if(curPlayer.equals(admin)) {
 			if(r.getPlayers().size() < 2) {
-				//utxras daelodos oponentebs
+				System.out.println("daelodos oponentens");
+				request.getRequestDispatcher("waitingForOpponents.jsp").forward(request, response);
 			}else {
 				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
 				GameManager.getInstance().addGame(g);

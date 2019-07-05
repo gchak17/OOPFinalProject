@@ -23,7 +23,7 @@
 			<li> <%= rooms.get(i) %>
 				
 				<form action="JoinRoomServlet" method="post"  >>
-				<input type = "submit" name="id" value = "Enter Room" >
+				<input type = "submit" value = "Enter Room" >
 				<input type="hidden" name="id" value="<%= rooms.get(i) %>" />
 				</form>
 			<li>
