@@ -21,18 +21,15 @@ function onMessage(evt) {
 
 function onChatMessage(evt){
 	var json = JSON.parse(evt.data);
+	$('#chatBox').append("<p class='username'>"+json.username+"</p><p class='text'>"+":"+json.message+"</p><br/>");
+	$('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
 }
 
 function clickOnSend(){
-	alert("came here")
+	alert("blaaa")
 	chatSocket.send(($('#chatText').val()));
     $('#chatText').val("")
 }
-
-function sendChatMessage(message){
-	chatSocket.send(message);
-}
-
 
 var canvas = document.getElementById("myCanvas");
 var context = canvas.getContext("2d");
