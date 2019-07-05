@@ -32,8 +32,8 @@ public class JoinRoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("shesvlis");
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.setAttribute("id", id);	
+		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 	}
 
 	/**
@@ -43,20 +43,24 @@ public class JoinRoomServlet extends HttpServlet {
 		Account user = (Account)request.getSession().getAttribute("user");
 		Player newPlayer = new Player(user);
 		
-		int RoomId = Integer.parseInt(request.getParameter("id").substring(5));
+		id = Integer.parseInt(request.getParameter("id").substring(5));
 		
-		Room r = GameManager.getInstance().getWaitingRooms().get(RoomId);
+		Room r = GameManager.getInstance().getWaitingRooms().get((Integer)id);
 		
+		
+		request.setAttribute("id", id);
 		
 		if(r.addPlayer(newPlayer)) {
 			
-			request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
+			//request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 		}else {
 			//utxras ro daarefreshos an sxva airchios
 			//igive pageze rom fanjara amoxtes egrec gamova 	
 			//request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request, response);
 		}
 		
-		
+		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 	}
+
+	private Object id;
 }

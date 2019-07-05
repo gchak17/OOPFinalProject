@@ -19,9 +19,9 @@ public class GameManager {
 		this.databaseManager = baseManager;
 	}
 	
-	public String addGame(ArrayList<Player> players) {
+	public String addGame(Game game) {
 		String id = generateRandomCode();
-		Game game = new Game(players, id);
+		game.setId(id);
 		games.put(id, game);
 		return id;
 	}

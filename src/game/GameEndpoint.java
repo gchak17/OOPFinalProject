@@ -27,12 +27,12 @@ public class GameEndpoint {
 
     @OnMessage
     public void sendMessage(Message message, Session session) throws IOException, EncodeException {
-        
     	if(message.getJson().getString("type").equals("isArtist?") ) {    	
         	JSONObject json = message.getJson();
         	json.put("answer", false);
-        	if(peers.get(0) == session) // account s eqneba aq ideashi dasetili aris tu ara mxatvari da imas amoiReb
+        	if(peers.get(0) == session) {
         		json.put("answer", true);
+        	}
         	
         	message.setJson(json);
         	session.getBasicRemote().sendObject(message);

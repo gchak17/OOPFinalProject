@@ -14,7 +14,8 @@
 </head>
 <body>
 
-	<% AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
+	<% 
+		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		Account currAccount = (Account)session.getAttribute("user");
 		List<Account> friends = currAccount.getFriendList();
 	%>
