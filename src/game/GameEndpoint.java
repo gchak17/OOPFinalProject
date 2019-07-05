@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import message.*;
 
-@ServerEndpoint(value = "/websocket", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
+@ServerEndpoint(value = "/client.html", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
 public class GameEndpoint {
     public static List<Session> peers = Collections.synchronizedList(new ArrayList<Session>());
     

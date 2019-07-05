@@ -1,3 +1,5 @@
+window.alert(5 + 6);
+
 var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
 var websocket = new WebSocket(wsUri);
