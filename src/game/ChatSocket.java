@@ -42,6 +42,7 @@ public class ChatSocket {
 
 	@OnMessage
 	public void sendMessage(String message, Session session) throws IOException, EncodeException {
+		System.out.println("came in here");
 		if (message == "") return;
 		String username = (String) session.getUserProperties().get("username");
 		chatlock.lock();

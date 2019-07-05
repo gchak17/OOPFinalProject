@@ -41,7 +41,7 @@ public class EnterChatServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String userName = request.getParameter("userName");
+		String userName = request.getParameter("username");
 		
 		request.getSession().setAttribute("username", userName);
 		request.getRequestDispatcher("Chat.html").forward(request, response);

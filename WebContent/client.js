@@ -1,11 +1,7 @@
 var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
-var wsUri2 = "ws://" + document.location.host + document.location.pathname + "chatSocket";
 
 var websocket = new WebSocket(wsUri);
-var chatSocket = new WebSocket(wsUri2);
 websocket.onmessage = function(evt) { onMessage(evt) };
-
-chatSocket.onmessage = function(evt) { onChatMessage(evt) };
 
 function sendText(json) {
     websocket.send(json);
@@ -17,18 +13,6 @@ function onMessage(evt) {
 		if(json.answer)isArtist = true;
 	}
     drawImageText(evt.data);
-}
-
-function onChatMessage(evt){
-	var json = JSON.parse(evt.data);
-	$('#chatBox').append("<p class='username'>"+json.username+"</p><p class='text'>"+":"+json.message+"</p><br/>");
-	$('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
-}
-
-function clickOnSend(){
-	alert("blaaa")
-	chatSocket.send(($('#chatText').val()));
-    $('#chatText').val("")
 }
 
 var canvas = document.getElementById("myCanvas");
