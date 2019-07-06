@@ -9,10 +9,10 @@ function onChatMessage(evt) {
 	alert("kill me");
 	var json = JSON.parse(evt.data);
 	alert(json.username + ": " + json.message);
-	/*$("#chatBox").append(
+	$("#chatBox").append(
 			"<p class='username'>" + json.username + "</p><p class='text'>"
 					+ ":" + json.message + "</p><br/>");
-	$("#chatBox").scrollTop($('#chatBox')[0].scrollHeight);*/
+	$("#chatBox").scrollTop($('#chatBox')[0].scrollHeight);
 }
 
 function clickOnSend() {
