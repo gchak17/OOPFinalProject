@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import managers.PasswordHasher;
+
 
 public class Account {
 	private long userID;
@@ -17,7 +19,7 @@ public class Account {
 	public Account(long userID, String username, String password, Avatar avatar) {
 		this.userID = userID;
 		this.username = username;
-		this.password = password;
+		this.password = PasswordHasher.passwordToHash(password);
 		this.avatar = avatar;
 		friendList = new HashMap<Long, Account>();
 	}
