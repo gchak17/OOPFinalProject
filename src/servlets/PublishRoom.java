@@ -55,7 +55,8 @@ public class PublishRoom extends HttpServlet {
 		Room waitingRoom = new Room(adminP, Rounds, selectedTime, MaxPlayer);
 		String id = GameManager.getInstance().registerRoom(waitingRoom);
 				
-		request.setAttribute("id", id);	
+		request.setAttribute("id", id);
+		
 		request.getSession().setAttribute("gameId", id);
 		
 		request.getSession().setAttribute("player", adminP);

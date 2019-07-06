@@ -26,13 +26,13 @@ public class Player {
 		assert (timeLeft>0);
         isArtist=true;
         turnStartTimeMillis = System.currentTimeMillis();
-//        timer.schedule(new TimerTask() {timer = new Timer();
-//        
-//            @Override
-//            public void run() {
-//                //game.timePassedFor(account);
-//            }
-//        },timeLeft*1000);
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //game.timePassedFor(account);
+            }
+        },timeLeft*1000);
         System.out.println(account.getUsername() + " started turn, time remaining:" + getRemainingTimeSeconds());
 	}
 	
@@ -81,13 +81,20 @@ public class Player {
 	public void setRoom() {
 		// TODO Auto-generated method stub
 	}
+	
 	public int getScore() {
 		return this.score;
 	}
+	
 	public boolean isInGame() {
 		return isStillIntheGame;
 	}
+	
 	public void leftGame() {
 		isStillIntheGame = false;
+	}
+	
+	public boolean isArtist() {
+		return isArtist;
 	}
 }
