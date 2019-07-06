@@ -12,51 +12,47 @@
 </head>
 <body>
          
-         		
 				
-         <%
-	         String RoomId = (String)request.getAttribute("id");
-	     %>
-	         <form action="StartGameServlet" method="post"  >>
-      		<input type="hidden" name="id" value="<%= RoomId %>" />
-				<input type = "submit" value = "Start Game">
-				</form>
+       
+	 <button onclick="startGame()">Start Game</button>
 	     
-	     
-	     <%    
-	         Room r = GameManager.getInstance().getRoomById(RoomId);
-	         ArrayList<Player> players = r.getPlayers();
-	         %>
-	         <ul>
-	 		<% for(int i = 0; i < players.size(); i++){
-	 			%>
-	 			<li> <%= players.get(i).toString() %>
-	 				
-	 			<li>
-	 			<%
-	 			
-	 		}%>
+	 <p id="demo"></p>  
 	 		
 	 		
-	 	  
-	 	</ul>
+	 	
 
 	<script>
 	//var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
 	var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/PublishRoom");
-	websocket.onmessage = function(evt) { onMessage(evt) };
-
-	function sendText(json) {
-	    websocket.send(json);
+	websocket.onmessage = function(evt) { updatePage(evt) };
+	
+	function updatePage(evt) {
+		
+		var json = JSON.parse(evt.data);
+		
+		if(json.type === "playersList"){
+			document.getElementById("demo").innerHTML = json.players;
+		}else if (json.type === "start"){
+			if(json.forward){
+				location.replace("http://localhost:8080/OOPFinalProject/client.html")
+			}else{
+				//aq utxras ro shen ar xar adzmini dzmaovo
+			}
+		}
+	}
+	
+	function startGame() {
+		 var json = JSON.stringify({
+		    	"type" : "start",
+		    	"forward" : false
+		    });
+		websocket.send(json);
 	}
 
-	function onMessage(evt) {
-		//daarefreshos gadmocemuli informaciis mixedvit..principshi arc chirdeba gadmocema.. prosta unda utxras ro ganaxsldes
-	}
-
-
-	</script>    
+	</script> 
+	
+	 
       
 </body>
 </html>
