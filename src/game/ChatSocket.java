@@ -29,9 +29,8 @@ public class ChatSocket {
 
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
-		System.out.println("sth");
-		HttpSession httpSession = ((HttpSession)session.getUserProperties().get("HttpSession"));
-		System.out.println(httpSession);
+		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
+		System.out.println("on open: " + httpSession);
 		String username = (String) httpSession.getAttribute("username");
 		session.getUserProperties().put("username", username);
 		sessionList.add(session);
@@ -39,24 +38,29 @@ public class ChatSocket {
 
 	@OnClose
 	public void onClose(Session session) {
-		System.out.println("cs");
+		System.out.println("on close");
 		sessionList.remove(session);
 	}
 
 	@OnMessage
 	public void sendMessage(String message, Session session) throws IOException, EncodeException {
-		System.out.println("came in here");
-		if (message == "") return;
+		if (message == "")
+			return;
 		String username = (String) session.getUserProperties().get("username");
+
+		System.out.println("came in here- " + username + ": " + message);
 		chatlock.lock();
 		for (Session curSes : sessionList) {
-            if (!curSes.equals(session)) {
-            	JSONObject js = new JSONObject();
-            	js.append("username", username);
-            	js.append("message", message);
-            	curSes.getBasicRemote().sendText(js.toString());
-            }
-        }
+			System.out.println("in for: " + curSes.getUserProperties().get("username") + " :: " + curSes.getId());
+			// if (!curSes.equals(session)) {
+
+			JSONObject js = new JSONObject();
+			js.append("username", username);
+			js.append("message", message);
+			curSes.getBasicRemote().sendText(js.toString());
+		}
+		// }
 		chatlock.unlock();
+		System.out.println("end");
 	}
 }

@@ -35,7 +35,8 @@ public class EnterChatServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String username = (String) request.getSession().getAttribute("username");
 		response.getWriter().append("Served at: " + username + " ").append(request.getContextPath());
-		//request.getRequestDispatcher("Chat.html").forward(request, response);
+
+		request.getRequestDispatcher("Chat.html").forward(request, response);
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class EnterChatServlet extends HttpServlet {
 		request.getSession().setAttribute("username", userName);
 		request.getRequestDispatcher("Chat.html").forward(request, response);
 				
-		doGet(request, response);
+		//doGet(request, response);
 	}
 
 }
