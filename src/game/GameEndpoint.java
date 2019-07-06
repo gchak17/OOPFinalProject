@@ -36,9 +36,10 @@ public class GameEndpoint {
         	json.put("answer", false);
 
             HttpSession httpSession = ((HttpSession)session.getUserProperties().get("HttpSession"));
-            Account user = (Account) httpSession.getAttribute("user");
+            Player user = (Player) httpSession.getAttribute("player");
+            //System.out.println(user);
             
-        	if(peers.get(0) == session) {
+        	if(user.isArtist()) {
         		json.put("answer", true);
         	}
         	
