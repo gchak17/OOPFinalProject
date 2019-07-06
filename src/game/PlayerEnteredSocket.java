@@ -48,6 +48,41 @@ public class PlayerEnteredSocket {
 
     @OnMessage
     public void sendMessage(Message message, Session session) throws IOException, EncodeException {
+    	JSONObject json = message.getJson();
+    	
+    	if(message.getJson().getString("type").equals("start") ) {    	
+        	
+        	HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
+        	String id = (String) httpSession.getAttribute("gameId");
+        	
+    		Room r = GameManager.getInstance().getRoomById(id);
+
+			
+    		Player admin = r.getAdmin();
+    		Player curPlayer  = (Player) (httpSession.getAttribute("player")) ;
+    		if(curPlayer.equals(admin)) {
+    			if(r.getPlayers().size() < 2) {
+    				System.out.println("daelodos oponentens");
+    				
+    			}else {
+    				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
+    				GameManager.getInstance().addGame(g);
+    				
+    				json.put("forward", true);
+    				for (Session peer : peers) {
+    		            peer.getBasicRemote().sendObject(message);
+    		        }
+    	 		}
+    		}else {
+    			session.getBasicRemote().sendObject(json);
+    			//only admin can start
+    		}
+        	
+          
+	    	
+        }
+    	
+    	
     
     }
     
@@ -58,16 +93,22 @@ public class PlayerEnteredSocket {
     	ArrayList<Player> players = r.getPlayers();
     	
     	JSONObject json = generateJsonForPlayers(players);
-    	
+    	Message newM = new Message(json);
     	
     	for (Session peer : peers) {
-    		peer.getBasicRemote().sendObject(new Message(json));
+    		peer.getBasicRemote().sendObject(newM);
         }
     }
 
 	private JSONObject generateJsonForPlayers(ArrayList<Player> players) {
 		JSONObject json = new JSONObject();
-		json.put("players", "");
+		String Players =  "";
+		for(int i = 0; i < players.size(); i++) {
+			Players += players.get(i).toString() + " ";
+		}
+		System.out.println(Players);
+		json.put("players", Players);
+		json.put("type", "playersList");
 		
 		return json;
 	}

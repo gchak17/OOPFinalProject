@@ -68,11 +68,11 @@ insert into avatars(avatar_filename, relative_path_id) values ('8.png', 2);
 insert into avatars(avatar_filename, relative_path_id) values ('9.png', 2); 
     
 insert into accounts (user_name, authentication_string, avatar_id)values
-	("Sandro", "Sandro", 6),
-	("Tamo", "Tamo", 1),
-    ("Gio", "Gio", 3),
-	("Anano", "Anano", 1),
-	("Izi","Izi", 2);
+	("Sandro", "7f3c0e9cffe87df09efbb7d24fcfe8e4d520125c", 6),
+	("Tamo", "b536d821f4dfe6e7168f0a3145583fa2754bd2e3", 1),
+    ("Gio", "8bbd45107f60757dfc06f3ecaa75ec7fcf51f5b2", 3),
+	("Anano", "8418d17eee4f3bbef294c397e94f08a27f12c257", 1),
+	("Izi","596f725f19333604c053fe47bb61d44c514045e5", 2);
 	
 insert into friend_connections(user1_id, user2_id) values
 		(1, 2),
@@ -80,7 +80,6 @@ insert into friend_connections(user1_id, user2_id) values
         (5, 3),
         (4, 1),
         (5, 2);    
-    
     
 drop view if exists friendships;
     
@@ -111,8 +110,4 @@ select a.id,
         ap.pathname
 	from avatars a
     join avatar_paths ap
-    on (a.relative_path_id = ap.id);
-
-
-
-    
+    on (a.relative_path_id = ap.id); 
