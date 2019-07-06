@@ -52,6 +52,7 @@ public class JoinRoomServlet extends HttpServlet {
 		request.setAttribute("id", id);
 		
 		if(r.addPlayer(newPlayer)) {
+			System.out.println(r.getPlayers());
 			request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 		}else {
 			//utxras ro daarefreshos an sxva airchios
