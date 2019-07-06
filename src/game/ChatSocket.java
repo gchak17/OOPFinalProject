@@ -52,14 +52,12 @@ public class ChatSocket {
 		chatlock.lock();
 		for (Session curSes : sessionList) {
 			System.out.println("in for: " + curSes.getUserProperties().get("username") + " :: " + curSes.getId());
-			// if (!curSes.equals(session)) {
 
 			JSONObject js = new JSONObject();
 			js.append("username", username);
 			js.append("message", message);
 			curSes.getBasicRemote().sendText(js.toString());
 		}
-		// }
 		chatlock.unlock();
 		System.out.println("end");
 	}
