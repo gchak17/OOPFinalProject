@@ -1,9 +1,9 @@
-var wsUri2 = "ws://" + document.location.host + document.location.pathname + "chatSocket";
 
-var chatSocket = new WebSocket(wsUri2);
+var chatSocket = new WebSocket("ws://localhost:8081/OOPFinalProject/EnterChatServlet?");
 
 chatSocket.onmessage = function(evt) { onChatMessage(evt) };
-
+chatSocket.onopen = function(evt) {  };
+chatSocket.onclose = function(evt) { };
 function onChatMessage(evt){
 	alert("kill me");
 	var json = JSON.parse(evt.data);
@@ -13,7 +13,6 @@ function onChatMessage(evt){
 
 
 function clickOnSend(){
-	alert("here");
 	chatSocket.send($('#chatText').val());
     $('#chatText').val("")
 }

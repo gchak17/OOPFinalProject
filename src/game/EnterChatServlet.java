@@ -33,7 +33,9 @@ public class EnterChatServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String username = (String) request.getSession().getAttribute("username");
+		response.getWriter().append("Served at: " + username + " ").append(request.getContextPath());
+		//request.getRequestDispatcher("Chat.html").forward(request, response);
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class EnterChatServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String userName = request.getParameter("username");
-		
+		System.out.println("in do post: " + userName);
 		request.getSession().setAttribute("username", userName);
 		request.getRequestDispatcher("Chat.html").forward(request, response);
 				

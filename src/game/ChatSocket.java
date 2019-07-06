@@ -21,7 +21,7 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/chatSocket", encoders = { MessageEncoder.class }, decoders = { MessageDecoder.class })
+@ServerEndpoint(value = "/EnterChatServlet")
 public class ChatSocket {
 
 	public static List<Session> sessionList = Collections.synchronizedList(new ArrayList<Session>());
@@ -29,6 +29,7 @@ public class ChatSocket {
 
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
+		System.out.println("sth");
 		HttpSession httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
 		String username = (String) httpSession.getAttribute("username");
 		session.getUserProperties().put("username", username);
@@ -37,6 +38,7 @@ public class ChatSocket {
 
 	@OnClose
 	public void onClose(Session session) {
+		System.out.println("cs");
 		sessionList.remove(session);
 	}
 
