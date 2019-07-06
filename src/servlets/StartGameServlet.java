@@ -1,23 +1,31 @@
-package main;
+package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
+import game.Game;
+import game.GameManager;
+import game.Player;
+import game.Room;
+
 /**
- * Servlet implementation class WaitingRoomsServlet
+ * Servlet implementation class StartGameServlet
  */
-@WebServlet("/WaitingRoomsServlet")
-public class WaitingRoomsServlet extends HttpServlet {
+@WebServlet("/StartGameServlet")
+public class StartGameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public WaitingRoomsServlet() {
+    public StartGameServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,9 +42,24 @@ public class WaitingRoomsServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request, response);
-
+		String id = request.getParameter("id");
+		Room r = GameManager.getInstance().getRoomById(id);
+		Player admin = r.getAdmin();
+		Player curPlayer  = (Player) (request.getSession().getAttribute("player")) ;
+		if(curPlayer.equals(admin)) {
+			if(r.getPlayers().size() < 2) {
+				System.out.println("daelodos oponentens");
+				request.getRequestDispatcher("waitingForOpponents.jsp").forward(request, response);
+			}else {
+				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
+				GameManager.getInstance().addGame(g);
+				
+				request.getRequestDispatcher("client.html").forward(request, response);
+				
+	 		}
+		}else {
+			//only admin can start
+		}
 	}
 
 }

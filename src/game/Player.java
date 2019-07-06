@@ -12,10 +12,13 @@ public class Player {
 	private Game game;
 	private long turnStartTimeMillis;
 	private Timer timer;
+	private int score;
+	private boolean isStillIntheGame = true;
 	
 	public Player(Account account) {
 		this.account = account;
 		isArtist = false;
+		score = 0;
 		timeLeft = 0;
 	}
 	
@@ -69,5 +72,22 @@ public class Player {
 			return false;
 		}
         return (this.account.equals(((Player)other).account));
+	}
+	
+	public Game getGame() {
+		return this.game;
+	}
+
+	public void setRoom() {
+		// TODO Auto-generated method stub
+	}
+	public int getScore() {
+		return this.score;
+	}
+	public boolean isInGame() {
+		return isStillIntheGame;
+	}
+	public void leftGame() {
+		isStillIntheGame = false;
 	}
 }

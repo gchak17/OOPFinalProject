@@ -1,31 +1,25 @@
-package main;
+package servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.Account;
-import game.Game;
-import game.GameManager;
-import game.Player;
-import game.Room;
+import managers.AccountData;
 
 /**
- * Servlet implementation class StartGameServlet
+ * Servlet implementation class CreateRoom
  */
-@WebServlet("/StartGameServlet")
-public class StartGameServlet extends HttpServlet {
+@WebServlet("/CreateRoom")
+public class CreateRoom extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public StartGameServlet() {
+    public CreateRoom() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,22 +36,7 @@ public class StartGameServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
-		Room r = GameManager.getInstance().getWaitingRooms().get(id);
-		Account admin = r.getAdmin();
-		if(((Account)request.getSession().getAttribute("user")).equals(admin)) {
-			if(r.getPlayers().size() < 2) {
-				//utxras daelodos oponentebs
-			}else {
-				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime());
-				GameManager.getInstance().addGame(g);
-				
-				request.getRequestDispatcher("client.html").forward(request, response);
-				//g.startGame(); dawyebas ideashi soketi mixvdeba albat da aq aseTi meTodi ar iqneba sachiro
-	 		}
-		}else {
-			//only admin can start
-		}
+		request.getRequestDispatcher("CreateRoom.html").forward(request, response);
 	}
 
 }

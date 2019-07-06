@@ -1,4 +1,4 @@
-package main;
+package servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,19 +7,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import managers.AccountData;
-
 /**
- * Servlet implementation class CreateRoom
+ * Servlet implementation class WaitingRoomsServlet
  */
-@WebServlet("/CreateRoom")
-public class CreateRoom extends HttpServlet {
+@WebServlet("/WaitingRoomsServlet")
+public class WaitingRoomsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateRoom() {
+    public WaitingRoomsServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,8 +34,9 @@ public class CreateRoom extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = (String) request.getSession().getAttribute("username");
-		request.getRequestDispatcher("createRoom.jsp").forward(request, response);
+
+		request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request, response);
+
 	}
 
 }
