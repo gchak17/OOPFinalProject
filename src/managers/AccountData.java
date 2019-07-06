@@ -18,12 +18,10 @@ import dao.Avatar;
 import db.MyDBInfo;
 
 public class AccountData {
-	
 	private Connection conn;
 	private static AccountData manager;
 	private AvatarManager avatarManager;
 	private HashMap<Long, Account> accounts;
-	
 	
 	private AccountData() throws SQLException{
 		accounts = new HashMap<Long, Account>();
@@ -78,7 +76,7 @@ public class AccountData {
 		try {
 			Statement st  = conn.createStatement();
 			st.executeUpdate("insert into accounts(id, user_name, authentication_string, avatar_id) values\n" + 
-					"(" + account.getID() + ", '" + account.getUsername() + "', '" + account.getPassword() + "', " + account.getAvatar().getID() + ");");
+					"(" + account.getID() + ", '" + account.getUsername() + "', '" + PasswordHasher.passwordToHash(account.getPassword()) + "', " + account.getAvatar().getID() + ");");
 						
 			st.close();
 			accounts.put(account.getID(), account);
@@ -126,8 +124,9 @@ public class AccountData {
 	 */
 	public Account authenticate(String username, String password) {
 		//TODO
+		String hashedPassword = PasswordHasher.passwordToHash(password);
 		for(Account a : accounts.values()) {
-			if(a.getUsername().equals(username) && a.getPassword().equals(password)) {
+			if(a.getUsername().equals(username) && a.getPassword().equals(hashedPassword)) {
 				return a;
 			}
 		}
@@ -143,7 +142,7 @@ public class AccountData {
 				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	/*
@@ -152,5 +151,4 @@ public class AccountData {
 	public int numAccounts() {
 		return accounts.size();
 	}
-
 }

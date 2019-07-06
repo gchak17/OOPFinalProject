@@ -2,11 +2,8 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-
 import managers.PasswordHasher;
-
 
 public class Account {
 	private long userID;
@@ -15,11 +12,10 @@ public class Account {
 	private Avatar avatar;
 	private HashMap<Long, Account> friendList;
 	
-	
 	public Account(long userID, String username, String password, Avatar avatar) {
 		this.userID = userID;
 		this.username = username;
-		this.password = PasswordHasher.passwordToHash(password);
+		this.password = password;
 		this.avatar = avatar;
 		friendList = new HashMap<Long, Account>();
 	}
@@ -43,11 +39,6 @@ public class Account {
 	public void setUsername(String newUserName) {
 		username = newUserName;
 	}
-	
-	public void setPassword(String newPassword) {
-		password = newPassword;
-	}
-	
 	
 	public void addFriend(Account friend) {
 		friendList.put(friend.getID(), friend);
@@ -86,5 +77,4 @@ public class Account {
 	public String toString() {
 		return "User: " + this.username + " Pass: " + this.password;
 	}
-	
 }
