@@ -17,7 +17,6 @@
 	<% 
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		Account currAccount = (Account)session.getAttribute("user");
-		List<Account> friends = currAccount.getFriendList();
 	%>
 
 	<img src="<%=currAccount.getAvatar().getFullPath() %>">
@@ -34,16 +33,6 @@
 		<input type="submit" value="Show Rooms">
 	</form>
 	
-	
-
-	<ul>
-		<% for(int i = 0; i < friends.size(); i++){
-			%>
-			<li>"<%= friends.get(i).getUsername() %>"</li>
-			<%
-		}%>
-	  
-	</ul>
 
 </body>
 </html>

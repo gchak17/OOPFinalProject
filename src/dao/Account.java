@@ -10,15 +10,17 @@ public class Account {
 	private String username;
 	private String password;
 	private Avatar avatar;
-	private HashMap<Long, Account> friendList;
+//	private HashMap<String, Account> friendList;
 	
 	public Account(long userID, String username, String password, Avatar avatar) {
 		this.userID = userID;
 		this.username = username;
 		this.password = password;
 		this.avatar = avatar;
-		friendList = new HashMap<Long, Account>();
+//		friendList = new HashMap<String, Account>();
 	}
+	
+	
 	
 	public long getID() {
 		return userID; 
@@ -32,6 +34,7 @@ public class Account {
 		return password;
 	}
 	
+	
 	public Avatar getAvatar() {
 		return avatar;
 	}
@@ -41,21 +44,33 @@ public class Account {
 	}
 	
 	public void addFriend(Account friend) {
-		friendList.put(friend.getID(), friend);
+//		friendList.put(friend.getUsername(), friend);
 	}
 	
 	public Account getFriendByID(long userID) {
-		if(friendList.containsKey(userID)) {
-			return friendList.get(userID);
-		}
+//		for(Account a : friendList.values()) {
+//			if(a.getID() == userID) {
+//				return a;
+//			}
+//		}
+		return null;
+	}
+	
+	/*
+	 * 
+	 */
+	public Account getFriendByUsername(String username) {
+//		if(friendList.containsKey(username)) {
+//			return friendList.get(username);
+//		}
 		return null;
 	}
 	
 	public List<Account> getFriendList(){
 		List<Account> res = new ArrayList<Account>();
-		for(Account a : friendList.values()) {
-			res.add(a);
-		}
+//		for(Account a : friendList.values()) {
+//			res.add(a);
+//		}
 		return res;
 	}
 	

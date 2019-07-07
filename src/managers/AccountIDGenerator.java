@@ -2,16 +2,15 @@ package managers;
 
 import java.sql.*;
 
-public class IDGenerator {
+public class AccountIDGenerator extends SimpleIDGenerator{
 	
-	private static IDGenerator generator;
-	private long nextID;
+	private static AccountIDGenerator generator;
 	
-	private IDGenerator() {
+	private AccountIDGenerator() {
 		try {
 			Connection conn = ConnectionManager.getDBConnection();
 			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select max(id) from accounts;");
+			ResultSet rs = st.executeQuery("select max(a.id) from accounts a;");
 			
 			while(rs.next()) {
 				nextID = rs.getLong(1);
@@ -22,12 +21,12 @@ public class IDGenerator {
 		}
 	}
 	
-	public static IDGenerator getInstance() {
+	public static AccountIDGenerator getInstance() {
 		if(generator == null) {
-			synchronized(IDGenerator.class) {
+			synchronized(AccountIDGenerator.class) {
 				if(generator == null) {
 					try {
-						generator = new IDGenerator();
+						generator = new AccountIDGenerator();
 					}catch(Exception e) {
 						e.printStackTrace();
 					}
@@ -37,8 +36,4 @@ public class IDGenerator {
 		return generator;
 	}
 	
-	
-	public long generateID() {
-		return ++nextID;
-	}
 }

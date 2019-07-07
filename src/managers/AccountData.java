@@ -18,28 +18,16 @@ import dao.Avatar;
 import db.MyDBInfo;
 
 public class AccountData {
+	
 	private Connection conn;
 	private static AccountData manager;
 	private AvatarManager avatarManager;
-	private HashMap<Long, Account> accounts;
+//	private HashMap<Long, Account> accounts;
 	
 	private AccountData() throws SQLException{
-		accounts = new HashMap<Long, Account>();
 		try {
 			conn = ConnectionManager.getDBConnection();
 			avatarManager = AvatarManager.getInstance();
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select * from accounts;");
-			while(rs.next()) {
-				long userID = rs.getLong(1);// id
-				String username = rs.getString(2);// username
-				String password = rs.getString(3);// password
-				long avatarID = rs.getLong(5);// avatarID
-				
-				accounts.put(userID, new Account(userID, username, password, avatarManager.getAvatarByID(avatarID)));
-			}
-			rs.close();
-			st.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -68,24 +56,24 @@ public class AccountData {
 	/*
 	 * 
 	 */
-	public int addAccount(Account account) {
+	public boolean addAccount(Account account) {
 		//TODO check if the account is already registered
 		/* 
 		 * insert into database  
 		 */
+		int res = 0;
 		try {
 			Statement st  = conn.createStatement();
-			st.executeUpdate("insert into accounts(id, user_name, authentication_string, avatar_id) values\n" + 
+			res = st.executeUpdate("insert into accounts(id, user_name, authentication_string, avatar_id) values\n" + 
 					"(" + account.getID() + ", '" + account.getUsername() + "', '" + PasswordHasher.passwordToHash(account.getPassword()) + "', " + account.getAvatar().getID() + ");");
 						
 			st.close();
-			accounts.put(account.getID(), account);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return 1;
+		return res != 0;
 	}
 	
 	
@@ -93,18 +81,16 @@ public class AccountData {
 	 * 
 	 */
 	public boolean removeAccount(Account account) {
+		int res = 0;
 		try {
 			Statement st = conn.createStatement();
-			int res = st.executeUpdate("delete from accounts where id = '" + account.getID() + "';");
-			accounts.remove(account.getID());
+			res = st.executeUpdate("delete from accounts where id = '" + account.getID() + "';");
 			st.close();
-			System.out.println(account.getUsername());
-			return res != 0;
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return false;
+		return res != 0;
 	}
 	
 	
@@ -113,10 +99,20 @@ public class AccountData {
 	 */
 	public Account getAccountByID(long userID) {
 		//TODO
-		if(accounts.containsKey(userID)) {
-			return accounts.get(userID);
+		Account account = null;
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select a.id, a.user_name, a.authentication_string, a.avatar_id from accounts a where a.id = "  + userID + ";");
+			while(rs.next()) {
+				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)));
+			}
+			
+			rs.close();
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
-		return null;
+		return account;
 	}
 	
 	/*
@@ -124,31 +120,45 @@ public class AccountData {
 	 */
 	public Account authenticate(String username, String password) {
 		//TODO
+		Account account = null;
 		String hashedPassword = PasswordHasher.passwordToHash(password);
-		for(Account a : accounts.values()) {
-			if(a.getUsername().equals(username) && a.getPassword().equals(hashedPassword)) {
-				return a;
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select a.id, a.user_name, a.authentication_string, a.avatar_id from accounts a " + 
+												"where a.user_name = '" + username + "' and a.authentication_string = '" + hashedPassword + "';");
+			
+			while(rs.next()) {
+				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)));
 			}
+			
+			rs.close();
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
-		return null;
+		return account;
 	}
 	
 	/*
 	 * 
 	 */
 	public boolean nameInUse(String username) {
-		for(Account a : accounts.values()) {
-			if(a.getUsername().equals(username)) {
-				return true;
+		boolean res = false;
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select a.id from accounts a where a.user_name = '" + username + "';");
+			
+			while(rs.next()) {
+				res = true;
 			}
+			
+			rs.close();
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
-		return false;
+		
+		return res;
 	}
 	
-	/*
-	 * 
-	 */
-	public int numAccounts() {
-		return accounts.size();
-	}
 }

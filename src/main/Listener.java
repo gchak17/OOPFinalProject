@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebListener;
 
 import managers.AccountData;
 import managers.AvatarManager;
-import managers.IDGenerator;
+import managers.AccountIDGenerator;
 
 /**
  * Application Lifecycle Listener implementation class Listener
@@ -37,12 +37,12 @@ public class Listener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0)  {
     	AccountData accountData = null;
     	AvatarManager avatarManager = null;
-    	IDGenerator generator = null;
+    	AccountIDGenerator generator = null;
     	
 		try {
 			accountData = AccountData.getInstance();
 			avatarManager = AvatarManager.getInstance();
-			generator = IDGenerator.getInstance();
+			generator = AccountIDGenerator.getInstance();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

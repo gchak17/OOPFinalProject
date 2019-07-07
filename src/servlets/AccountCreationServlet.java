@@ -11,7 +11,7 @@ import dao.Account;
 import dao.Avatar;
 import managers.AccountData;
 import managers.AvatarManager;
-import managers.IDGenerator;
+import managers.AccountIDGenerator;
 
 /**
  * Servlet implementation class AccountCreationServlet
@@ -43,7 +43,7 @@ public class AccountCreationServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		AvatarManager avatarManager = (AvatarManager)getServletContext().getAttribute("avatarManager");
-		IDGenerator generator = (IDGenerator)getServletContext().getAttribute("idGenerator");
+		AccountIDGenerator generator = (AccountIDGenerator)getServletContext().getAttribute("idGenerator");
 		
 		String userName = request.getParameter("userName");
 		String password = request.getParameter("password");

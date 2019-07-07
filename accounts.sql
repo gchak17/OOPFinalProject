@@ -9,7 +9,7 @@ drop table if exists accounts;
 -- ------------------accounts table--------------
 create table accounts
 (id integer auto_increment primary key not null,
- user_name text not null,
+ user_name varchar(255) unique not null,
  authentication_string text not null,
  register_date datetime not null default current_timestamp,
  avatar_id integer not null default 1
@@ -34,38 +34,32 @@ alter table friend_connections
 
 
 -- ------------------avatars------------------
-create table avatar_paths
-(id integer not null auto_increment primary key,
-pathname text not null);
-
 create table avatars
 (id integer not null auto_increment primary key,
-avatar_filename text not null,
-relative_path_id integer not null);
+avatar_filename varchar(256) not null,
+path_name varchar(256) not null);
+
 
 alter table avatars
-	add constraint pathname_fk foreign key(relative_path_id)
-		references avatar_paths(id);
+	add constraint unique_avatar unique (avatar_filename, path_name);
 
 alter table accounts
 	add constraint avatar_fk foreign key (avatar_id)
     references avatars(id);
 
 
+
 -- --------------insert sample values--------------
-insert into avatar_paths(pathname) values ('.');
-insert into avatar_paths(pathname) values ('./avatars');
 
-
-insert into avatars(avatar_filename, relative_path_id) values ('1.png', 2);
-insert into avatars(avatar_filename, relative_path_id) values ('2.png', 2); 
-insert into avatars(avatar_filename, relative_path_id) values ('3.png', 2);
-insert into avatars(avatar_filename, relative_path_id) values ('4.png', 2); 
-insert into avatars(avatar_filename, relative_path_id) values ('5.png', 2);
-insert into avatars(avatar_filename, relative_path_id) values ('6.png', 2); 
-insert into avatars(avatar_filename, relative_path_id) values ('7.png', 2);
-insert into avatars(avatar_filename, relative_path_id) values ('8.png', 2); 
-insert into avatars(avatar_filename, relative_path_id) values ('9.png', 2); 
+insert into avatars(avatar_filename, path_name) values ('1.png', "./avatars");
+insert into avatars(avatar_filename, path_name) values ('2.png', "./avatars"); 
+insert into avatars(avatar_filename, path_name) values ('3.png', "./avatars");
+insert into avatars(avatar_filename, path_name) values ('4.png', "./avatars"); 
+insert into avatars(avatar_filename, path_name) values ('5.png', "./avatars");
+insert into avatars(avatar_filename, path_name) values ('6.png', "./avatars"); 
+insert into avatars(avatar_filename, path_name) values ('7.png', "./avatars");
+insert into avatars(avatar_filename, path_name) values ('8.png', "./avatars"); 
+insert into avatars(avatar_filename, path_name) values ('9.png', "./avatars"); 
     
 insert into accounts (user_name, authentication_string, avatar_id)values
 	("Sandro", "7f3c0e9cffe87df09efbb7d24fcfe8e4d520125c", 6),
@@ -95,19 +89,10 @@ create view acc_info
 as
 select ac.user_name,
 		ac.authentication_string,
-        pathname,
-        avatar_filename
+        concat(a.path_name, '/',  a.avatar_filename) as full_path
 	from accounts ac
     left join avatars a
-    on (ac.avatar_id = a.id)
-    left join avatar_paths ap
-    on (a.relative_path_id = ap.id);
-
-create view avatar_info
-as
-select a.id,
-		a.avatar_filename,
-        ap.pathname
-	from avatars a
-    join avatar_paths ap
-    on (a.relative_path_id = ap.id); 
+    on (ac.avatar_id = a.id);
+    
+    
+    

@@ -10,25 +10,10 @@ public class AvatarManager {
 	
 	private static AvatarManager manager;
 	private Connection conn;
-	private HashMap<Long, Avatar> avatars;
 	
-	private AvatarManager() throws SQLException{
-		avatars = new HashMap<Long, Avatar>();
+	private AvatarManager(){
 		try {
 			conn = ConnectionManager.getDBConnection();
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery("select * from avatar_info;");
-			
-			//TODO populate avatars HashMap
-			while(rs.next()) {
-				
-				long id = rs.getLong(1);// id
-				String filename = rs.getString(2);// filename
-				String path = rs.getString(3);// path
-				avatars.put(id, new Avatar(id, filename, path));
-			}
-			rs.close();
-			st.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -50,15 +35,38 @@ public class AvatarManager {
 	}
 	
 	public Avatar getAvatarByID(long avatarID) {
-		if(avatars.containsKey(avatarID)) {
-			return avatars.get(avatarID);
+		Avatar avatar = null;
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select a.* from avatars a where a.id = " + avatarID + ";");
+			
+			while(rs.next()) {
+				avatar = new Avatar(rs.getInt(1), rs.getString(2), rs.getString(3));
+			}
+			
+			rs.close();
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
-		return null;
+		return avatar;
 	}
 	
-	public void addAvatar(Avatar avatar) {
-		if(!avatars.containsKey(avatar.getID())) {
-			avatars.put(avatar.getID(), avatar);
+	public boolean addAvatar(Avatar avatar) {
+		int res = 0;
+		try {
+			Statement st1 = conn.createStatement();
+			
+			
+			res = st1.executeUpdate("insert into avatars values (" + 
+											avatar.getID() + ", " + 
+											avatar.getFilename() + ", " + 
+											avatar.getPath() +");");
+			st1.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
+		
+		return res != 0;
 	}
 }
