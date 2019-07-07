@@ -1,5 +1,10 @@
 @charset "ISO-8859-1";
 
+.canvas-div{
+	border-radius: 5px;
+	border-style: solid;
+}
+
 #myCanvas{
 	position:absolute;
 	top:10%;

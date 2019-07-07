@@ -30,7 +30,6 @@ public class ChatSocket {
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
-		System.out.println("on open: " + httpSession);
 		String username = (String) httpSession.getAttribute("username");
 		session.getUserProperties().put("username", username);
 		sessionList.add(session);
@@ -38,7 +37,6 @@ public class ChatSocket {
 
 	@OnClose
 	public void onClose(Session session) {
-		System.out.println("on close");
 		sessionList.remove(session);
 	}
 
@@ -48,10 +46,8 @@ public class ChatSocket {
 			return;
 		String username = (String) session.getUserProperties().get("username");
 
-		System.out.println("came in here- " + username + ": " + message);
 		chatlock.lock();
 		for (Session curSes : sessionList) {
-			System.out.println("in for: " + curSes.getUserProperties().get("username") + " :: " + curSes.getId());
 
 			JSONObject js = new JSONObject();
 			js.append("username", username);
@@ -59,6 +55,5 @@ public class ChatSocket {
 			curSes.getBasicRemote().sendText(js.toString());
 		}
 		chatlock.unlock();
-		System.out.println("end");
 	}
 }
