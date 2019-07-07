@@ -22,7 +22,6 @@ public class Game {
 	private boolean everybodyGuessed;
 
 	private boolean isGameOver = false;
-	private boolean isRoundOver = false;
 	private Round round;
 	private int nthRound;
 
@@ -65,6 +64,7 @@ public class Game {
 
 	public void startNewRound() {
 		choosePainter();
+		
 		nthRound++;
 		Round r = new Round(nthRound, players, artist);
 		this.round = r;
@@ -113,4 +113,7 @@ public class Game {
 		return null;
 	}
 
+	public ArrayList<Player> getPlayers(){
+		return players;
+	}
 }

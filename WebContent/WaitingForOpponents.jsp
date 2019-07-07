@@ -35,7 +35,7 @@
 			document.getElementById("demo").innerHTML = json.players;
 		}else if (json.type === "start"){
 			if(json.forward){
-				location.replace("http://localhost:8080/OOPFinalProject/client.html")
+				location.replace("http://localhost:8080/OOPFinalProject/client.jsp")
 			}else{
 				//aq utxras ro shen ar xar adzmini dzmaovo
 			}

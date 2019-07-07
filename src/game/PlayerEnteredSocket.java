@@ -24,7 +24,7 @@ import message.MessageEncoder;
 @ServerEndpoint(value = "/PublishRoom", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class}, configurator = GameSocketConfig.class)
 public class PlayerEnteredSocket {
     public static List<Session> peers = Collections.synchronizedList(new ArrayList<Session>());
-    
+    private static boolean gameIsNotStarted = true;
     @OnOpen
     public void onOpen(Session peer) throws IOException, EncodeException {
     	System.out.println("oh henlo fren");
@@ -35,14 +35,21 @@ public class PlayerEnteredSocket {
 
     @OnClose
     public void onClose(Session peer) {
-        peers.remove(peer);
-        HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
-        Player user = (Player) httpSession.getAttribute("player");
-        if(user.equals(GameManager.getInstance().getRoomById((String)httpSession.getAttribute("gameId")).getAdmin())){
-        	System.out.println("waishalos otaxi");
-        }
+    	
+    	if(gameIsNotStarted) {
+	    	System.out.println("chaxura");
+	    	
+	        peers.remove(peer);
+	        HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+	        Player user = (Player) httpSession.getAttribute("player");
+	        
+	        if(user.equals(GameManager.getInstance().getRoomById((String)httpSession.getAttribute("gameId")).getAdmin())){
+	        	System.out.println("waishalos otaxi");
+	        }
+	        
+	        user.leftGame();
         
-        user.leftGame();
+    	}
         
     }
 
@@ -67,6 +74,8 @@ public class PlayerEnteredSocket {
     			}else {
     				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
     				GameManager.getInstance().addGame(g);
+    				System.out.println("gaafolsa");
+    				gameIsNotStarted = false;
     				
     				json.put("forward", true);
     				for (Session peer : peers) {
@@ -106,7 +115,7 @@ public class PlayerEnteredSocket {
 		for(int i = 0; i < players.size(); i++) {
 			Players += players.get(i).toString() + " ";
 		}
-		System.out.println(Players);
+		
 		json.put("players", Players);
 		json.put("type", "playersList");
 		

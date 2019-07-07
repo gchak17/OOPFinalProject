@@ -22,7 +22,7 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/chat.html", configurator = GameSocketConfig.class)
+@ServerEndpoint(value = "/client.jsp", configurator = GameSocketConfig.class)
 public class ChatSocket {
 
 	public static List<Session> sessionList = Collections.synchronizedList(new ArrayList<Session>());
@@ -31,7 +31,9 @@ public class ChatSocket {
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
-		String username = (String) httpSession.getAttribute("username");
+		Player user = (Player) httpSession.getAttribute("player"); 
+		Account acc = user.getAccount();
+		String username = acc.getUsername();// (String) httpSession.getAttribute("username");
 		session.getUserProperties().put("username", username);
 		sessionList.add(session);
 	}
@@ -45,11 +47,15 @@ public class ChatSocket {
 	public void sendMessage(String message, Session session) throws IOException, EncodeException {
 		if (message == "")
 			return;
-		
+		System.out.println("not yet1");
 		HttpSession httpSession = ((HttpSession)session.getUserProperties().get("HttpSession"));
+		System.out.println("not yet2");
         Player user = (Player) httpSession.getAttribute("player");
+        System.out.println("not yet3");
         Account acc = user.getAccount();
+        System.out.println("not yet4");
 		String username = acc.getUsername();//(String) session.getUserProperties().get("username");
+		System.out.println("not yet5");
 
 		chatlock.lock();
 		for (Session curSes : sessionList) {
