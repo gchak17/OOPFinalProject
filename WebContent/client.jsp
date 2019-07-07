@@ -1,3 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="game.GameManager"%>
+<%@ page import="game.Game"%>
+<%@ page import="game.Player"%>
+<%@	page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -7,6 +12,13 @@
 </head>
 <body>
     <div id="users-panel" class="side-panel"></div>
+    
+    <% 
+		String gameId = (String)request.getSession().getAttribute("gameId");
+		Game game = GameManager.getInstance().getGame(gameId);
+		ArrayList<Player> players = game.getPlayers();
+	%>
+	
    
 	<div id="chat-panel" class="side-panel" >
 		<div id="chatBox" class="chat-box"></div>
@@ -39,6 +51,6 @@
 
         <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()">
     </div>
-    <script src = "js\client.js"></script>
+    <script src = "client.js"></script>
 </body>
 </html>
