@@ -1,195 +1,145 @@
 @charset "ISO-8859-1";
 
-
-.chat-div{
-	border-radius: thin;
-	border-style: solid;
-    float:right;
-    width:340px;
-	height:350px;
-    background-color: #525ef7;
-    border-radius: 15px;
-    border-color: #e03bd4;
+.center-panel{
+	position: absolute;
+	border: 2px solid;
+	left: 20%;
 }
 
-.button1{
-	color: white;
-	background-color: #7655ee;
-	margin-bottom: 3%;
-}
-
-#chatText{
-	margin-left: 2%;
-}
-.chat-box{
-	border-radius: thin;
-	border-style: solid;
-	border-color: #e03bd4;
-    display: block;
-    
-    width: 330px;
-    height: 300px;
-    
-    margin: auto;
-    margin-top: 0%;
-    margin-bottom: 4%;
-    
-    overflow-y: scroll;
-    background-color: #ebe0ff;
-    text-align: initial;
-}
-
-.canvas-div{
-	border-radius: 5px;
-	border-style: solid;
-}
-
-#myCanvas{
-	position:absolute;
+#canvas{
 	top:10%;
-	left:10%;
-	border:2px solid;
+}
+
+#word-panel{
+	top: 0%;
+	width: 800px;
+	height: 50px;
+}
+
+#paint-options-panel{
+	bottom: 0.5%;
+	width: 800px;
+	height: 100px;
+}
+
+.paint-options-panel-colors{
+	position:absolute;
+	width:11px;
+	height:11px;
+	border-radius:50%;
+}
+
+.side-panel{
+	position: absolute;
+	top: 0%;
+	border: 2px solid;
+	width: 245px;
+	height: 620px;
+}
+
+#users-panel{
+	left: 0%;
+}
+
+#chat-panel{
+	left: 81.4%;
 }
 
 #choosecolor{
 	position:absolute;
-	top:80%;
-	left:10%;
+	top:20%;
+	left:0%;
 }
 
 #green{
-	position:absolute;
-	top:83%;
-	left:10%;
-	width:11px;
-	height:11px;
+	top:37%;
+	left:0%;
 	background:green;
-	border-radius:50%;
 }
 
 #blue{
-	position:absolute;
-	top:83%;
-	left:11%;
-	width:11px;
-	height:11px;
+	top:37%;
+	left:2%;
 	background:blue;
-	border-radius:50%;	
 }
 
 #red{
-	position:absolute;
-	top:83%;
-	left:12%;
-	width:11px;
-	height:11px;
+	top:37%;
+	left:4%;
 	background:red;
-	border-radius:50%;
 }
 
 #yellow{
-	position:absolute;
-	top:85%;
-	left:10%;
-	width:11px;
-	height:11px;
+	top:37%;
+	left:6%;
 	background:yellow;
-	border-radius:50%;
 }
 
 #orange{
-	position:absolute;
-	top:85%;
-	left:11%;
-	width:11px;
-	height:11px;
+	top:37%;
+	left:8%;
 	background:orange;
-	border-radius:50%;
 }
 
 #black{
-	position:absolute;
-	top:85%;
-	left:12%;
-	width:11px;
-	height:11px;
+	top:50%;
+	left:0%;
 	background:black;
-	border-radius:50%;
 }
 
 #gray{
-	position:absolute;
-	top:83%;
-	left:13%;
-	width:11px;
-	height:11px;
+	top:50%;
+	left:2%;
 	background:gray;
-	border-radius:50%;
 }
 
 #purple{
-	position:absolute;
-	top:85%;
-	left:13%;
-	width:11px;
-	height:11px;
+	top:50%;
+	left:4%;
 	background:purple;
-	border-radius:50%;
 }
 
 #brown{
-	position:absolute;
-	top:83%;
-	left:14%;
-	width:11px;
-	height:11px;
+	top:50%;
+	left:6%;
 	background:brown;
-	border-radius:50%;
 }
 
 #aqua{
-	position:absolute;
-	top:85%;
-	left:14%;
-	width:11px;
-	height:11px;
+	top:50%;
+	left:8%;
 	background:aqua;
-	border-radius:50%;
 }
 
 #eraser{
 	position:absolute;
-	top:80%;
-	left:18%;
+	top:0%;
+	left:15%;
 }
 
 #white{
-	position:absolute;
-	top:83%;
-	left:18%;
-	width:11px;
-	height:11px;
+	top:20%;
+	left:15%;
 	background:white;
 	border:1px solid;
-	border-radius:50%;
 }
 
 #clr{
 	position:absolute;
-	top:76%;
-	left:10%;
+	top:0%;
+	left:0%;
 }
 
 #choosewidth{
 	position:absolute;
-	top:80%;
-	left:24%;
+	top:0%;
+	left:25%;
 }
 
 #w4{
 	position:absolute;
-	top:83.9%;
-	left:24%;
+	top:15%;
+	left:25%;
 	width:4px;
 	height:4px;
 	background:white;
@@ -199,8 +149,8 @@
 
 #w8{
 	position:absolute;
-	top:83.5%;
-	left:24.75%;
+	top:15%;
+	left:26%;
 	width:8px;
 	height:8px;
 	background:white;
@@ -210,8 +160,8 @@
 
 #w16{
 	position:absolute;
-	top:83%;
-	left:25.8%;
+	top:15%;
+	left:27%;
 	width:16px;
 	height:16px;
 	border-radius:50%;
