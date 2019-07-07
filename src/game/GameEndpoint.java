@@ -2,8 +2,6 @@ package game;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
@@ -12,20 +10,19 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.json.JSONObject;
 
-import dao.Account;
 import message.*;
 
 @ServerEndpoint(value = "/client.jsp/web", encoders = { MessageEncoder.class }, decoders = {
 		MessageDecoder.class }, configurator = GameSocketConfig.class)
 public class GameEndpoint {
 	private static ConcurrentHashMap<String, ArrayList<Session>> sessions = new ConcurrentHashMap<>();
-	
+
 	@OnOpen
 	public void onOpen(Session curS, EndpointConfig config) {
 		HttpSession httpSession = (HttpSession) curS.getUserProperties().get("HttpSession");
 		httpSession.setAttribute("session", curS);
 		String id = (String) httpSession.getAttribute("gameId");
-		
+
 		ArrayList<Session> ses;
 		if (sessions.get(id) == null) {
 			ses = new ArrayList<Session>();
@@ -39,33 +36,34 @@ public class GameEndpoint {
 
 	@OnClose
 	public void onClose(Session peer) throws IOException, EncodeException {
+
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		String id = (String) httpSession.getAttribute("gameId");
+		
 		Game g = GameManager.getInstance().getGame(id);
-		g.removePlayer((Player)httpSession.getAttribute("player"));
+		g.removePlayer((Player) httpSession.getAttribute("player"));
 		
 		JSONObject json = new JSONObject();// es unda iyos otaxshi vinebi darchnen imis shemcveli
-		
+
 		Message message = new Message(json);
 		ArrayList<Session> peers = sessions.get(id);
 		for (Session s : peers) {
-			if(!s.equals(peer))
-			s.getBasicRemote().sendObject(message);
+			if (!s.equals(peer))
+				s.getBasicRemote().sendObject(message);
 		}
-		
+		peers.remove(peer);
 	}
 
 	@OnMessage
 	public static void onMessage(Message message, Session session) throws IOException, EncodeException {
 		HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
-		
+
 		String type = message.getJson().getString("type");
 		JSONObject json = message.getJson();
 		if (type.equals("isArtist?")) {
-			
+
 			json.put("answer", false);
-			
-			
+
 			Player user = (Player) httpSession.getAttribute("player");
 
 			if (user.isArtist()) {
@@ -74,9 +72,9 @@ public class GameEndpoint {
 
 			message.setJson(json);
 			session.getBasicRemote().sendObject(message);
-			
-		}else{ // aq typebze damokidebuli gaxdeba bevri ideaSi satitaod
-			
+
+		} else { // aq typebze damokidebuli gaxdeba bevri ideaSi satitaod
+
 			String id = (String) httpSession.getAttribute("gameId");
 			ArrayList<Session> peers = sessions.get(id);
 			for (Session peer : peers) {
@@ -87,13 +85,11 @@ public class GameEndpoint {
 		}
 	}
 
-	
-	
-    public static void sendMessage(String gameId, Message message) throws IOException, EncodeException{
-    	System.out.println("mesiji unda iyos qulebis");
+	public static void sendMessage(String gameId, Message message) throws IOException, EncodeException {
+		System.out.println("mesiji unda iyos qulebis");
 		ArrayList<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
 			peer.getBasicRemote().sendObject(message);
 		}
-    }
+	}
 }

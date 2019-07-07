@@ -37,8 +37,10 @@ public class Round {
 
 	private void initMap() {
 		points = new HashMap<Player, Integer>();
+		playersGuessedTimes = new HashMap<Player, Integer>();
 		for (Player p : players) {
 			points.put(p, 0);
+			playersGuessedTimes.put(p, 100);
 		}
 	}
 
@@ -72,6 +74,7 @@ public class Round {
 		for (Player p : players) {
 			String user = p.getAccount().getUsername();
 			int res = points.get(p);
+			System.out.println(res);
 			json.put(user, res);
 		}
 
@@ -90,7 +93,10 @@ public class Round {
 	}
 
 	private void generatePointsForPlayers() {
-
+		for (Player key : playersGuessedTimes.keySet()) {
+			int res = 100 - playersGuessedTimes.get(key);
+			points.put(key, res);
+		}
 	}
 
 	public HashMap<Player, Integer> getPoints() {

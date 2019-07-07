@@ -49,6 +49,9 @@ public class PlayerEnteredSocket {
 
 			System.out.println("waishala roomi");
 		}
+		ArrayList<Session> sess = sessions.get(id);
+		sess.remove(peer);
+		sessions.put(id, sess);
 
 		r.removePlayer(user);
 	}
@@ -81,9 +84,9 @@ public class PlayerEnteredSocket {
 			Player admin = r.getAdmin();
 			Player curPlayer = (Player) (httpSession.getAttribute("player"));
 			if (curPlayer.equals(admin)) {
+				json.put("admin", true);
 				if (r.getPlayers().size() < 2) {
-					System.out.println("daelodos oponentens");
-
+					session.getBasicRemote().sendObject(new Message(json));
 				} else {
 					Game g = new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
 					GameManager.getInstance().addGame(g);
@@ -97,7 +100,8 @@ public class PlayerEnteredSocket {
 					}
 				}
 			} else {
-				session.getBasicRemote().sendObject(json);
+				json.put("admin", false);
+				session.getBasicRemote().sendObject(new Message(json));
 				// only admin can start
 			}
 
