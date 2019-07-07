@@ -24,7 +24,7 @@
 	<script>
 	//var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-	var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/PublishRoom");
+	var websocket = new WebSocket("ws://localhost:8081/OOPFinalProject/PublishRoom");
 	websocket.onmessage = function(evt) { updatePage(evt) };
 	
 	function updatePage(evt) {
@@ -35,7 +35,7 @@
 			document.getElementById("demo").innerHTML = json.players;
 		}else if (json.type === "start"){
 			if(json.forward){
-				location.replace("http://localhost:8080/OOPFinalProject/client.html")
+				location.replace("http://localhost:8081/OOPFinalProject/client.html")
 			}else{
 				//aq utxras ro shen ar xar adzmini dzmaovo
 			}

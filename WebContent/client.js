@@ -1,8 +1,8 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 var chatSocket = new WebSocket(
-		"ws://localhost:8081/OOPFinalProject/EnterChatServlet");
+		"ws://localhost:8081/OOPFinalProject/client.html");
 
-var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.html");
+var websocket = new WebSocket("ws://localhost:8081/OOPFinalProject/client.html");
 websocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -12,6 +12,7 @@ chatSocket.onmessage = function(evt){
 };
 
 function onChatMessage(evt) {
+	alert("got here");
 	var json = JSON.parse(evt.data);
 	var node = document.createElement("P");
 
@@ -23,6 +24,7 @@ function onChatMessage(evt) {
 }
 
 function clickOnSend() {
+	alert("got here");
 	chatSocket.send(document.getElementById("chatText").value);
 }
 

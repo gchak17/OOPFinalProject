@@ -17,11 +17,12 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.json.JSONObject;
 
+import dao.Account;
 import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/EnterChatServlet", configurator = GameSocketConfig.class)
+@ServerEndpoint(value = "/chat.html", configurator = GameSocketConfig.class)
 public class ChatSocket {
 
 	public static List<Session> sessionList = Collections.synchronizedList(new ArrayList<Session>());
@@ -44,7 +45,11 @@ public class ChatSocket {
 	public void sendMessage(String message, Session session) throws IOException, EncodeException {
 		if (message == "")
 			return;
-		String username = (String) session.getUserProperties().get("username");
+		
+		HttpSession httpSession = ((HttpSession)session.getUserProperties().get("HttpSession"));
+        Player user = (Player) httpSession.getAttribute("player");
+        Account acc = user.getAccount();
+		String username = acc.getUsername();//(String) session.getUserProperties().get("username");
 
 		chatlock.lock();
 		for (Session curSes : sessionList) {
