@@ -82,6 +82,14 @@
 		<input type="submit" value="Show Rooms">
 	</form>
 	
+	<form action="AddFriendServlet" method="post">
+		<input type="submit" value="Add Friend">
+	</form>
+	
+	<form action="SeeNotifications" method="post">
+		<input type="submit" value="See Notifications">
+	</form>
+	
 	<form action="LogOutServlet" method="post">
 		<input type="submit" value="Log Out">
 	</form>
