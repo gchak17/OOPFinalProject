@@ -39,7 +39,7 @@ function onMessage(evt) {
 	drawImageText(evt.data);
 }
 
-var canvas = document.getElementById("myCanvas");
+var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 var offsetLeft = canvas.offsetLeft;
 var offsetTop = canvas.offsetTop;
