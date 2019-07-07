@@ -9,6 +9,7 @@ import dao.Account;
 
 public class Game {
 	private ArrayList<Player> players;
+	
 	private HashMap<Player, Integer> points;
 
 	private Player artist;
@@ -27,12 +28,20 @@ public class Game {
 
 	public Game(ArrayList<Player> players, int round, int time, String id) {
 		this.players = players;
+		setGameForPlayers();
 		this.numRounds = round;
 		this.time = time;
 		this.id = id;
+		points =  new HashMap<Player, Integer>();
 		painterIndex = 0;
 		nthRound = 0;
 		startNewRound();
+	}
+
+	private void setGameForPlayers() {
+		for(Player p : players) {
+			p.setGame(this);
+		}
 	}
 
 	public String getId() {
@@ -101,7 +110,6 @@ public class Game {
 
 	private ArrayList<Player> playersWantToPlayAgain() {
 		// ask if they want to play again
-
 		return null;
 	}
 
