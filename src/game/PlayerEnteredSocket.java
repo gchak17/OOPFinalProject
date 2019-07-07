@@ -44,9 +44,9 @@ public class PlayerEnteredSocket {
 
 		if (gameIsNotStarted && user.equals(
 				GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
-			
+
 			removeEveryone(peer, id);
-			
+
 			System.out.println("waishala roomi");
 		}
 
@@ -55,16 +55,16 @@ public class PlayerEnteredSocket {
 
 	private void removeEveryone(Session peer, String id) throws IOException, EncodeException {
 		JSONObject json = new JSONObject();// es unda iyos show roomze rom gadartos egeti
-		
+
 		Message message = new Message(json);
 		ArrayList<Session> peers = sessions.get(id);
 		for (Session s : peers) {
-			if(!s.equals(peer))
-			s.getBasicRemote().sendObject(message);
+			if (!s.equals(peer))
+				s.getBasicRemote().sendObject(message);
 		}
 		sessions.remove(id);
 		GameManager.getInstance().removeRoom(id);
-		
+
 	}
 
 	@OnMessage

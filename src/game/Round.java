@@ -1,6 +1,5 @@
 package game;
 
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,13 +21,15 @@ public class Round {
 	private HashMap<Player, Integer> playersGuessedTimes;
 	private boolean everybodyGuessed = false;
 	private HashMap<Player, Integer> points;
+	private String gameId;
 
-	public Round(int nthRound, ArrayList<Player> players, Player artist) {
+	public Round(int nthRound, ArrayList<Player> players, Player artist, String gameId) {
 		this.nth = nthRound;
 		this.players = players;
 		this.artist = artist;
+		this.gameId = gameId;
 		initMap();
-		
+
 		artist.startDrawing();
 		sendNewRoundInformationsToSocket();
 
@@ -36,8 +37,8 @@ public class Round {
 
 	private void initMap() {
 		points = new HashMap<Player, Integer>();
-		for(Player p : players) {
-			points.put(p,0);
+		for (Player p : players) {
+			points.put(p, 0);
 		}
 	}
 
@@ -56,7 +57,7 @@ public class Round {
 
 	public void smbdGuessed(Player p, int sec) throws SQLException {
 		playersGuessedTimes.put(p, sec);
-		
+
 		if (playersGuessedTimes.size() == players.size()) {
 			everybodyGuessed = true;
 			artist.getTimer().cancel();
@@ -65,19 +66,19 @@ public class Round {
 
 	}
 
-	private void sendPointsToWebSocket()  {
+	private void sendPointsToWebSocket() {
 		JSONObject json = new JSONObject();
 		json.put("type", "showResults");
-		for(Player p : players) {
+		for (Player p : players) {
 			String user = p.getAccount().getUsername();
 			int res = points.get(p);
 			json.put(user, res);
 		}
-		
+
 		Message newM = new Message(json);
-		
+
 		try {
-			GameEndpoint.sendMessage(newM, null);
+			GameEndpoint.sendMessage(gameId, newM);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,11 +90,10 @@ public class Round {
 	}
 
 	private void generatePointsForPlayers() {
-		
 
 	}
-	
-	public HashMap<Player, Integer> getPoints(){
+
+	public HashMap<Player, Integer> getPoints() {
 		return points;
 	}
 

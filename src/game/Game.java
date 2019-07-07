@@ -9,7 +9,7 @@ import dao.Account;
 
 public class Game {
 	private ArrayList<Player> players;
-	
+
 	private HashMap<Player, Integer> points;
 
 	private Player artist;
@@ -31,14 +31,14 @@ public class Game {
 		this.numRounds = round;
 		this.time = time;
 		this.id = id;
-		points =  new HashMap<Player, Integer>();
+		points = new HashMap<Player, Integer>();
 		painterIndex = 0;
 		nthRound = 0;
 		startNewRound();
 	}
 
 	private void setGameForPlayers() {
-		for(Player p : players) {
+		for (Player p : players) {
 			p.setGame(this);
 		}
 	}
@@ -66,7 +66,7 @@ public class Game {
 		choosePainter();
 		System.out.println("painter is " + artist);
 		nthRound++;
-		Round r = new Round(nthRound, players, artist);
+		Round r = new Round(nthRound, players, artist, id);
 		this.round = r;
 	}
 
@@ -113,7 +113,11 @@ public class Game {
 		return null;
 	}
 
-	public ArrayList<Player> getPlayers(){
+	public ArrayList<Player> getPlayers() {
 		return players;
+	}
+
+	public void removePlayer(Player cur) {
+		players.remove(cur);
 	}
 }
