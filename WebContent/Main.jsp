@@ -23,6 +23,9 @@
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		Account currAccount = (Account)session.getAttribute("user");
 	%>
+	
+	<p1> <%= currAccount.getUsername() %> </p1>
+	<br>
 
 	<img src="<%=currAccount.getAvatar().getFullPath() %>">
 	
@@ -77,6 +80,10 @@
 	
 	<form action="WaitingRoomsServlet" method="post">
 		<input type="submit" value="Show Rooms">
+	</form>
+	
+	<form action="LogOutServlet" method="post">
+		<input type="submit" value="Log Out">
 	</form>
 	
 </body>
