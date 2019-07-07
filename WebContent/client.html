@@ -4,34 +4,15 @@
     <meta charset="ISO-8859-1">
     <title>whiteboard</title>
     <link href="client.css" rel="stylesheet" type="text/css">
-    
 </head>
 <body>
-    <canvas id="myCanvas" width="400" height="400"></canvas>
-	<div class="canvas-div"></div>
-    <div id="choosecolor">choose color:</div>
-    <div id="green" onclick="color(this)"></div>
-    <div id="blue" onclick="color(this)"></div>
-    <div id="red" onclick="color(this)"></div>
-    <div id="yellow" onclick="color(this)"></div>
-    <div id="orange" onclick="color(this)"></div>
-    <div id="black" onclick="color(this)"></div>
-    <div id="gray" onclick="color(this)"></div>
-    <div id="purple" onclick="color(this)"></div>
-    <div id="brown" onclick="color(this)"></div>
-    <div id="aqua" onclick="color(this)"></div>
-    
-    <div id="eraser">get eraser:</div>
-    <div id="white" onclick="color(this)"></div>
-    
-    <div id="choosewidth">choose width:</div>
-    <div id="w4" onclick="width(this)"></div>
-    <div id="w8" onclick="width(this)"></div>
-    <div id="w16" onclick="width(this)"></div>
+    <div id="users-panel" class="side-panel"></div>
+<!--     <div id="chat-panel" class="side-panel"></div> -->
+
 
     <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()">
    
-	<div class="chat-div">
+	<div class="side-panel" id="chat-div">
 		<div id="chatBox" class="chat-box"></div>
 		
 		<input type="text" placeholder="text message" id="chatText" size="30">
@@ -39,7 +20,35 @@
 	</div>
 	
 	<script src = "js\client.js"></script>
+
+    <div id="word-panel" class="center-panel"></div>
+    <canvas id="canvas" class="center-panel" width="800" height="440"></canvas>
+    <div id="paint-options-panel" class="center-panel">
+        <div id="choosecolor">choose color:</div>
+        <div id="green" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="blue" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="red" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="yellow" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="orange" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="black" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="gray" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="purple" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="brown" onclick="color(this)" class="paint-options-panel-colors"></div>
+        <div id="aqua" onclick="color(this)" class="paint-options-panel-colors"></div>
+
+        <div id="eraser">get eraser:</div>
+        <div id="white" onclick="color(this)" class="paint-options-panel-colors"></div>
+            
+        <div id="choosewidth">choose width:</div>
+        <div id="w4" onclick="width(this)"></div>
+        <div id="w8" onclick="width(this)"></div>
+        <div id="w16" onclick="width(this)"></div>
+
+        <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()">
+    </div>
+    
+	
+    <script src = "js\client.js"></script>
+
 </body>
-
-
 </html>
