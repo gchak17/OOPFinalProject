@@ -8,7 +8,7 @@
 </head>
 <body>
     <canvas id="myCanvas" width="400" height="400"></canvas>
-	<div class="canvas-div">STH</div>
+	<div class="canvas-div"></div>
     <div id="choosecolor">choose color:</div>
     <div id="green" onclick="color(this)"></div>
     <div id="blue" onclick="color(this)"></div>
@@ -30,6 +30,13 @@
     <div id="w16" onclick="width(this)"></div>
 
     <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()">
+    
+    <div class="chat-div">
+		<div id="chatBox" class="chat-box"></div>
+		
+		<input type="text" placeholder="text message" id="chatText" size="30">
+		<button onclick="clickOnSend()" class="button1">Send</button>
+	</div>
 
 	<script src = "js\client.js"></script>
 </body>

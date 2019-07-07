@@ -21,7 +21,7 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/EnterChatServlet", configurator = GameSocketConfig.class)
+@ServerEndpoint(value = "/client.html", configurator = GameSocketConfig.class)
 public class ChatSocket {
 
 	public static List<Session> sessionList = Collections.synchronizedList(new ArrayList<Session>());
