@@ -1,5 +1,5 @@
 var chatSocket = new WebSocket(
-		"ws://localhost:8081/OOPFinalProject/EnterChatServlet");
+		"ws://localhost:8080/OOPFinalProject/EnterChatServlet");
 
 chatSocket.onmessage = function(evt) {
 	onChatMessage(evt)
