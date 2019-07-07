@@ -64,4 +64,9 @@ public class Room {
 	public void setRoomId(String roomId) {
 		this.roomId = roomId;
 	}
+
+	public void removePlayer(Player user) {
+		// TODO Auto-generated method stub
+		
+	}
 }

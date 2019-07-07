@@ -2,8 +2,7 @@ package game;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.EncodeException;
@@ -15,111 +14,126 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.json.JSONObject;
 
-import dao.Account;
 import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-
-@ServerEndpoint(value = "/PublishRoom", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class}, configurator = GameSocketConfig.class)
+@ServerEndpoint(value = "/PublishRoom", encoders = { MessageEncoder.class }, decoders = {
+		MessageDecoder.class }, configurator = GameSocketConfig.class)
 public class PlayerEnteredSocket {
-    public static List<Session> peers = Collections.synchronizedList(new ArrayList<Session>());
-    private static boolean gameIsNotStarted = true;
-    @OnOpen
-    public void onOpen(Session peer) throws IOException, EncodeException {
-    	System.out.println("oh henlo fren");
-    	peers.add(peer);
-    	HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
-    	ohHenloFrens(httpSession);
-    }
 
-    @OnClose
-    public void onClose(Session peer) {
-    	
-    	if(gameIsNotStarted) {
-	    	System.out.println("chaxura");
-	    	
-	        peers.remove(peer);
-	        HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
-	        Player user = (Player) httpSession.getAttribute("player");
-	        
-	        if(user.equals(GameManager.getInstance().getRoomById((String)httpSession.getAttribute("gameId")).getAdmin())){
-	        	System.out.println("waishalos otaxi");
-	        }
-	        
-	        user.leftGame();
-        
-    	}
-        
-    }
+	private static ConcurrentHashMap<String, ArrayList<Session>> sessions = new ConcurrentHashMap<>();
+	private static boolean gameIsNotStarted = true;
 
-    @OnMessage
-    public void sendMessage(Message message, Session session) throws IOException, EncodeException {
-    	JSONObject json = message.getJson();
-    	
-    	if(message.getJson().getString("type").equals("start") ) {    	
-        	
-        	HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
-        	String id = (String) httpSession.getAttribute("gameId");
-        	
-    		Room r = GameManager.getInstance().getRoomById(id);
+	@OnOpen
+	public void onOpen(Session peer) throws IOException, EncodeException {
+		System.out.println("oh henlo fren");
 
+		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+		ohHenloFrens(httpSession, peer);
+	}
+
+	@OnClose
+	public void onClose(Session peer) throws IOException, EncodeException {
+
+		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+		String id = (String) httpSession.getAttribute("gameId");
+		Room r = GameManager.getInstance().getRoomById(id);
+
+		Player user = (Player) httpSession.getAttribute("player");
+
+		if (gameIsNotStarted && user.equals(
+				GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
+			JSONObject json = new JSONObject();// es unda iyos show roomze rom gadartos egeti
 			
-    		Player admin = r.getAdmin();
-    		Player curPlayer  = (Player) (httpSession.getAttribute("player")) ;
-    		if(curPlayer.equals(admin)) {
-    			if(r.getPlayers().size() < 2) {
-    				System.out.println("daelodos oponentens");
-    				
-    			}else {
-    				Game g =  new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
-    				GameManager.getInstance().addGame(g);
-    				System.out.println("gaafolsa");
-    				gameIsNotStarted = false;
-    				
-    				json.put("forward", true);
-    				for (Session peer : peers) {
-    		            peer.getBasicRemote().sendObject(message);
-    		        }
-    	 		}
-    		}else {
-    			session.getBasicRemote().sendObject(json);
-    			//only admin can start
-    		}
-        	
-          
-	    	
-        }
-    	
-    	
-    
-    }
-    
-    private void ohHenloFrens(HttpSession httpSession) throws IOException, EncodeException{
-    	
-    	String RoomId = (String) httpSession.getAttribute("gameId");
-    	Room r = GameManager.getInstance().getRoomById(RoomId);
-    	ArrayList<Player> players = r.getPlayers();
-    	
-    	JSONObject json = generateJsonForPlayers(players);
-    	Message newM = new Message(json);
-    	
-    	for (Session peer : peers) {
-    		peer.getBasicRemote().sendObject(newM);
-        }
-    }
+			Message message = new Message(json);
+			ArrayList<Session> peers = sessions.get(id);
+			for (Session s : peers) {
+				if(!s.equals(peer))
+				s.getBasicRemote().sendObject(message);
+			}
+			sessions.remove(id);
+			GameManager.getInstance().removeRoom(id);
+			
+			System.out.println("waishala roomi");
+		}
+
+		r.removePlayer(user);
+	}
+
+	@OnMessage
+	public void sendMessage(Message message, Session session) throws IOException, EncodeException {
+		JSONObject json = message.getJson();
+
+		if (message.getJson().getString("type").equals("start")) {
+
+			HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
+			String id = (String) httpSession.getAttribute("gameId");
+
+			Room r = GameManager.getInstance().getRoomById(id);
+
+			Player admin = r.getAdmin();
+			Player curPlayer = (Player) (httpSession.getAttribute("player"));
+			if (curPlayer.equals(admin)) {
+				if (r.getPlayers().size() < 2) {
+					System.out.println("daelodos oponentens");
+
+				} else {
+					Game g = new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
+					GameManager.getInstance().addGame(g);
+					gameIsNotStarted = false;
+
+					json.put("forward", true);
+
+					ArrayList<Session> peers = sessions.get(id);
+					for (Session peer : peers) {
+						peer.getBasicRemote().sendObject(message);
+					}
+				}
+			} else {
+				session.getBasicRemote().sendObject(json);
+				// only admin can start
+			}
+
+		}
+
+	}
+
+	private void ohHenloFrens(HttpSession httpSession, Session curS) throws IOException, EncodeException {
+
+		String RoomId = (String) httpSession.getAttribute("gameId");
+		Room r = GameManager.getInstance().getRoomById(RoomId);
+		ArrayList<Player> players = r.getPlayers();
+
+		ArrayList<Session> ses;
+		if (sessions.contains(RoomId)) {
+			ses = sessions.get(RoomId);
+		} else {
+			ses = new ArrayList<Session>();
+		}
+
+		ses.add(curS);
+		sessions.put(RoomId, ses);
+
+		JSONObject json = generateJsonForPlayers(players);
+		Message newM = new Message(json);
+
+		for (Session s : ses) {
+			s.getBasicRemote().sendObject(newM);
+		}
+	}
 
 	private JSONObject generateJsonForPlayers(ArrayList<Player> players) {
 		JSONObject json = new JSONObject();
-		String Players =  "";
-		for(int i = 0; i < players.size(); i++) {
+		String Players = "";
+		for (int i = 0; i < players.size(); i++) {
 			Players += players.get(i).toString() + " ";
 		}
-		
+
 		json.put("players", Players);
 		json.put("type", "playersList");
-		
+
 		return json;
 	}
-    
+
 }

@@ -14,14 +14,13 @@ import org.json.JSONObject;
 import dao.Account;
 import message.*;
 
-@ServerEndpoint(value = "/client.html", encoders = { MessageEncoder.class }, decoders = {
+@ServerEndpoint(value = "/client.jsp/web", encoders = { MessageEncoder.class }, decoders = {
 		MessageDecoder.class }, configurator = GameSocketConfig.class)
 public class GameEndpoint {
 	public static List<Session> peers = Collections.synchronizedList(new ArrayList<Session>());
 
 	@OnOpen
 	public void onOpen(Session peer, EndpointConfig config) {
-
 		peers.add(peer);
 	}
 

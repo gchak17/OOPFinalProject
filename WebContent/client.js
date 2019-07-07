@@ -2,7 +2,7 @@
 var chatSocket = new WebSocket(
 		"ws://localhost:8080/OOPFinalProject/client.jsp");
 
-var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.jsp");
+var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.jsp/web");
 websocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -31,7 +31,6 @@ function sendText(json) {
 }
 
 function onMessage(evt) {
-	alert("got here");
 	var json = JSON.parse(evt.data);
 	if (json.type === "isArtist?") {
 		if (json.answer)

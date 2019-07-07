@@ -62,4 +62,8 @@ public class GameManager {
     	}
     	return rooms;
     }
+
+	public void removeRoom(String id) {
+		waitingRooms.remove(id);
+	}
 }
