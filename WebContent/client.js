@@ -1,26 +1,5 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var chatSocket = new WebSocket(
-		"ws://localhost:8081/OOPFinalProject/client.html");
-
-chatSocket.onmessage = function(evt) {
-	onChatMessage(evt)
-};
-
-function onChatMessage(evt) {
-	var json = JSON.parse(evt.data);
-	var node = document.createElement("P");
-
-	var textnode = document.createTextNode(json.username + ": " + json.message);
-	node.appendChild(textnode);
-
-	document.getElementById("chatBox").appendChild(node);
-	document.getElementById("chatText").value = "";
-}
-
-function clickOnSend() {
-	chatSocket.send(document.getElementById("chatText").value);
-}
 
 var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.html");
 websocket.onmessage = function(evt) {
