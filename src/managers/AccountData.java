@@ -84,7 +84,7 @@ public class AccountData {
 		int res = 0;
 		try {
 			Statement st = conn.createStatement();
-			res = st.executeUpdate("delete from accounts where id = '" + account.getID() + "';");
+			res = st.executeUpdate("delete from accounts where id = " + account.getID() + ";");
 			st.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -92,7 +92,20 @@ public class AccountData {
 		
 		return res != 0;
 	}
-	
+
+
+	/*
+	 * 
+	 */
+	public void changeAccountAvatar(Account account, Avatar avatar) {
+		try {
+			Statement st = conn.createStatement();
+			st.executeUpdate("update accounts set avatar_id = " + avatar.getID() + " where accounts.id = " + account.getID() + ";");
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/*
 	 * 
