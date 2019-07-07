@@ -115,7 +115,7 @@ public class PlayerEnteredSocket {
 		for(int i = 0; i < players.size(); i++) {
 			Players += players.get(i).toString() + " ";
 		}
-		System.out.println(Players);
+		
 		json.put("players", Players);
 		json.put("type", "playersList");
 		

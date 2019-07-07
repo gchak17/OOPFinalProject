@@ -1,9 +1,18 @@
 package game;
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.websocket.EncodeException;
+
+import org.json.JSONObject;
+
+import com.mysql.cj.Session;
+
+import message.Message;
 
 public class Round {
 
@@ -18,9 +27,18 @@ public class Round {
 		this.nth = nthRound;
 		this.players = players;
 		this.artist = artist;
+		initMap();
+		
 		artist.startDrawing();
 		sendNewRoundInformationsToSocket();
 
+	}
+
+	private void initMap() {
+		points = new HashMap<Player, Integer>();
+		for(Player p : players) {
+			points.put(p,0);
+		}
 	}
 
 	private void sendNewRoundInformationsToSocket() {
@@ -30,7 +48,7 @@ public class Round {
 
 	public void endRound() {
 		System.out.println(artist.getAccount().getUsername() + "'s round is over");
-
+		artist.endDrawing();
 		generatePointsForPlayers();
 		sendPointsToWebSocket();
 
@@ -47,13 +65,31 @@ public class Round {
 
 	}
 
-	private void sendPointsToWebSocket() {
-		// TODO Auto-generated method stub
+	private void sendPointsToWebSocket()  {
+		JSONObject json = new JSONObject();
+		json.put("type", "showResults");
+		for(Player p : players) {
+			String user = p.getAccount().getUsername();
+			int res = points.get(p);
+			json.put(user, res);
+		}
+		
+		Message newM = new Message(json);
+		
+		try {
+			GameEndpoint.sendMessage(newM, null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EncodeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	private void generatePointsForPlayers() {
-		// TODO Auto-generated method stub
+		
 
 	}
 	

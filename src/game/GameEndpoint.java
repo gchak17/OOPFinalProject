@@ -31,9 +31,11 @@ public class GameEndpoint {
 	}
 
 	@OnMessage
-	public void sendMessage(Message message, Session session) throws IOException, EncodeException {
-		if (message.getJson().getString("type").equals("isArtist?")) {
-			JSONObject json = message.getJson();
+	public static void sendMessage(Message message, Session session) throws IOException, EncodeException {
+		String type = message.getJson().getString("type");
+		JSONObject json = message.getJson();
+		if (type.equals("isArtist?")) {
+			
 			json.put("answer", false);
 
 			HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
@@ -46,7 +48,7 @@ public class GameEndpoint {
 
 			message.setJson(json);
 			session.getBasicRemote().sendObject(message);
-		} else {
+		}else {
 			for (Session peer : peers) {
 				if (!peer.equals(session)) {
 					peer.getBasicRemote().sendObject(message);

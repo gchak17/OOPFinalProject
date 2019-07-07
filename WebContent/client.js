@@ -33,6 +33,7 @@ function sendText(json) {
 }
 
 function onMessage(evt) {
+	alert("got here");
 	var json = JSON.parse(evt.data);
 	if (json.type === "isArtist?") {
 		if (json.answer)
