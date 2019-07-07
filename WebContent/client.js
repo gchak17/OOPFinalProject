@@ -1,30 +1,9 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
-var chatSocket = new WebSocket(
-		"ws://localhost:8080/OOPFinalProject/client.jsp");
 
 var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.jsp/web");
 websocket.onmessage = function(evt) {
 	onMessage(evt)
 };
-
-chatSocket.onmessage = function(evt){
-	onChatMessage(evt)
-};
-
-function onChatMessage(evt) {
-	var json = JSON.parse(evt.data);
-	var node = document.createElement("P");
-
-	var textnode = document.createTextNode(json.username + ": " + json.message);
-	node.appendChild(textnode);
-
-	document.getElementById("chatBox").appendChild(node);
-	document.getElementById("chatText").value = "";
-}
-
-function clickOnSend() {
-	chatSocket.send(document.getElementById("chatText").value);
-}
 
 function sendText(json) {
 	websocket.send(json);
@@ -33,8 +12,7 @@ function sendText(json) {
 function onMessage(evt) {
 	var json = JSON.parse(evt.data);
 	if (json.type === "isArtist?") {
-		if (json.answer)
-			isArtist = true;
+			isArtist = json.answer;
 	}
 	drawImageText(evt.data);
 }
@@ -53,7 +31,7 @@ var currWidth = 4;
 
 listen(canvas, 'mousedown', function(event) {
 	checkIfIsArtist();
-
+	
 	drawing = isArtist;
 	lastPos = getPos(event);
 });

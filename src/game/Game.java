@@ -64,7 +64,7 @@ public class Game {
 
 	public void startNewRound() {
 		choosePainter();
-		
+		System.out.println("painter is " + artist);
 		nthRound++;
 		Round r = new Round(nthRound, players, artist);
 		this.round = r;

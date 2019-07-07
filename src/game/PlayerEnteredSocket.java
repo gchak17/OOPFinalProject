@@ -44,21 +44,27 @@ public class PlayerEnteredSocket {
 
 		if (gameIsNotStarted && user.equals(
 				GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
-			JSONObject json = new JSONObject();// es unda iyos show roomze rom gadartos egeti
 			
-			Message message = new Message(json);
-			ArrayList<Session> peers = sessions.get(id);
-			for (Session s : peers) {
-				if(!s.equals(peer))
-				s.getBasicRemote().sendObject(message);
-			}
-			sessions.remove(id);
-			GameManager.getInstance().removeRoom(id);
+			removeEveryone(peer, id);
 			
 			System.out.println("waishala roomi");
 		}
 
 		r.removePlayer(user);
+	}
+
+	private void removeEveryone(Session peer, String id) throws IOException, EncodeException {
+		JSONObject json = new JSONObject();// es unda iyos show roomze rom gadartos egeti
+		
+		Message message = new Message(json);
+		ArrayList<Session> peers = sessions.get(id);
+		for (Session s : peers) {
+			if(!s.equals(peer))
+			s.getBasicRemote().sendObject(message);
+		}
+		sessions.remove(id);
+		GameManager.getInstance().removeRoom(id);
+		
 	}
 
 	@OnMessage
@@ -106,10 +112,10 @@ public class PlayerEnteredSocket {
 		ArrayList<Player> players = r.getPlayers();
 
 		ArrayList<Session> ses;
-		if (sessions.contains(RoomId)) {
-			ses = sessions.get(RoomId);
-		} else {
+		if (sessions.get(RoomId) == null) {
 			ses = new ArrayList<Session>();
+		} else {
+			ses = sessions.get(RoomId);
 		}
 
 		ses.add(curS);

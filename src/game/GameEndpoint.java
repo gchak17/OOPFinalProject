@@ -39,9 +39,9 @@ public class GameEndpoint {
 
 			HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
 			Player user = (Player) httpSession.getAttribute("player");
-			// System.out.println(user);
 
 			if (user.isArtist()) {
+				System.out.println("kivo");
 				json.put("answer", true);
 			}
 

@@ -52,5 +52,6 @@
         <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()">
     </div>
     <script src = "client.js"></script>
+    <script src = "chat.js"></script>
 </body>
 </html>
