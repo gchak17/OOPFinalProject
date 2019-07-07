@@ -19,38 +19,42 @@ import managers.AccountIDGenerator;
 @WebServlet("/AccountCreationServlet")
 public class AccountCreationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AccountCreationServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public AccountCreationServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		AvatarManager avatarManager = (AvatarManager)getServletContext().getAttribute("avatarManager");
-		AccountIDGenerator generator = (AccountIDGenerator)getServletContext().getAttribute("idGenerator");
-		
+		AvatarManager avatarManager = (AvatarManager) getServletContext().getAttribute("avatarManager");
+		AccountIDGenerator generator = (AccountIDGenerator) getServletContext().getAttribute("idGenerator");
+
 		String userName = request.getParameter("userName");
 		String password = request.getParameter("password");
 		long avatar_id = Long.valueOf(request.getParameter("avatar_id"));
 		Avatar avatar = avatarManager.getAvatarByID(avatar_id);
-		
-		if(!accountData.nameInUse(userName)) {
+
+		if (!accountData.nameInUse(userName)) {
 			Account account = new Account(generator.generateID(), userName, password, avatar);
 			accountData.addAccount(account);
 			request.getSession().setAttribute("user", account);
