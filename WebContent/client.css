@@ -6,12 +6,42 @@
 	left: 20%;
 }
 
-#chat-div{
+#canvas{
+	top:10%;
+}
+
+#word-panel{
+	top: 0%;
+	width: 800px;
+	height: 50px;
+}
+
+#paint-options-panel{
+	bottom: 0.5%;
+	width: 800px;
+	height: 100px;
+}
+
+.paint-options-panel-colors{
+	position:absolute;
+	width:11px;
+	height:11px;
+	border-radius:50%;
+}
+
+.side-panel{
+ 	position: absolute;
+ 	top: 0%; 
+ 	border: 2px solid;
+ 	width: 245px; 
+ 	height: 620px;
+}
+
+#chat-panel{
+	left: 81.4%;
 	border-radius: thin;
 	border-style: solid;
-    float:right;
-    width: 245px;
-	height: 620px;
+	position: absolute;
     background-color: #525ef7;
     border-radius: 15px;
     border-color: #e03bd4;
@@ -44,43 +74,8 @@
     text-align: initial;
 }
 
-#canvas{
-	top:10%;
-}
-
-#word-panel{
-	top: 0%;
-	width: 800px;
-	height: 50px;
-}
-
-#paint-options-panel{
-	bottom: 0.5%;
-	width: 800px;
-	height: 100px;
-}
-
-.paint-options-panel-colors{
-	position:absolute;
-	width:11px;
-	height:11px;
-	border-radius:50%;
-}
-
-/* .side-panel{ */
-/* 	position: absolute; */
-/* 	top: 0%; */
-/* 	border: 2px solid; */
-/* 	width: 245px; */
-/* 	height: 620px; */
-/* } */
-
 #users-panel{
 	left: 0%;
-}
-
-#chat-panel{
-	left: 81.4%;
 }
 
 #choosecolor{
