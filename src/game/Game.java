@@ -113,4 +113,7 @@ public class Game {
 		return null;
 	}
 
+	public ArrayList<Player> getPlayers(){
+		return players;
+	}
 }
