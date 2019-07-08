@@ -13,15 +13,18 @@ public class Account {
 	private String username;
 	private String password;
 	private Avatar avatar;
-	private List<Long> friendList;
+	private ArrayList<Long> friendList;
 	private AccountData accountData;
 	
-	public Account(long userID, String username, String password, Avatar avatar) {
+	public Account(long userID, String username, String password, Avatar avatar, ArrayList<Long> friends) {
 		this.userID = userID;
 		this.username = username;
 		this.password = password;
 		this.avatar = avatar;
-		friendList = new ArrayList<>();
+		if(friends != null)
+			friendList = friends;
+		else
+			friendList = new ArrayList<>();
 		accountData = AccountData.getInstance();
 	}
 	
@@ -50,6 +53,7 @@ public class Account {
 	
 	public void addFriend(Account friend) {
 		friendList.add(friend.getID());
+		accountData.addFriend(this, friend.getID());
 	}
 	
 	public Account getFriendByID(long userID) {
