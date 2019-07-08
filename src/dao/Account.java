@@ -2,7 +2,10 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+
+import managers.AccountData;
 import managers.PasswordHasher;
 
 public class Account {
@@ -10,14 +13,16 @@ public class Account {
 	private String username;
 	private String password;
 	private Avatar avatar;
-//	private HashMap<String, Account> friendList;
+	private List<Long> friendList;
+	private AccountData accountData;
 	
 	public Account(long userID, String username, String password, Avatar avatar) {
 		this.userID = userID;
 		this.username = username;
 		this.password = password;
 		this.avatar = avatar;
-//		friendList = new HashMap<String, Account>();
+		friendList = new ArrayList<>();
+		accountData = AccountData.getInstance();
 	}
 	
 	
@@ -44,15 +49,15 @@ public class Account {
 	}
 	
 	public void addFriend(Account friend) {
-//		friendList.put(friend.getUsername(), friend);
+		friendList.add(friend.getID());
 	}
 	
 	public Account getFriendByID(long userID) {
-//		for(Account a : friendList.values()) {
-//			if(a.getID() == userID) {
-//				return a;
-//			}
-//		}
+		for(int i = 0; i < friendList.size(); i++) {
+			if(friendList.get(i) == userID) {
+				return accountData.getAccountByID(userID);
+			}
+		}
 		return null;
 	}
 	
@@ -60,18 +65,21 @@ public class Account {
 	 * 
 	 */
 	public Account getFriendByUsername(String username) {
-//		if(friendList.containsKey(username)) {
-//			return friendList.get(username);
-//		}
+		for(int i = 0; i < friendList.size(); i++) {
+			Account account = accountData.getAccountByID(friendList.get(i));
+			if(account.getUsername() == username) {
+				return account;
+			}
+		}
 		return null;
 	}
 	
-	public List<Account> getFriendList(){
-		List<Account> res = new ArrayList<Account>();
-//		for(Account a : friendList.values()) {
-//			res.add(a);
-//		}
-		return res;
+	public Iterator<Account> getFriendList(){
+		List<Account> res = new ArrayList<>();
+		for(int i = 0; i < friendList.size(); i++) {
+			res.add(accountData.getAccountByID(friendList.get(i)));
+		}
+		return res.iterator();
 	}
 	
 	@Override
