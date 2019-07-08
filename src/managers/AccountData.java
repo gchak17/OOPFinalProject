@@ -231,19 +231,4 @@ public class AccountData {
 		
 		return res;
 	}
-	
-	/*
-	 * 
-	 */
-	public void sendFriendRequest(long requestSenderId, long reciverUsernameId) {
-		try {
-			FriendRequestIDGenerator generator = FriendRequestIDGenerator.getInstance();
-			Statement st = conn.createStatement();
-			st.executeUpdate("insert into friend_requests(id, request_sender_id, request_reciever_id) values\n" + 
-					"(" + generator.generateID() + ", " + requestSenderId + ", " + reciverUsernameId + ");");
-			st.close();
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
 }
