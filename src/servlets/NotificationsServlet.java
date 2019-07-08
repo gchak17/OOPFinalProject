@@ -37,11 +37,10 @@ public class NotificationsServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		Account user = (Account)request.getSession().getAttribute("user");
+//		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
+//		Account user = (Account)request.getSession().getAttribute("user");
 		//user.getnotifications
-		PrintWriter out = response.getWriter();
-		response.setContentType("text/html");
+		request.getRequestDispatcher("NotificationPage.jsp").forward(request, response);
 		//accept (add friend in database) or decline friend request
 	}
 }

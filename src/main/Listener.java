@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebListener;
 
 import managers.AccountData;
 import managers.AvatarManager;
+import managers.FriendRequestManager;
 import managers.AccountIDGenerator;
 
 /**
@@ -38,11 +39,13 @@ public class Listener implements ServletContextListener {
     	AccountData accountData = null;
     	AvatarManager avatarManager = null;
     	AccountIDGenerator generator = null;
+    	FriendRequestManager friendRequestManager = null;
     	
 		try {
 			accountData = AccountData.getInstance();
 			avatarManager = AvatarManager.getInstance();
 			generator = AccountIDGenerator.getInstance();
+			friendRequestManager = FriendRequestManager.getInstance();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,7 +53,7 @@ public class Listener implements ServletContextListener {
 		arg0.getServletContext().setAttribute("accountData", accountData);
 		arg0.getServletContext().setAttribute("avatarManager", avatarManager);
 		arg0.getServletContext().setAttribute("idGenerator", generator);
-    	
+		arg0.getServletContext().setAttribute("friendRequestManager", friendRequestManager);
     }
 	
 }

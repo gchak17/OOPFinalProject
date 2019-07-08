@@ -14,6 +14,7 @@ import dao.Avatar;
 import managers.AccountData;
 import managers.AccountIDGenerator;
 import managers.AvatarManager;
+import managers.FriendRequestManager;
 
 /**
  * Servlet implementation class SendRequestServlet
@@ -41,9 +42,10 @@ public class SendRequestServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
+		FriendRequestManager friendRequestManager = (FriendRequestManager) getServletContext().getAttribute("friendRequestManager");
 		String friendUserName = request.getParameter("friendusername");
 		Account user = (Account)request.getSession().getAttribute("user");
-
+		
 		PrintWriter out = response.getWriter(); 
 		response.setContentType("text/html");
 		if(user.getUsername().equals(friendUserName)) {
@@ -53,7 +55,7 @@ public class SendRequestServlet extends HttpServlet {
 				out.append("<p> " + friendUserName + " is already your friend.</p>");
 			}else{
 				//call send request method
-				accountData.sendFriendRequest(user.getID(), accountData.getAccountByUsername(friendUserName).getID());
+				friendRequestManager.sendFriendRequest(user.getID(), accountData.getAccountByUsername(friendUserName).getID());
 				out.append("<p> friend request to " + friendUserName + " is sent.</p>");
 			}
 		}else{

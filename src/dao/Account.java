@@ -21,10 +21,7 @@ public class Account {
 		this.username = username;
 		this.password = password;
 		this.avatar = avatar;
-		if(friends != null)
-			friendList = friends;
-		else
-			friendList = new ArrayList<>();
+		friendList = friends;
 		accountData = AccountData.getInstance();
 	}
 	
@@ -65,13 +62,10 @@ public class Account {
 		return null;
 	}
 	
-	/*
-	 * 
-	 */
 	public Account getFriendByUsername(String username) {
 		for(int i = 0; i < friendList.size(); i++) {
 			Account account = accountData.getAccountByID(friendList.get(i));
-			if(account.getUsername() == username) {
+			if(account.getUsername().equals(username)) {
 				return account;
 			}
 		}
