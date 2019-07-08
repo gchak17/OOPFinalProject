@@ -70,4 +70,17 @@ public class FriendRequestManager {
 		}
 		return requests.iterator();
 	}
+	
+	/*
+	 * 
+	 */
+	public void deleteFriendRequest (long requestSenderId, long requestRecieverId) {
+		try {
+			Statement st = conn.createStatement();
+			st.executeUpdate("delete from friend_requests where request_sender_id = " + requestSenderId + " and request_reciever_id = " + requestRecieverId + ";" );
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
