@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,7 +57,7 @@ public class AccountCreationServlet extends HttpServlet {
 		Avatar avatar = avatarManager.getAvatarByID(avatar_id);
 
 		if (!accountData.nameInUse(userName)) {
-			Account account = new Account(generator.generateID(), userName, password, avatar);
+			Account account = new Account(generator.generateID(), userName, password, avatar, new ArrayList<Long>());
 			accountData.addAccount(account);
 			request.getSession().setAttribute("user", account);
 			request.getRequestDispatcher("Main.jsp").forward(request, response);
