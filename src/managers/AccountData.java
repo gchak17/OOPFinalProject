@@ -22,7 +22,6 @@ public class AccountData {
 	private Connection conn;
 	private static AccountData manager;
 	private AvatarManager avatarManager;
-//	private HashMap<Long, Account> accounts;
 	
 	private AccountData() throws SQLException{
 		try {

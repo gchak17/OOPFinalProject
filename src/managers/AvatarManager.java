@@ -56,8 +56,8 @@ public class AvatarManager {
 		int res = 0;
 		try {
 			Statement st1 = conn.createStatement();
-			
-			
+
+
 			res = st1.executeUpdate("insert into avatars values (" + 
 											avatar.getID() + ", " + 
 											avatar.getFilename() + ", " + 
