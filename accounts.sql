@@ -47,7 +47,20 @@ alter table accounts
 	add constraint avatar_fk foreign key (avatar_id)
     references avatars(id);
 
+    
+-- ------------friend_requests----------------
+create table friend_requests
+(id integer not null auto_increment primary key,
+request_sender_id integer not null,
+request_reciever_id integer not null);
 
+alter table friend_requests
+	add constraint friend_requests_fk1 foreign key (request_sender_id)
+	references accounts(id);
+	
+alter table friend_requests
+	add constraint friend_requests_fk2 foreign key (request_reciever_id)
+	references accounts(id);
 
 -- --------------insert sample values--------------
 

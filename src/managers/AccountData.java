@@ -168,6 +168,27 @@ public class AccountData {
 	/*
 	 * 
 	 */
+	public Account getAccountByUsername(String username) {
+		//TODO
+		Account account = null;
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select a.id, a.user_name, a.authentication_string, a.avatar_id from accounts a where a.user_name = '"  + username + "';");
+			while(rs.next()) {
+				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)), getFriends(rs.getInt(1)));
+			}
+			
+			rs.close();
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return account;
+	}
+	
+	/*
+	 * 
+	 */
 	public Account authenticate(String username, String password) {
 		//TODO
 		Account account = null;
@@ -209,5 +230,20 @@ public class AccountData {
 		}
 		
 		return res;
+	}
+	
+	/*
+	 * 
+	 */
+	public void sendFriendRequest(long requestSenderId, long reciverUsernameId) {
+		try {
+			FriendRequestIDGenerator generator = FriendRequestIDGenerator.getInstance();
+			Statement st = conn.createStatement();
+			st.executeUpdate("insert into friend_requests(id, request_sender_id, request_reciever_id) values\n" + 
+					"(" + generator.generateID() + ", " + requestSenderId + ", " + reciverUsernameId + ");");
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

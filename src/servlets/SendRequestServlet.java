@@ -53,6 +53,7 @@ public class SendRequestServlet extends HttpServlet {
 				out.append("<p> " + friendUserName + " is already your friend.</p>");
 			}else{
 				//call send request method
+				accountData.sendFriendRequest(user.getID(), accountData.getAccountByUsername(friendUserName).getID());
 				out.append("<p> friend request to " + friendUserName + " is sent.</p>");
 			}
 		}else{
