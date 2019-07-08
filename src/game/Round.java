@@ -52,8 +52,8 @@ public class Round {
 	}
 
 	private void sendNewRoundInformationsToSocket() {
-		// TODO Auto-generated method stub
-
+		// aman prosta painteri vinaa is unda ganaaxlos dafaze
+		// da sityvis zomis shesabamisi xazebi gamoachinos
 	}
 
 	public void endRound() {

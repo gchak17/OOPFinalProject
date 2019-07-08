@@ -100,7 +100,7 @@ public class Game {
 	}
 
 	private void endGame() {
-		showResults();
+		showFinalResults();
 
 		ArrayList<Player> leftPlayers = playersWantToPlayAgain();
 		if (leftPlayers.size() > 0) {
@@ -113,7 +113,7 @@ public class Game {
 		}
 	}
 
-	private void showResults() {
+	private void showFinalResults() {
 
 	}
 

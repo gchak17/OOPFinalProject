@@ -20,7 +20,7 @@
 		<ul>
 		<% for(int i = 0; i < rooms.size(); i++){
 			%>
-			<li> <%= rooms.get(i) %>
+			<li> <%= rooms.get(i).toString() %>
 				
 				<form action="JoinRoomServlet" method="post"  >>
 				<input type = "submit" value = "Enter Room" >
