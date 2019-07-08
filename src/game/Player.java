@@ -28,7 +28,7 @@ public class Player {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				game.endRound();
+				game.getRound().endTurn();
 			}
 		}, 10 * 1000);// aq roundidan amogebuli dro damchirdeba
 		System.out.println(account.getUsername() + " started turn, time remaining:" + getRemainingTimeSeconds());
@@ -89,4 +89,5 @@ public class Player {
 	public Timer getTimer() {
 		return timer;
 	}
+
 }

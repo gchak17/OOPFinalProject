@@ -19,58 +19,118 @@ public class Round {
 	private int nth;
 	private ArrayList<Player> players;
 	private Player artist;
-	private HashMap<Player, Integer> playersGuessedTimes;
+	private HashMap<Player, Integer> playersGuessedTimesForSingleTurn;
 	private boolean everybodyGuessed = false;
 	private HashMap<Player, Integer> points;
-	private String gameId;
+	private Game game;
 	private Date date;
+	private Player roundStarter;
+	private int turnCounter;
+	private boolean roundIsnotEnded = true;
 
-	public Round(int nthRound, ArrayList<Player> players, Player artist, String gameId) {
-		this.nth = nthRound;
+	public Round(ArrayList<Player> players, Player artist, Game g) {
+
 		this.players = players;
 		this.artist = artist;
-		this.gameId = gameId;
+		this.roundStarter = artist;
+		this.game = g;
 		this.date = new Date(System.currentTimeMillis());
+		this.turnCounter = 0;
 		initMap();
 
-		artist.startDrawing();
-		sendNewRoundInformationsToSocket();
-
+		startTurn();
 	}
-	
+
 	public Date getDate() {
 		return this.date;
 	}
 
 	private void initMap() {
 		points = new HashMap<Player, Integer>();
-		playersGuessedTimes = new HashMap<Player, Integer>();
+		playersGuessedTimesForSingleTurn = new HashMap<Player, Integer>();
 		for (Player p : players) {
 			points.put(p, 0);
-			playersGuessedTimes.put(p, 100);
+			playersGuessedTimesForSingleTurn.put(p, 100);
 		}
 	}
 
-	private void sendNewRoundInformationsToSocket() {
-		// aman prosta painteri vinaa is unda ganaaxlos dafaze
-		// da sityvis zomis shesabamisi xazebi gamoachinos
+	public HashMap<Player, Integer> getPoints() {
+		return points;
 	}
 
-	public void endRound() {
-		System.out.println(artist.getAccount().getUsername() + "'s round is over");
+	private void choosePainter() {
+		if (turnCounter != 1) {
+			clearCanvas();
+			int index = 0;
+			for (int i = 0; i < players.size(); i++) {
+				if (players.get(i).equals(artist)) {
+					index = i + 1;
+					if (index == players.size())
+						index = 0;
+				}
+			}
+			artist = players.get(index);
+			if (artist.equals(roundStarter)) {
+				game.endRound();
+				roundIsnotEnded = false;
+			}
+		}
+	}
+
+	public void endTurn() {
+		System.out.println(artist + " is svla morcha");
 		artist.endDrawing();
 		generatePointsForPlayers();
-		sendPointsToWebSocket();
+		// sendPointsToWebSocket();
 
+		startTurn();
+	}
+
+	private void startTurn() {
+		
+		turnCounter++;
+		choosePainter();
+		if (roundIsnotEnded) {
+			generateThreeWordsAndChooseOne();
+			System.out.println(this + " roomma daawyebia");
+			artist.startDrawing();
+			sendNewTurnInformationsToSocket();
+		}
+	}
+
+	private void clearCanvas() {
+		JSONObject json = new JSONObject();
+		json.put("command", "clear");
+		try {
+			GameEndpoint.sendMessage(game.getId(), new Message(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EncodeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void generateThreeWordsAndChooseOne() {
+		// TODO Auto-generated method stub
+		// System.out.println("sami sityvis dagenenrireba da erTis archeva");
+
+	}
+
+	private void sendNewTurnInformationsToSocket() {
+		// aman prosta painteri vinaa is unda ganaaxlos dafaze
+		// da sityvis zomis shesabamisi xazebi gamoachinos
+		// System.out.println("vin xatavs ganaxlda dafaze da sityvis xazebi gamochnda");
 	}
 
 	public void smbdGuessed(Player p, int sec) throws SQLException {
-		playersGuessedTimes.put(p, sec);
+		playersGuessedTimesForSingleTurn.put(p, sec);
 
-		if (playersGuessedTimes.size() == players.size()) {
+		if (playersGuessedTimesForSingleTurn.size() == players.size()) {
 			everybodyGuessed = true;
 			artist.getTimer().cancel();
-			endRound();// es ar vici zustad sachiroa tu ara, sheidzleba taimerma tviton gaushvas mainc?
+			endTurn();// es ar vici zustad sachiroa tu ara, sheidzleba taimerma tviton gaushvas mainc?
 		}
 
 	}
@@ -81,14 +141,13 @@ public class Round {
 		for (Player p : players) {
 			String user = p.getAccount().getUsername();
 			int res = points.get(p);
-			System.out.println(res);
 			json.put(user, res);
 		}
 
 		Message newM = new Message(json);
 
 		try {
-			GameEndpoint.sendMessage(gameId, newM);
+			GameEndpoint.sendMessage(game.getId(), newM);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,14 +159,10 @@ public class Round {
 	}
 
 	private void generatePointsForPlayers() {
-		for (Player key : playersGuessedTimes.keySet()) {
-			int res = 100 - playersGuessedTimes.get(key);
+		for (Player key : playersGuessedTimesForSingleTurn.keySet()) {
+			int res = 100 - playersGuessedTimesForSingleTurn.get(key);
 			points.put(key, res);
 		}
-	}
-
-	public HashMap<Player, Integer> getPoints() {
-		return points;
 	}
 
 }

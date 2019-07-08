@@ -1,6 +1,7 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.jsp/web");
+var websocket = new WebSocket(
+		"ws://localhost:8080/OOPFinalProject/client.jsp/web");
 websocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -11,12 +12,15 @@ function sendText(json) {
 
 function onMessage(evt) {
 	var json = JSON.parse(evt.data);
-	 if (json.command === "paint"){
-			drawImageText(evt.data);
-	}else if(json.command === "showResults"){
-		
-	}else if (json.command === "checkStatus") {
+
+	if (json.command === "paint") {
+		drawImageText(evt.data);
+	} else if (json.command === "checkStatus") {
 		isArtist = json.answer;
+	} else if (json.command === "showResults") {
+
+	} else if (json.command === "clear") {
+		context.clearRect(0, 0, canvas.width, canvas.height);
 	}
 }
 
@@ -83,27 +87,26 @@ function width(obj) {
 }
 
 function clearCanvas() {
-	var json = JSON.stringify({
-		"command" : "clear"
-	});
-
-	drawImageText(json);
-	sendText(json);
+	checkIfIsArtist();
+	if(isArtist){
+		var json = JSON.stringify({
+			"command" : "clear"
+		});
+		sendText(json);
+	}
 }
 
 function drawImageText(image) {
 	var json = JSON.parse(image);
-	if (json.command === "clear") {
-		context.clearRect(0, 0, canvas.width, canvas.height);
-	} else {
-		context.beginPath();
-		context.lineWidth = json.width;
-		context.strokeStyle = json.color;
-		context.lineCap = "round";
-		context.moveTo(json.start.x, json.start.y);
-		context.lineTo(json.end.x, json.end.y);
-		context.stroke();
-	}
+
+	context.beginPath();
+	context.lineWidth = json.width;
+	context.strokeStyle = json.color;
+	context.lineCap = "round";
+	context.moveTo(json.start.x, json.start.y);
+	context.lineTo(json.end.x, json.end.y);
+	context.stroke();
+	
 }
 
 listen(document, 'mouseup', function(event) {
