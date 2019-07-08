@@ -58,9 +58,9 @@ public class GameEndpoint {
 	public static void onMessage(Message message, Session session) throws IOException, EncodeException {
 		HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
 
-		String type = message.getJson().getString("type");
+		String type = message.getJson().getString("command");
 		JSONObject json = message.getJson();
-		if (type.equals("isArtist?")) {
+		if (type.equals("checkStatus")) {
 
 			json.put("answer", false);
 
@@ -86,7 +86,7 @@ public class GameEndpoint {
 	}
 
 	public static void sendMessage(String gameId, Message message) throws IOException, EncodeException {
-		System.out.println("mesiji unda iyos qulebis");
+		
 		ArrayList<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
 			peer.getBasicRemote().sendObject(message);

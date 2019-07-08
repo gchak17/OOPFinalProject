@@ -3,7 +3,9 @@ package game;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import dao.Account;
 
@@ -17,7 +19,6 @@ public class Game {
 	private int maxPlayers;
 	private int time;
 	private int numRounds;
-	private int painterIndex;
 	private Timer betweenRoundsTimer;
 	private boolean everybodyGuessed;
 
@@ -32,7 +33,6 @@ public class Game {
 		this.time = time;
 		this.id = id;
 		points = new HashMap<Player, Integer>();
-		painterIndex = 0;
 		nthRound = 0;
 		startNewRound();
 	}
@@ -52,14 +52,16 @@ public class Game {
 	}
 
 	private void choosePainter() {
-		while (true) {
-			if (players.get(painterIndex).isInGame()) {
-				artist = players.get(painterIndex);
-				painterIndex++;
-				break;
+		int index = 0;
+		for(int i = 0; i < players.size(); i++) {
+			if(players.get(i).equals(artist)) {
+				index = i+1;
+				if(index == players.size())
+					index = 0;
 			}
-			painterIndex++;
 		}
+		artist = players.get(index);
+		
 	}
 
 	public void startNewRound() {
@@ -77,6 +79,15 @@ public class Game {
 		if (nthRound == numRounds) {
 			endGame();
 		}
+		
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				startNewRound();
+			}
+		}, 5 * 1000);// aq roundidan amogebuli dro damchirdeba
+		
 	}
 
 	private void addRoundResToTotalScores() {
@@ -89,7 +100,6 @@ public class Game {
 	}
 
 	private void endGame() {
-
 		showResults();
 
 		ArrayList<Player> leftPlayers = playersWantToPlayAgain();
@@ -97,7 +107,6 @@ public class Game {
 			// start game from 0
 			this.players = leftPlayers;
 			points = new HashMap<Player, Integer>();
-			painterIndex = 0;
 			nthRound = 0;
 			choosePainter();
 			startNewRound();
@@ -110,7 +119,7 @@ public class Game {
 
 	private ArrayList<Player> playersWantToPlayAgain() {
 		// ask if they want to play again
-		return null;
+		return new ArrayList<Player>();
 	}
 
 	public ArrayList<Player> getPlayers() {
@@ -119,5 +128,9 @@ public class Game {
 
 	public void removePlayer(Player cur) {
 		players.remove(cur);
+	}
+	
+	public HashMap<Player, Integer> getPoints() {
+		return points;
 	}
 }

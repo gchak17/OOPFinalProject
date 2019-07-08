@@ -1,8 +1,8 @@
+<%@page import="java.util.HashMap"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="game.GameManager"%>
 <%@ page import="game.Game"%>
 <%@ page import="game.Player"%>
-<%@	page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -16,8 +16,17 @@
     <% 
 		String gameId = (String)request.getSession().getAttribute("gameId");
 		Game game = GameManager.getInstance().getGame(gameId);
-		ArrayList<Player> players = game.getPlayers();
+		HashMap<Player, Integer> points = game.getPoints();
+		
 	%>
+	
+	<ul>
+		<% for (Player key : points.keySet()){
+			String s = key.toString() + " : " + Integer.toString(points.get(key)); %>
+			<li> <%= s %> </li>
+		<%}%>
+	</ul>
+	
 	
    
 	<div id="chat-panel" class="side-panel" >

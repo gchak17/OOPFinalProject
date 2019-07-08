@@ -23,7 +23,7 @@
 
 	<script>
 	//var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
-	alert(document.location.host + document.location.pathname);
+	
 	var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/PublishRoom");
 	websocket.onmessage = function(evt) { updatePage(evt) };
 	

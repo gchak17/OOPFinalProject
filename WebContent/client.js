@@ -11,10 +11,13 @@ function sendText(json) {
 
 function onMessage(evt) {
 	var json = JSON.parse(evt.data);
-	if (json.type === "isArtist?") {
-			isArtist = json.answer;
+	 if (json.command === "paint"){
+			drawImageText(evt.data);
+	}else if(json.command === "showResults"){
+		
+	}else if (json.command === "checkStatus") {
+		isArtist = json.answer;
 	}
-	drawImageText(evt.data);
 }
 
 var canvas = document.getElementById("canvas");
@@ -44,8 +47,7 @@ listen(canvas, 'mousemove', function(event) {
 	var p = getPos(event);
 
 	var json = JSON.stringify({
-		"type" : "drawing",
-		"clear" : false,
+		"command" : "paint",
 		"start" : {
 			"x" : lastPos[0],
 			"y" : lastPos[1]
@@ -67,7 +69,7 @@ listen(canvas, 'mousemove', function(event) {
 
 function checkIfIsArtist() {
 	var json = JSON.stringify({
-		"type" : "isArtist?",
+		"command" : "checkStatus"
 	});
 	sendText(json);
 }
@@ -82,8 +84,7 @@ function width(obj) {
 
 function clearCanvas() {
 	var json = JSON.stringify({
-		"type" : "shota",
-		"clear" : true
+		"command" : "clear"
 	});
 
 	drawImageText(json);
@@ -92,7 +93,7 @@ function clearCanvas() {
 
 function drawImageText(image) {
 	var json = JSON.parse(image);
-	if (json.clear) {
+	if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 	} else {
 		context.beginPath();

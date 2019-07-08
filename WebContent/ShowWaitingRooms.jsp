@@ -26,7 +26,7 @@
 				<input type = "submit" value = "Enter Room" >
 				<input type="hidden" name="id" value="<%= rooms.get(i) %>" />
 				</form>
-			<li>
+			</li>
 			<%
 			
 		}%>

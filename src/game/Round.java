@@ -77,7 +77,7 @@ public class Round {
 
 	private void sendPointsToWebSocket() {
 		JSONObject json = new JSONObject();
-		json.put("type", "showResults");
+		json.put("command", "showResults");
 		for (Player p : players) {
 			String user = p.getAccount().getUsername();
 			int res = points.get(p);

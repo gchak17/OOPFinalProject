@@ -13,7 +13,6 @@ public class Player {
 	private long turnStartTimeMillis;
 	private Timer timer;
 	private int score;
-	private boolean isStillIntheGame = true;
 
 	public Player(Account account) {
 		this.account = account;
@@ -81,14 +80,6 @@ public class Player {
 
 	public int getScore() {
 		return this.score;
-	}
-
-	public boolean isInGame() {
-		return isStillIntheGame;
-	}
-
-	public void leftGame() {
-		isStillIntheGame = false;
 	}
 
 	public boolean isArtist() {
