@@ -1,6 +1,7 @@
 package game;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,17 +23,23 @@ public class Round {
 	private boolean everybodyGuessed = false;
 	private HashMap<Player, Integer> points;
 	private String gameId;
+	private Date date;
 
 	public Round(int nthRound, ArrayList<Player> players, Player artist, String gameId) {
 		this.nth = nthRound;
 		this.players = players;
 		this.artist = artist;
 		this.gameId = gameId;
+		this.date = new Date(System.currentTimeMillis());
 		initMap();
 
 		artist.startDrawing();
 		sendNewRoundInformationsToSocket();
 
+	}
+	
+	public Date getDate() {
+		return this.date;
 	}
 
 	private void initMap() {

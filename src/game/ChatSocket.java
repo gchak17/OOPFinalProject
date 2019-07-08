@@ -47,15 +47,10 @@ public class ChatSocket {
 	public void sendMessage(String message, Session session) throws IOException, EncodeException {
 		if (message == "")
 			return;
-		System.out.println("not yet1");
 		HttpSession httpSession = ((HttpSession)session.getUserProperties().get("HttpSession"));
-		System.out.println("not yet2");
         Player user = (Player) httpSession.getAttribute("player");
-        System.out.println("not yet3");
         Account acc = user.getAccount();
-        System.out.println("not yet4");
 		String username = acc.getUsername();//(String) session.getUserProperties().get("username");
-		System.out.println("not yet5");
 
 		chatlock.lock();
 		for (Session curSes : sessionList) {
