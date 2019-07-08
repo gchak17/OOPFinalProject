@@ -86,7 +86,7 @@
 		<input type="submit" value="Add Friend">
 	</form>
 	
-	<form action="SeeNotifications" method="post">
+	<form action="NotificationsServlet" method="post">
 		<input type="submit" value="See Notifications">
 	</form>
 	

@@ -10,22 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.Account;
-import dao.Avatar;
 import managers.AccountData;
-import managers.AccountIDGenerator;
-import managers.AvatarManager;
 
 /**
- * Servlet implementation class SendRequestServlet
+ * Servlet implementation class NotificationsServlet
  */
-@WebServlet("/SendRequestServlet")
-public class SendRequestServlet extends HttpServlet {
+@WebServlet("/NotificationsServlet")
+public class NotificationsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SendRequestServlet() {
+    public NotificationsServlet() {
         super();
     }
 
@@ -41,22 +38,10 @@ public class SendRequestServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		String friendUserName = request.getParameter("friendusername");
 		Account user = (Account)request.getSession().getAttribute("user");
-
-		PrintWriter out = response.getWriter(); 
+		//user.getnotifications
+		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		if(user.getUsername().equals(friendUserName)) {
-			out.append("<p> that's your username.</p>");
-		}else if(accountData.nameInUse(friendUserName)){
-			if(user.getFriendByUsername(friendUserName) != null){
-				out.append("<p> " + friendUserName + " is already your friend.</p>");
-			}else{
-				//call send request method
-				out.append("<p> friend request to " + friendUserName + " is sent.</p>");
-			}
-		}else{
-			out.append("<p>user with that name does not exist.</p>");
-		}
+		//accept (add friend in database) or decline friend request
 	}
 }
