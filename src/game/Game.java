@@ -14,17 +14,15 @@ public class Game {
 
 	private HashMap<Player, Integer> points;
 
-	private Player artist;
+	private Player roundStarterArtist;
 	private String id;
-	private int maxPlayers;
 	private int time;
 	private int numRounds;
 	private Timer betweenRoundsTimer;
-	private boolean everybodyGuessed;
 
-	private boolean isGameOver = false;
 	private Round round;
-	private int nthRound;
+	private int roundCounter;
+	private int artistIndex;
 
 	public Game(ArrayList<Player> players, int round, int time, String id) {
 		this.players = players;
@@ -33,7 +31,8 @@ public class Game {
 		this.time = time;
 		this.id = id;
 		points = new HashMap<Player, Integer>();
-		nthRound = 0;
+		roundCounter = 0;
+		artistIndex = 0;
 		startNewRound();
 	}
 
@@ -52,42 +51,47 @@ public class Game {
 	}
 
 	private void choosePainter() {
-		int index = 0;
-		for(int i = 0; i < players.size(); i++) {
-			if(players.get(i).equals(artist)) {
-				index = i+1;
-				if(index == players.size())
-					index = 0;
+		if (artistIndex == 0) {
+			roundStarterArtist = players.get(0);
+		} else {
+			for (int i = 0; i < players.size(); i++) {
+				if (players.get(i).equals(roundStarterArtist)) {
+					artistIndex = i + 1;
+					if (artistIndex == numRounds)
+						endGame();
+				}
 			}
+			roundStarterArtist = players.get(artistIndex);
+
+			System.out.println(roundStarterArtist + " raunds daiwyebs");
 		}
-		artist = players.get(index);
-		
 	}
 
 	public void startNewRound() {
 		choosePainter();
-		System.out.println("painter is " + artist);
-		nthRound++;
-		Round r = new Round(nthRound, players, artist, id);
+		roundCounter++;
+		this.betweenRoundsTimer = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT rogoraa ?
+		Round r = new Round(players, roundStarterArtist, this);
 		this.round = r;
 	}
 
 	public void endRound() {
-		this.round.endRound();
+		System.out.println("damTavrda raundi");
 		addRoundResToTotalScores();
 
-		if (nthRound == numRounds) {
+		System.out.println(roundCounter + " : " + numRounds);
+		if (roundCounter == numRounds) {
 			endGame();
+		} else {
+
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					startNewRound();
+				}
+			}, 5 * 1000);// aq roundidan amogebuli dro damchirdeba
 		}
-		
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				startNewRound();
-			}
-		}, 5 * 1000);// aq roundidan amogebuli dro damchirdeba
-		
 	}
 
 	private void addRoundResToTotalScores() {
@@ -104,17 +108,17 @@ public class Game {
 
 		ArrayList<Player> leftPlayers = playersWantToPlayAgain();
 		if (leftPlayers.size() > 0) {
+			System.out.println("riatto");
 			// start game from 0
 			this.players = leftPlayers;
 			points = new HashMap<Player, Integer>();
-			nthRound = 0;
+			roundCounter = 0;
 			choosePainter();
 			startNewRound();
 		}
 	}
 
 	private void showFinalResults() {
-
 	}
 
 	private ArrayList<Player> playersWantToPlayAgain() {
@@ -129,8 +133,9 @@ public class Game {
 	public void removePlayer(Player cur) {
 		players.remove(cur);
 	}
-	
+
 	public HashMap<Player, Integer> getPoints() {
 		return points;
 	}
+
 }

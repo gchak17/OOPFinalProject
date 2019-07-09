@@ -39,10 +39,10 @@ public class GameEndpoint {
 
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		String id = (String) httpSession.getAttribute("gameId");
-		
+
 		Game g = GameManager.getInstance().getGame(id);
 		g.removePlayer((Player) httpSession.getAttribute("player"));
-		
+
 		JSONObject json = new JSONObject();// es unda iyos otaxshi vinebi darchnen imis shemcveli
 
 		Message message = new Message(json);
@@ -58,9 +58,10 @@ public class GameEndpoint {
 	public static void onMessage(Message message, Session session) throws IOException, EncodeException {
 		HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
 
-		String type = message.getJson().getString("command");
+		String command = message.getJson().getString("command");
 		JSONObject json = message.getJson();
-		if (type.equals("checkStatus")) {
+		
+		if (command.equals("checkStatus")) {
 
 			json.put("answer", false);
 
@@ -73,20 +74,35 @@ public class GameEndpoint {
 			message.setJson(json);
 			session.getBasicRemote().sendObject(message);
 
-		} else { // aq typebze damokidebuli gaxdeba bevri ideaSi satitaod
+		} else if(command.equals("clear")) {
+			sendToEveryone(message, httpSession);
+			
+		}else {
+			sendToEveryoneButMe(message, httpSession, session);
+			
+		}
+	}
 
-			String id = (String) httpSession.getAttribute("gameId");
-			ArrayList<Session> peers = sessions.get(id);
-			for (Session peer : peers) {
-				if (!peer.equals(session)) {
-					peer.getBasicRemote().sendObject(message);
-				}
+	private static void sendToEveryoneButMe(Message message, HttpSession httpSession, Session session) throws IOException, EncodeException {
+		String id = (String) httpSession.getAttribute("gameId");
+		ArrayList<Session> peers = sessions.get(id);
+		for (Session peer : peers) {
+			if (!peer.equals(session)) {
+				peer.getBasicRemote().sendObject(message);
 			}
 		}
 	}
 
+	private static void sendToEveryone(Message message, HttpSession httpSession) throws IOException, EncodeException {
+		String id = (String) httpSession.getAttribute("gameId");
+		ArrayList<Session> peers = sessions.get(id);
+		for (Session peer : peers) {
+			peer.getBasicRemote().sendObject(message);
+		}
+	}
+
 	public static void sendMessage(String gameId, Message message) throws IOException, EncodeException {
-		
+
 		ArrayList<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
 			peer.getBasicRemote().sendObject(message);

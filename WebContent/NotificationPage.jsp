@@ -21,13 +21,21 @@
 	%>
 	
 	<% Iterator<Long> requests = friendRequestManager.getRequests(currAccount.getID()); %>
-    <ul>
-		<% while(requests.hasNext()) {
-			%>
-			<li>"<%= accountData.getAccountByID(requests.next()).getUsername() + "sent a friend request" %>"</li>
-			<%
-		}%>
-	  
-	</ul>
+    
+	
+	<% while(requests.hasNext())  {
+		%>
+		<% Account requestSender = accountData.getAccountByID(requests.next()); %>
+		<%= requestSender.getUsername() + " sent a friend request" %>
+		<% request.getSession().setAttribute("requestSender", requestSender); %>
+		<form action="AcceptFriendRequestServlet" method="post">
+			<input type="submit" value="Accept">
+		</form>
+		<form action="RejectFriendRequestServlet" method="post">
+			<input type="submit" value="Reject">
+		</form>
+		<%
+	}%>
+	
 </body>
 </html>
