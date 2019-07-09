@@ -33,7 +33,7 @@ public class ChatSocket {
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
-		Player user = (Player) httpSession.getAttribute("player"); 
+		Player user = (Player) httpSession.getAttribute("player");
 		Account acc = user.getAccount();
 		String username = acc.getUsername();// (String) httpSession.getAttribute("username");
 		session.getUserProperties().put("username", username);
@@ -50,36 +50,36 @@ public class ChatSocket {
 		if (message == "")
 			return;
 		Date playerDate = new Date(System.currentTimeMillis());
-		
-		HttpSession httpSession = ((HttpSession)session.getUserProperties().get("HttpSession"));
+
+		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
 		String gameId = (String) httpSession.getAttribute("gameId");
-		
+
 		Game game = GameManager.getInstance().getGame(gameId);
-		
-        Player user = (Player) httpSession.getAttribute("player");
-        Account acc = user.getAccount();
+
+		Player user = (Player) httpSession.getAttribute("player");
+		Account acc = user.getAccount();
 		String username = acc.getUsername();
 		Game.Round round = game.getRound();
-		
-		if (message.equals(round.getChosenWord())) {//aq unda iyos sityvis shemowmeba
+
+		if (message.equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
 			Date roundDate = round.getDate();
-			
+
 			long diff = playerDate.getTime() - roundDate.getTime();
 			try {
-				if (!user.isArtist()) 
+				if (!user.isArtist())
 					round.smbdGuessed(user, diff);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 		chatlock.lock();
 		for (Session curSes : sessionList) {
 
 			JSONObject js = new JSONObject();
 			js.append("username", username);
-			if (message.equals(round.getChosenWord())) {//aq unda iyos sityvis shemowmeba
+			if (message.equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
 				if (!user.isArtist())
 					js.append("message", "guessed the word");
 			} else {

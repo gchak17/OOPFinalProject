@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.EncodeException;
@@ -16,8 +15,6 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import org.json.JSONObject;
-
-import com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition;
 
 import message.Message;
 import message.MessageDecoder;
@@ -45,17 +42,20 @@ public class PlayerEnteredSocket {
 
 		Player user = (Player) httpSession.getAttribute("player");
 
-		if (gameIsNotStarted && user.equals(
-				GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
+		if (gameIsNotStarted) {
 
-			removeEveryone(peer, id);
+			if (user.equals(
+					GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
 
+				removeEveryone(peer, id);
+			} else {
+				r.removePlayer(user);
+			}
 		}
 		List<Session> sess = sessions.get(id);
 		sess.remove(peer);
 		sessions.put(id, sess);
 
-		r.removePlayer(user);
 	}
 
 	private void removeEveryone(Session peer, String id) throws IOException, EncodeException {
@@ -82,20 +82,17 @@ public class PlayerEnteredSocket {
 			String id = (String) httpSession.getAttribute("gameId");
 
 			Room r = GameManager.getInstance().getRoomById(id);
-
 			Player admin = r.getAdmin();
 			Player curPlayer = (Player) (httpSession.getAttribute("player"));
+
 			if (curPlayer.equals(admin)) {
 				json.put("admin", true);
 				if (r.getPlayers().size() < 2) {
 					session.getBasicRemote().sendObject(new Message(json));
 				} else {
-					
 					gameIsNotStarted = false;
-
 					json.put("forward", true);
-					
-					
+
 					List<Session> peers = sessions.get(id);
 					for (Session peer : peers) {
 						peer.getBasicRemote().sendObject(message);
@@ -109,13 +106,13 @@ public class PlayerEnteredSocket {
 		}
 	}
 
-	private void ohHenloFrens(HttpSession httpSession, Session curS) throws IOException, EncodeException{
+	private void ohHenloFrens(HttpSession httpSession, Session curS) throws IOException, EncodeException {
 		String RoomId = (String) httpSession.getAttribute("gameId");
 		Room r = GameManager.getInstance().getRoomById(RoomId);
 		ArrayList<Player> players = r.getPlayers();
 
 		List<Session> ses;
-		if (sessions.get(RoomId) == null) {
+		if (!sessions.containsKey(RoomId)) {
 			ses = Collections.synchronizedList(new ArrayList<Session>());
 		} else {
 			ses = sessions.get(RoomId);
@@ -123,12 +120,10 @@ public class PlayerEnteredSocket {
 
 		ses.add(curS);
 		sessions.put(RoomId, ses);
-
 		JSONObject json = generateJsonForPlayers(players);
-		Message newM = new Message(json);
 
 		for (Session s : ses) {
-			s.getBasicRemote().sendObject(newM);
+			s.getBasicRemote().sendObject(new Message(json));
 		}
 	}
 

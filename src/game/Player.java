@@ -13,6 +13,7 @@ public class Player {
 	private long turnStartTimeMillis;
 	private Timer timer;
 	private int score;
+	private Room room;
 
 	public Player(Account account) {
 		this.account = account;
@@ -30,7 +31,7 @@ public class Player {
 			public void run() {
 				game.getRound().endTurn();
 			}
-		}, 10 * 1000);// aq roundidan amogebuli dro damchirdeba
+		}, 10 * 1000);// room.getTime();
 		System.out.println(account.getUsername() + " started turn, time remaining:" + getRemainingTimeSeconds());
 	}
 
@@ -63,7 +64,6 @@ public class Player {
 		if (other == this) {
 			return true;
 		}
-
 		if (!(other instanceof Player)) {
 			return false;
 		}
@@ -74,8 +74,12 @@ public class Player {
 		return this.game;
 	}
 
-	public void setRoom() {
-		// TODO Auto-generated method stub
+	public void setRoom(Room r) {
+		this.room = r;
+	}
+
+	public Room getRoom() {
+		return this.room;
 	}
 
 	public int getScore() {

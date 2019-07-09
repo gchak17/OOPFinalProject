@@ -21,48 +21,51 @@ import managers.AccountData;
 @WebServlet("/PublishRoom")
 public class PublishRoom extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public PublishRoom() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		 System.out.println("aq ar unda shesuliyo");
+	public PublishRoom() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("aq ar unda shesuliyo");
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		int Rounds = Integer.parseInt(request.getParameter("Rounds"));
-		
+
 		int selectedTime = Integer.parseInt(request.getParameter("time"));
-		
+
 		int MaxPlayer = Integer.parseInt(request.getParameter("MaxPlayers"));
-		
-		Account admin = (Account)request.getSession().getAttribute("user");
+
+		Account admin = (Account) request.getSession().getAttribute("user");
 		Player adminP = new Player(admin);
-		
-		
+
 		Room waitingRoom = new Room(adminP, Rounds, selectedTime, MaxPlayer);
 		String id = GameManager.getInstance().registerRoom(waitingRoom);
-				
+
 		request.setAttribute("id", id);
-		
+
 		request.getSession().setAttribute("gameId", id);
-		
+
 		request.getSession().setAttribute("player", adminP);
-		
+
 		request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
-		//mgoni im waiting pageze socketis damateba dachirdeba
+		// mgoni im waiting pageze socketis damateba dachirdeba
 	}
 
 }

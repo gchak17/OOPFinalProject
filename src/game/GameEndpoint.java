@@ -1,7 +1,6 @@
 package game;
 
 import java.io.IOException;
-import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +25,7 @@ public class GameEndpoint {
 		httpSession.setAttribute("session", curS);
 		String id = (String) httpSession.getAttribute("gameId");
 		Room r = (Room) GameManager.getInstance().getRoomById(id);
-		
+
 		List<Session> ses;
 		if (!sessions.containsKey(id)) {
 			ses = Collections.synchronizedList(new ArrayList<Session>());
@@ -35,37 +34,30 @@ public class GameEndpoint {
 		}
 
 		ses.add(curS);
-		
-		
 		sessions.put(id, ses);
-		
-		if(ses.size() == r.getPlayers().size()) {
+
+		if (ses.size() == r.getPlayers().size()) {
 			Game g = new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
 			GameManager.getInstance().addGame(g);
 		}
-		
-		//System.out.println("SHEVIDA " + sessions.size());
-		
-//		for(String key1 : sessions.keySet()) {
-//			System.out.print(key1 + " ");
-//			for(Session key2 : sessions.get(key1)) {
-//				System.out.print(key2 + " ");
-//			}
-//			System.out.println();
-//		}
+
 	}
 
 	@OnClose
 	public void onClose(Session peer) throws IOException, EncodeException {
-		//showplayers case is needed
-		
+
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		String id = (String) httpSession.getAttribute("gameId");
 
 		Game g = GameManager.getInstance().getGame(id);
 		g.removePlayer((Player) httpSession.getAttribute("player"));
 
-		JSONObject json = new JSONObject();// es unda iyos otaxshi vinebi darchnen imis shemcveli
+		JSONObject json = new JSONObject();
+		json.put("command", "showplayers");
+		for (Player p : g.getPoints().keySet()) {
+			System.out.println("waishala da darcha" + p);
+			json.put(p.toString(), g.getPoints().get(p));
+		}
 
 		Message message = new Message(json);
 		List<Session> peers = sessions.get(id);
@@ -82,7 +74,7 @@ public class GameEndpoint {
 
 		String command = message.getJson().getString("command");
 		JSONObject json = message.getJson();
-		
+
 		if (command.equals("checkStatus")) {
 
 			json.put("answer", false);
@@ -96,14 +88,15 @@ public class GameEndpoint {
 			message.setJson(json);
 			session.getBasicRemote().sendObject(message);
 
-		}else if(command.equals("clear") ){
+		} else if (command.equals("clear")) {
 			sendToEveryone(message, httpSession);
-		}else{
+		} else {
 			sendToEveryoneButMe(message, httpSession, session);
 		}
 	}
 
-	private static void sendToEveryoneButMe(Message message, HttpSession httpSession, Session session) throws IOException, EncodeException {
+	private static void sendToEveryoneButMe(Message message, HttpSession httpSession, Session session)
+			throws IOException, EncodeException {
 		String id = (String) httpSession.getAttribute("gameId");
 		List<Session> peers = sessions.get(id);
 		for (Session peer : peers) {

@@ -32,17 +32,14 @@ public class Game {
 	private int artistIndex;
 
 	public Game(ArrayList<Player> players, int round, int time, String id) {
-		
 		this.players = players;
 		setGameForPlayers();
 		this.numRounds = round;
 		this.time = time;
 		this.id = id;
-		points = new HashMap<Player, Integer>();
-		roundCounter = 0;
-		artistIndex = 0;
-		
-		
+		this.points = new HashMap<Player, Integer>();
+		this.artistIndex = -1;
+		this.roundCounter = 0;
 		startNewRound();
 	}
 
@@ -60,27 +57,23 @@ public class Game {
 		return round;
 	}
 
-	private void choosePainter() {
-		if (artistIndex == 0) {
-			roundStarterArtist = players.get(0);
+	private void chooseStarterPainter() {
+		if (artistIndex == -1) {
+			artistIndex++;
 		} else {
-			for (int i = 0; i < players.size(); i++) {
-				if (players.get(i).equals(roundStarterArtist)) {
-					artistIndex = i + 1;
-					if (artistIndex == numRounds)
-						endGame();
-				}
+			artistIndex = players.indexOf(roundStarterArtist) + 1;
+			if (artistIndex == players.size()) {
+				artistIndex = 0;
 			}
-			roundStarterArtist = players.get(artistIndex);
-
 		}
+		roundStarterArtist = players.get(artistIndex);
 	}
 
 	public void startNewRound() {
-		choosePainter();
 		roundCounter++;
-		this.betweenRoundsTimer = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT rogoraa ?
-		
+		chooseStarterPainter();
+		this.betweenRoundsTimer = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT
+										// rogoraa ?
 		Round r = new Round(players, roundStarterArtist);
 		this.round = r;
 	}
@@ -120,7 +113,7 @@ public class Game {
 			this.players = leftPlayers;
 			points = new HashMap<Player, Integer>();
 			roundCounter = 0;
-			choosePainter();
+			chooseStarterPainter();
 			startNewRound();
 		}
 	}
@@ -139,14 +132,15 @@ public class Game {
 
 	public void removePlayer(Player cur) {
 		players.remove(cur);
+		points.remove(cur);
+		round.removePlayer(cur);
 	}
 
 	public HashMap<Player, Integer> getPoints() {
 		return points;
 	}
 
-	public class Round{
-		private int nth;
+	public class Round {
 		private ArrayList<Player> players;
 		private Player artist;
 		private HashMap<Player, Long> playersGuessedTimesForSingleTurn;
@@ -157,9 +151,9 @@ public class Game {
 		private int turnCounter;
 		private boolean roundIsnotEnded = true;
 		private String chosenWord = "word";
-		private Connection conn;	
-		private ArrayList<String> randomWords;
-		
+		private Connection conn;
+		private ArrayList<String> randomWords = new ArrayList<String>();
+
 		public Round(ArrayList<Player> players, Player artist) {
 			this.players = players;
 			this.artist = artist;
@@ -170,15 +164,15 @@ public class Game {
 
 			startTurn();
 		}
-		
+
 		public String getChosenWord() {
 			return chosenWord;
 		}
-		
+
 		public void setChosenWord(String chosenWord) {
 			this.chosenWord = chosenWord;
 		}
-		
+
 		public Date getDate() {
 			return this.date;
 		}
@@ -188,7 +182,16 @@ public class Game {
 			playersGuessedTimesForSingleTurn = new HashMap<Player, Long>();
 			for (Player p : players) {
 				RoundPoints.put(p, 0);
-				playersGuessedTimesForSingleTurn.put(p, (long)100);
+				playersGuessedTimesForSingleTurn.put(p, (long) 100);
+			}
+		}
+
+		private void removePlayer(Player p) {
+			RoundPoints.remove(p);
+			playersGuessedTimesForSingleTurn.remove(p);
+			if (p.equals(roundStarter)) {
+				int ind = players.indexOf(p);
+				roundStarter = players.get(++ind);
 			}
 		}
 
@@ -199,14 +202,11 @@ public class Game {
 		private void choosePainter() {
 			if (turnCounter != 1) {
 				clearCanvas();
-				int index = 0;
-				for (int i = 0; i < players.size(); i++) {
-					if (players.get(i).equals(artist)) {
-						index = i + 1;
-						if (index == players.size())
-							index = 0;
-					}
-				}
+
+				int index = players.indexOf(artist) + 1;
+				if (index == players.size())
+					index = 0;
+
 				artist = players.get(index);
 				if (artist.equals(roundStarter)) {
 					endRound();
@@ -219,17 +219,15 @@ public class Game {
 			artist.endDrawing();
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
-			
+
 			startTurn();
 		}
 
 		private void startTurn() {
-			
 			turnCounter++;
 			choosePainter();
 			if (roundIsnotEnded) {
 				try {
-					randomWords = new ArrayList<String>();
 					generateThreeWordsAndChooseOne();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -256,7 +254,7 @@ public class Game {
 
 		private void generateThreeWordsAndChooseOne() throws SQLException {
 			conn = ConnectionManager.getDBConnection();
-			Statement st  = conn.createStatement();
+			Statement st = conn.createStatement();
 			String query = "SELECT * FROM words ORDER BY RAND() LIMIT 3;";
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
@@ -269,7 +267,8 @@ public class Game {
 		private void sendNewTurnInformationsToSocket() {
 			JSONObject json = new JSONObject();
 			json.put("command", "showplayers");
-			for(Player p : RoundPoints.keySet()){
+			for (Player p : RoundPoints.keySet()) {
+				System.out.println(p.toString() + " : " + RoundPoints.get(p) + " gadaawera");
 				json.put(p.toString(), RoundPoints.get(p));
 			}
 			try {
@@ -302,9 +301,8 @@ public class Game {
 			json.put("command", "showResults");
 			for (Player p : RoundPoints.keySet()) {
 				json.put(p.toString(), Integer.toString(RoundPoints.get(p)));
+				System.out.println(p.toString() + " : " + RoundPoints.get(p));
 			}
-
-
 			try {
 				GameEndpoint.sendMessage(getId(), new Message(json));
 			} catch (IOException e) {
@@ -316,7 +314,7 @@ public class Game {
 
 		private void generatePointsForPlayers() {
 			for (Player key : playersGuessedTimesForSingleTurn.keySet()) {
-				//int res = 100 - playersGuessedTimesForSingleTurn.get(key);
+				// int res = 100 - playersGuessedTimesForSingleTurn.get(key);
 				RoundPoints.put(key, new Random().nextInt(50));
 			}
 		}

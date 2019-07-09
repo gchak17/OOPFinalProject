@@ -18,48 +18,53 @@ import game.Room;
 @WebServlet("/JoinRoomServlet")
 public class JoinRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public JoinRoomServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public JoinRoomServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.println("joinRoomis geti");
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Account user = (Account)request.getSession().getAttribute("user");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Account user = (Account) request.getSession().getAttribute("user");
 		Player newPlayer = new Player(user);
-		
+
 		String id = request.getParameter("id");
-		
+
 		Room r = GameManager.getInstance().getRoomById(id);
-		
-		request.getSession().setAttribute("gameId", id);//game id da room id erti da igiveebia 
+
+		request.getSession().setAttribute("gameId", id);// game id da room id erti da igiveebia
 		request.getSession().setAttribute("player", newPlayer);
-		
+
 		request.setAttribute("id", id);
-		
-		if(r.addPlayer(newPlayer)) {
+
+		if (r.addPlayer(newPlayer)) {
 			System.out.println("daamata");
 			request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
-		}else {
-			//utxras ro daarefreshos an sxva airchios
-			//igive pageze rom fanjara amoxtes egrec gamova 	
-			//request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request, response);
+		} else {
+			// utxras ro daarefreshos an sxva airchios
+			// igive pageze rom fanjara amoxtes egrec gamova
+			// request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request,
+			// response);
 		}
-		
+
 	}
 
 }
