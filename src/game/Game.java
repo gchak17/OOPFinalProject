@@ -41,6 +41,8 @@ public class Game {
 		points = new HashMap<Player, Integer>();
 		roundCounter = 0;
 		artistIndex = 0;
+		
+		
 		startNewRound();
 	}
 
@@ -156,7 +158,7 @@ public class Game {
 		private boolean roundIsnotEnded = true;
 		private String chosenWord = "word";
 		private Connection conn;	
-		private ArrayList<String> randomWords = new ArrayList<String>();
+		private ArrayList<String> randomWords;
 		
 		public Round(ArrayList<Player> players, Player artist) {
 			this.players = players;
@@ -217,7 +219,7 @@ public class Game {
 			artist.endDrawing();
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
-
+			
 			startTurn();
 		}
 
@@ -227,6 +229,7 @@ public class Game {
 			choosePainter();
 			if (roundIsnotEnded) {
 				try {
+					randomWords = new ArrayList<String>();
 					generateThreeWordsAndChooseOne();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
