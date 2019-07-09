@@ -178,11 +178,15 @@ function showPlayerResults(json){
 	}
 	
 	for(var k in json){
-		if(k === "command") continue;
+		if(k === "command" || k === "artist") continue;
+		
 		var v = json[k];
 		var newP = document.createElement("P");
 		var t = document.createTextNode(k + " : " + v);
 		newP.appendChild(t);
+		if(k === kson.artist){
+			newP.style.color = "yellow";
+		}
 		userPanel.appendChild(newP);
 	}
 }

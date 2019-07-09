@@ -43,19 +43,21 @@ public class PlayerEnteredSocket {
 		Player user = (Player) httpSession.getAttribute("player");
 
 		if (gameIsNotStarted) {
-
 			if (user.equals(
 					GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
-
+				System.out.println("admini gavida");
 				removeEveryone(peer, id);
 			} else {
 				r.removePlayer(user);
+				List<Session> sess = sessions.get(id);
+				sess.remove(peer);
+				sessions.put(id, sess);
 			}
+		}else {
+			List<Session> sess = sessions.get(id);
+			sess.remove(peer);
+			sessions.put(id, sess);
 		}
-		List<Session> sess = sessions.get(id);
-		sess.remove(peer);
-		sessions.put(id, sess);
-
 	}
 
 	private void removeEveryone(Session peer, String id) throws IOException, EncodeException {
