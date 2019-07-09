@@ -1,5 +1,4 @@
-var chatSocket = new WebSocket(
-		"ws://localhost:8080/OOPFinalProject/client.jsp");
+var chatSocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.jsp");
 
 chatSocket.onmessage = function(evt){
 	onChatMessage(evt)
@@ -12,10 +11,10 @@ function onChatMessage(evt) {
 	var textnode = document.createTextNode(json.username + ": " + json.message);
 	node.appendChild(textnode);
 
-	document.getElementById("chatBox").appendChild(node);
-	document.getElementById("chatText").value = "";
+	document.getElementById("chat-box-div").appendChild(node);
+	document.getElementById("chat-text").value = "";
 }
 
 function clickOnSend() {
-	chatSocket.send(document.getElementById("chatText").value);
+	chatSocket.send(document.getElementById("chat-text").value);
 }

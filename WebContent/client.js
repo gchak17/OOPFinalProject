@@ -1,7 +1,6 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var websocket = new WebSocket(
-		"ws://localhost:8080/OOPFinalProject/client.jsp/web");
+var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.jsp/web");
 websocket.onmessage = function(evt) {
 	onMessage(evt)
 };
