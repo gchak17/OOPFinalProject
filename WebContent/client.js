@@ -24,7 +24,7 @@ function onMessage(evt) {
 	}
 }
 
-var canvas = document.getElementById("canvas");
+var canvas = document.getElementById("canvas-panel");
 var context = canvas.getContext("2d");
 var offsetLeft = canvas.offsetLeft;
 var offsetTop = canvas.offsetTop;
