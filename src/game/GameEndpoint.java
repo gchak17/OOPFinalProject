@@ -1,7 +1,10 @@
 package game;
 
 import java.io.IOException;
+import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
@@ -15,7 +18,7 @@ import message.*;
 @ServerEndpoint(value = "/client.jsp/web", encoders = { MessageEncoder.class }, decoders = {
 		MessageDecoder.class }, configurator = GameSocketConfig.class)
 public class GameEndpoint {
-	private static ConcurrentHashMap<String, ArrayList<Session>> sessions = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 
 	@OnOpen
 	public void onOpen(Session curS, EndpointConfig config) {
@@ -23,20 +26,31 @@ public class GameEndpoint {
 		httpSession.setAttribute("session", curS);
 		String id = (String) httpSession.getAttribute("gameId");
 
-		ArrayList<Session> ses;
-		if (sessions.get(id) == null) {
-			ses = new ArrayList<Session>();
+		List<Session> ses;
+		if (!sessions.containsKey(id)) {
+			ses = Collections.synchronizedList(new ArrayList<Session>());
 		} else {
 			ses = sessions.get(id);
 		}
 
 		ses.add(curS);
 		sessions.put(id, ses);
+		
+		System.out.println("SHEVIDA " + sessions.size());
+		
+//		for(String key1 : sessions.keySet()) {
+//			System.out.print(key1 + " ");
+//			for(Session key2 : sessions.get(key1)) {
+//				System.out.print(key2 + " ");
+//			}
+//			System.out.println();
+//		}
 	}
 
 	@OnClose
 	public void onClose(Session peer) throws IOException, EncodeException {
-
+		//showplayers case is needed
+		
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		String id = (String) httpSession.getAttribute("gameId");
 
@@ -46,7 +60,7 @@ public class GameEndpoint {
 		JSONObject json = new JSONObject();// es unda iyos otaxshi vinebi darchnen imis shemcveli
 
 		Message message = new Message(json);
-		ArrayList<Session> peers = sessions.get(id);
+		List<Session> peers = sessions.get(id);
 		for (Session s : peers) {
 			if (!s.equals(peer))
 				s.getBasicRemote().sendObject(message);
@@ -74,18 +88,16 @@ public class GameEndpoint {
 			message.setJson(json);
 			session.getBasicRemote().sendObject(message);
 
-		} else if(command.equals("clear")) {
+		}else if(command.equals("clear") ){
 			sendToEveryone(message, httpSession);
-			
-		}else {
+		}else{
 			sendToEveryoneButMe(message, httpSession, session);
-			
 		}
 	}
 
 	private static void sendToEveryoneButMe(Message message, HttpSession httpSession, Session session) throws IOException, EncodeException {
 		String id = (String) httpSession.getAttribute("gameId");
-		ArrayList<Session> peers = sessions.get(id);
+		List<Session> peers = sessions.get(id);
 		for (Session peer : peers) {
 			if (!peer.equals(session)) {
 				peer.getBasicRemote().sendObject(message);
@@ -95,7 +107,7 @@ public class GameEndpoint {
 
 	private static void sendToEveryone(Message message, HttpSession httpSession) throws IOException, EncodeException {
 		String id = (String) httpSession.getAttribute("gameId");
-		ArrayList<Session> peers = sessions.get(id);
+		List<Session> peers = sessions.get(id);
 		for (Session peer : peers) {
 			peer.getBasicRemote().sendObject(message);
 		}
@@ -103,7 +115,8 @@ public class GameEndpoint {
 
 	public static void sendMessage(String gameId, Message message) throws IOException, EncodeException {
 
-		ArrayList<Session> peers = sessions.get(gameId);
+		List<Session> peers = sessions.get(gameId);
+		//System.out.println(peers + " " + sessions.size());
 		for (Session peer : peers) {
 			peer.getBasicRemote().sendObject(message);
 		}

@@ -27,13 +27,13 @@
 	var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/PublishRoom");
 	websocket.onmessage = function(evt) { updatePage(evt) };
 	
-	function updatePage(evt) {
+	function updatePage(evt){
 		
 		var json = JSON.parse(evt.data);
 		
 		if(json.type === "playersList"){
 			document.getElementById("demo").innerHTML = json.players;
-		}else if (json.type === "start"){
+		}else if(json.type === "start"){
 			if(json.admin){
 				if(json.forward){
 					location.replace("http://localhost:8080/OOPFinalProject/client.jsp")
