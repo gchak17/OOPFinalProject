@@ -1,8 +1,11 @@
 package game;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -12,6 +15,8 @@ import java.util.TimerTask;
 import javax.websocket.EncodeException;
 
 import org.json.JSONObject;
+
+import managers.ConnectionManager;
 import message.Message;
 
 public class Game {
@@ -142,13 +147,16 @@ public class Game {
 		private int nth;
 		private ArrayList<Player> players;
 		private Player artist;
-		private HashMap<Player, Integer> playersGuessedTimesForSingleTurn;
+		private HashMap<Player, Long> playersGuessedTimesForSingleTurn;
 		private boolean everybodyGuessed = false;
 		private HashMap<Player, Integer> RoundPoints;
 		private Date date;
 		private Player roundStarter;
 		private int turnCounter;
 		private boolean roundIsnotEnded = true;
+		private String chosenWord = "word";
+		private Connection conn;	
+		private ArrayList<String> randomWords = new ArrayList<String>();
 		
 		public Round(ArrayList<Player> players, Player artist) {
 			this.players = players;
@@ -161,16 +169,24 @@ public class Game {
 			startTurn();
 		}
 		
+		public String getChosenWord() {
+			return chosenWord;
+		}
+		
+		public void setChosenWord(String chosenWord) {
+			this.chosenWord = chosenWord;
+		}
+		
 		public Date getDate() {
 			return this.date;
 		}
 
 		private void initMap() {
 			RoundPoints = new HashMap<Player, Integer>();
-			playersGuessedTimesForSingleTurn = new HashMap<Player, Integer>();
+			playersGuessedTimesForSingleTurn = new HashMap<Player, Long>();
 			for (Player p : players) {
 				RoundPoints.put(p, 0);
-				playersGuessedTimesForSingleTurn.put(p, 100);
+				playersGuessedTimesForSingleTurn.put(p, (long)100);
 			}
 		}
 
@@ -210,7 +226,12 @@ public class Game {
 			turnCounter++;
 			choosePainter();
 			if (roundIsnotEnded) {
-				generateThreeWordsAndChooseOne();
+				try {
+					generateThreeWordsAndChooseOne();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				artist.startDrawing();
 				sendNewTurnInformationsToSocket();
 			}
@@ -230,9 +251,15 @@ public class Game {
 			}
 		}
 
-		private void generateThreeWordsAndChooseOne() {
-			// TODO Auto-generated method stub
-			// System.out.println("sami sityvis dagenenrireba da erTis archeva");
+		private void generateThreeWordsAndChooseOne() throws SQLException {
+			conn = ConnectionManager.getDBConnection();
+			Statement st  = conn.createStatement();
+			String query = "SELECT * FROM words ORDER BY RAND() LIMIT 3;";
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+				randomWords.add(rs.getString("word"));
+			}
+			System.out.println(randomWords);
 
 		}
 
@@ -256,7 +283,7 @@ public class Game {
 			// System.out.println("vin xatavs ganaxlda dafaze da sityvis xazebi gamochnda");
 		}
 
-		public void smbdGuessed(Player p, int sec) throws SQLException {
+		public void smbdGuessed(Player p, long sec) throws SQLException {
 			playersGuessedTimesForSingleTurn.put(p, sec);
 
 			if (playersGuessedTimesForSingleTurn.size() == players.size()) {
