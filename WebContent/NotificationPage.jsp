@@ -21,18 +21,19 @@
 	%>
 	
 	<% Iterator<Long> requests = friendRequestManager.getRequests(currAccount.getID()); %>
-    
+
 	
 	<% while(requests.hasNext())  {
 		%>
 		<% Account requestSender = accountData.getAccountByID(requests.next()); %>
 		<%= requestSender.getUsername() + " sent a friend request" %>
-		<% request.getSession().setAttribute("requestSender", requestSender); %>
 		<form action="AcceptFriendRequestServlet" method="post">
 			<input type="submit" value="Accept">
+			<input name = "requestSenderUsername" type = "hidden" value = <%= requestSender.getUsername() %>>
 		</form>
 		<form action="RejectFriendRequestServlet" method="post">
 			<input type="submit" value="Reject">
+			<input name = "requestSenderUsername" type = "hidden" value = <%= requestSender.getUsername() %>>
 		</form>
 		<%
 	}%>

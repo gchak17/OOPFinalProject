@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.Account;
+import managers.AccountData;
 import managers.FriendRequestManager;
 
 /**
@@ -16,7 +17,7 @@ import managers.FriendRequestManager;
 @WebServlet("/RejectFriendRequestServlet")
 public class RejectFriendRequestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -39,8 +40,10 @@ public class RejectFriendRequestServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		FriendRequestManager friendRequestManager = (FriendRequestManager) getServletContext().getAttribute("friendRequestManager");
+		AccountData accountData = (AccountData)getServletContext().getAttribute("accountData");
 		Account requestReciever = (Account) request.getSession().getAttribute("user");
-		Account requestSender = (Account) request.getSession().getAttribute("requestSender");
+		String requestSenderUsername = request.getParameter("requestSenderUsername");
+		Account requestSender = accountData.getAccountByUsername(requestSenderUsername);
 		friendRequestManager.deleteFriendRequest(requestSender.getID(), requestReciever.getID());
 		request.getSession().removeAttribute("requestSender");
 		request.getRequestDispatcher("NotificationPage.jsp").forward(request, response);
