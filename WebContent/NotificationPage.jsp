@@ -14,6 +14,10 @@
 </head>
 
 <body>
+	<form action="BackToProfileServlet" method="post">
+		<input type="submit" value="Back to profile">
+	</form>
+
 	<% 
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		Account currAccount = (Account)session.getAttribute("user");
