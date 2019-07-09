@@ -174,7 +174,7 @@ function showPlayerResults(json){
 	var userPanel = document.getElementById("users-panel");
 	
 	while(userPanel.hasChildNodes()){   
-		userPanel.removeChild(list.firstChild);
+		userPanel.removeChild(userPanel.firstChild);
 	}
 	
 	for(var k in json){

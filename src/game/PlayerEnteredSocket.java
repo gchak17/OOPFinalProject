@@ -26,11 +26,8 @@ import message.MessageEncoder;
 @ServerEndpoint(value = "/PublishRoom", encoders = { MessageEncoder.class }, decoders = {
 		MessageDecoder.class }, configurator = GameSocketConfig.class)
 public class PlayerEnteredSocket {
-
 	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 	private static boolean gameIsNotStarted = true;
-//	private static ReentrantLock lock = new ReentrantLock();
-//	private static Condition cond = new Condition();
 
 	@OnOpen
 	public void onOpen(Session peer) throws IOException, EncodeException {
@@ -103,25 +100,16 @@ public class PlayerEnteredSocket {
 					for (Session peer : peers) {
 						peer.getBasicRemote().sendObject(message);
 					}
-					
-					try{Thread.sleep(1000);
-					}catch(InterruptedException e){e.printStackTrace();}
-					
-					Game g = new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
-					GameManager.getInstance().addGame(g);
 				}
 			} else {
 				json.put("admin", false);
 				session.getBasicRemote().sendObject(new Message(json));
 				// only admin can start
 			}
-
 		}
-
 	}
 
-	private void ohHenloFrens(HttpSession httpSession, Session curS) throws IOException, EncodeException {
-
+	private void ohHenloFrens(HttpSession httpSession, Session curS) throws IOException, EncodeException{
 		String RoomId = (String) httpSession.getAttribute("gameId");
 		Room r = GameManager.getInstance().getRoomById(RoomId);
 		ArrayList<Player> players = r.getPlayers();
@@ -156,5 +144,4 @@ public class PlayerEnteredSocket {
 
 		return json;
 	}
-
 }
