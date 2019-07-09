@@ -1,8 +1,10 @@
 package game;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -47,17 +49,40 @@ public class ChatSocket {
 	public void sendMessage(String message, Session session) throws IOException, EncodeException {
 		if (message == "")
 			return;
+		Date playerDate = new Date(System.currentTimeMillis());
+		
 		HttpSession httpSession = ((HttpSession)session.getUserProperties().get("HttpSession"));
+		String gameId = (String) httpSession.getAttribute("gameId");
+		
+		Game game = GameManager.getInstance().getGame(gameId);
+		
         Player user = (Player) httpSession.getAttribute("player");
         Account acc = user.getAccount();
-		String username = acc.getUsername();//(String) session.getUserProperties().get("username");
-
+		String username = acc.getUsername();
+		
+		if (message.equals("word")) {//aq unda iyos sityvis shemowmeba
+			Round round = game.getRound();
+			Date roundDate = round.getDate();
+			
+			long diff = playerDate.getTime() - roundDate.getTime();
+			try {
+				round.smbdGuessed(user, diff);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		chatlock.lock();
 		for (Session curSes : sessionList) {
 
 			JSONObject js = new JSONObject();
 			js.append("username", username);
-			js.append("message", message);
+			if (message.equals("word")) {//aq unda iyos sityvis shemowmeba
+				js.append("message", "guessed the word");
+			} else {
+				js.append("message", message);
+			}
 			curSes.getBasicRemote().sendText(js.toString());
 		}
 		chatlock.unlock();

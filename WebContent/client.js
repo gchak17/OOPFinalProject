@@ -1,7 +1,6 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var websocket = new WebSocket(
-		"ws://localhost:8080/OOPFinalProject/client.jsp/web");
+var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.jsp/web");
 websocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -17,17 +16,19 @@ function onMessage(evt) {
 		drawImageText(evt.data);
 	} else if (json.command === "checkStatus") {
 		isArtist = json.answer;
-	} else if (json.command === "showResults") {
-
+	} else if (json.command === "showResults" || json.command === "showplayers") {
+		showPlayerResults(json);
 	} else if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
-	}
+	} 
+//	else if (json.command === "showplayers"){
+//		showPlayers(json);
+//	}
 }
 
-var canvas = document.getElementById("canvas");
+var canvas = document.getElementById("canvas-panel");
 var context = canvas.getContext("2d");
-var offsetLeft = canvas.offsetLeft;
-var offsetTop = canvas.offsetTop;
+var offsetLeft, offsetTop;
 
 var drawing = false;
 var isArtist = false;
@@ -120,5 +121,68 @@ function listen(elem, type, listener) {
 function getPos(event) {
 	var x = event.clientX - offsetLeft;
 	var y = event.clientY - offsetTop;
-	return [ x, y ];
+	return [x, y];
+}
+
+function changeSizeAndPosition(){
+    //canvas-panel
+    document.getElementById("canvas-panel").width = innerWidth * 0.6;
+    document.getElementById("canvas-panel").height = innerHeight * 0.6;
+    document.getElementById("canvas-panel").style.top = innerHeight * 0.2 + "px";
+    document.getElementById("canvas-panel").style.left = innerWidth * 0.2 + "px";
+
+    //center-panel class
+    var x = document.getElementsByClassName("center-panel");
+    for (var i = 0; i < x.length; i++) {
+        x[i].style.width = innerWidth * 0.6 + "px";
+        x[i].style.height = innerHeight * 0.2 + "px";
+        x[i].style.left = innerWidth * 0.2 + "px";
+    }
+
+    //word-panel
+    document.getElementById("word-panel").style.top = "0px";
+
+    //paint-options-panel
+    document.getElementById("paint-options-panel").style.top = innerHeight * 0.8 + "px";
+
+    //side-panel class
+    var x = document.getElementsByClassName("side-panel");
+    for (var i = 0; i < x.length; i++) {
+        x[i].style.width = innerWidth * 0.2 + "px";
+        x[i].style.height = innerHeight + "px";
+        x[i].style.top = "0px";
+    }
+
+    //users-panel
+    document.getElementById("users-panel").style.left = "0px";
+
+    //chat-panel
+    document.getElementById("chat-panel").style.left = innerWidth * 0.8 + "px";
+
+    //chat-box class
+    var x = document.getElementsByClassName("chat-box-class");
+    for (var i = 0; i < x.length; i++) {
+        x[i].style.width = innerWidth * 0.18 + "px";
+        x[i].style.height = innerHeight * 0.87 + "px";
+    }
+
+	offsetLeft = canvas.offsetLeft;
+	offsetTop = canvas.offsetTop;
+}
+
+function showPlayerResults(json){
+	var userPanel = document.getElementById("users-panel");
+	
+	while(userPanel.hasChildNodes()){   
+		userPanel.removeChild(list.firstChild);
+	}
+	
+	for(var k in json){
+		if(k === "command") continue;
+		var v = json[k];
+		var newP = document.createElement("P");
+		var t = document.createTextNode(k + " : " + v);
+		newP.appendChild(t);
+		userPanel.appendChild(newP);
+	}
 }

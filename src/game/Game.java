@@ -1,30 +1,33 @@
 package game;
 
+import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import dao.Account;
+import javax.websocket.EncodeException;
+
+import org.json.JSONObject;
+import message.Message;
 
 public class Game {
 	private ArrayList<Player> players;
-
 	private HashMap<Player, Integer> points;
-
 	private Player roundStarterArtist;
 	private String id;
 	private int time;
 	private int numRounds;
 	private Timer betweenRoundsTimer;
-
 	private Round round;
 	private int roundCounter;
 	private int artistIndex;
 
 	public Game(ArrayList<Player> players, int round, int time, String id) {
+		
 		this.players = players;
 		setGameForPlayers();
 		this.numRounds = round;
@@ -63,7 +66,6 @@ public class Game {
 			}
 			roundStarterArtist = players.get(artistIndex);
 
-			System.out.println(roundStarterArtist + " raunds daiwyebs");
 		}
 	}
 
@@ -71,15 +73,14 @@ public class Game {
 		choosePainter();
 		roundCounter++;
 		this.betweenRoundsTimer = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT rogoraa ?
-		Round r = new Round(players, roundStarterArtist, this);
+		
+		Round r = new Round(players, roundStarterArtist);
 		this.round = r;
 	}
 
 	public void endRound() {
-		System.out.println("damTavrda raundi");
 		addRoundResToTotalScores();
 
-		System.out.println(roundCounter + " : " + numRounds);
 		if (roundCounter == numRounds) {
 			endGame();
 		} else {
@@ -108,7 +109,6 @@ public class Game {
 
 		ArrayList<Player> leftPlayers = playersWantToPlayAgain();
 		if (leftPlayers.size() > 0) {
-			System.out.println("riatto");
 			// start game from 0
 			this.players = leftPlayers;
 			points = new HashMap<Player, Integer>();
@@ -138,4 +138,157 @@ public class Game {
 		return points;
 	}
 
+	public class Round{
+		private int nth;
+		private ArrayList<Player> players;
+		private Player artist;
+		private HashMap<Player, Integer> playersGuessedTimesForSingleTurn;
+		private boolean everybodyGuessed = false;
+		private HashMap<Player, Integer> RoundPoints;
+		private Date date;
+		private Player roundStarter;
+		private int turnCounter;
+		private boolean roundIsnotEnded = true;
+		
+		public Round(ArrayList<Player> players, Player artist) {
+			this.players = players;
+			this.artist = artist;
+			this.roundStarter = artist;
+			this.date = new Date(System.currentTimeMillis());
+			this.turnCounter = 0;
+			initMap();
+
+			startTurn();
+		}
+		
+		public Date getDate() {
+			return this.date;
+		}
+
+		private void initMap() {
+			RoundPoints = new HashMap<Player, Integer>();
+			playersGuessedTimesForSingleTurn = new HashMap<Player, Integer>();
+			for (Player p : players) {
+				RoundPoints.put(p, 0);
+				playersGuessedTimesForSingleTurn.put(p, 100);
+			}
+		}
+
+		public HashMap<Player, Integer> getPoints() {
+			return RoundPoints;
+		}
+
+		private void choosePainter() {
+			if (turnCounter != 1) {
+				clearCanvas();
+				int index = 0;
+				for (int i = 0; i < players.size(); i++) {
+					if (players.get(i).equals(artist)) {
+						index = i + 1;
+						if (index == players.size())
+							index = 0;
+					}
+				}
+				artist = players.get(index);
+				if (artist.equals(roundStarter)) {
+					endRound();
+					roundIsnotEnded = false;
+				}
+			}
+		}
+
+		public void endTurn() {
+			artist.endDrawing();
+			generatePointsForPlayers();
+			sendPointsToWebSocket();
+
+			startTurn();
+		}
+
+		private void startTurn() {
+			
+			turnCounter++;
+			choosePainter();
+			if (roundIsnotEnded) {
+				generateThreeWordsAndChooseOne();
+				artist.startDrawing();
+				sendNewTurnInformationsToSocket();
+			}
+		}
+
+		private void clearCanvas() {
+			JSONObject json = new JSONObject();
+			json.put("command", "clear");
+			try {
+				GameEndpoint.sendMessage(getId(), new Message(json));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (EncodeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		private void generateThreeWordsAndChooseOne() {
+			// TODO Auto-generated method stub
+			// System.out.println("sami sityvis dagenenrireba da erTis archeva");
+
+		}
+
+		private void sendNewTurnInformationsToSocket() {
+			JSONObject json = new JSONObject();
+			json.put("command", "showplayers");
+			for(Player p : RoundPoints.keySet()){
+				json.put(p.toString(), RoundPoints.get(p));
+			}
+			try {
+				GameEndpoint.sendMessage(getId(), new Message(json));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (EncodeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// aman prosta painteri vinaa is unda ganaaxlos dafaze
+			// da sityvis zomis shesabamisi xazebi gamoachinos
+			// System.out.println("vin xatavs ganaxlda dafaze da sityvis xazebi gamochnda");
+		}
+
+		public void smbdGuessed(Player p, int sec) throws SQLException {
+			playersGuessedTimesForSingleTurn.put(p, sec);
+
+			if (playersGuessedTimesForSingleTurn.size() == players.size()) {
+				everybodyGuessed = true;
+				artist.getTimer().cancel();
+				endTurn();// es ar vici zustad sachiroa tu ara, sheidzleba taimerma tviton gaushvas mainc?
+			}
+
+		}
+
+		private void sendPointsToWebSocket() {
+			JSONObject json = new JSONObject();
+			json.put("command", "showResults");
+			for (Player p : RoundPoints.keySet()) {
+				json.put(p.toString(), Integer.toString(RoundPoints.get(p)));
+			}
+
+
+			try {
+				GameEndpoint.sendMessage(getId(), new Message(json));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (EncodeException e) {
+				e.printStackTrace();
+			}
+		}
+
+		private void generatePointsForPlayers() {
+			for (Player key : playersGuessedTimesForSingleTurn.keySet()) {
+				//int res = 100 - playersGuessedTimesForSingleTurn.get(key);
+				RoundPoints.put(key, new Random().nextInt(50));
+			}
+		}
+	}
 }
