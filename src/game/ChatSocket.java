@@ -59,14 +59,15 @@ public class ChatSocket {
         Player user = (Player) httpSession.getAttribute("player");
         Account acc = user.getAccount();
 		String username = acc.getUsername();
+		Game.Round round = game.getRound();
 		
-		if (message.equals("word")) {//aq unda iyos sityvis shemowmeba
-			Round round = game.getRound();
+		if (message.equals(round.getChosenWord())) {//aq unda iyos sityvis shemowmeba
 			Date roundDate = round.getDate();
 			
 			long diff = playerDate.getTime() - roundDate.getTime();
 			try {
-				round.smbdGuessed(user, diff);
+				if (!user.isArtist()) 
+					round.smbdGuessed(user, diff);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -78,8 +79,9 @@ public class ChatSocket {
 
 			JSONObject js = new JSONObject();
 			js.append("username", username);
-			if (message.equals("word")) {//aq unda iyos sityvis shemowmeba
-				js.append("message", "guessed the word");
+			if (message.equals(round.getChosenWord())) {//aq unda iyos sityvis shemowmeba
+				if (!user.isArtist())
+					js.append("message", "guessed the word");
 			} else {
 				js.append("message", message);
 			}
