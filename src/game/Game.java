@@ -12,11 +12,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.websocket.EncodeException;
-
 import org.json.JSONObject;
-
 import managers.ConnectionManager;
 import message.Message;
 
@@ -100,7 +97,7 @@ public class Game {
 				public void run() {
 					startNewRound();
 				}
-			}, 5 * 1000);// aq roundidan amogebuli dro damchirdeba
+			}, 10 * 1000);// aq roundidan amogebuli dro damchirdeba
 		}
 	}
 
@@ -237,6 +234,7 @@ public class Game {
 		private void startTurn() {
 			turnCounter++;
 			choosePainter();
+			sendNewTurnInformationsToSocket();
 			if (roundIsnotEnded) {
 				try {
 					generateThreeWordsAndChooseOne();
@@ -244,7 +242,6 @@ public class Game {
 					e.printStackTrace();
 				}
 				artist.startDrawing();
-				sendNewTurnInformationsToSocket();
 			}
 		}
 
@@ -274,7 +271,7 @@ public class Game {
 
 		private void sendNewTurnInformationsToSocket() {
 			JSONObject json = new JSONObject();
-			json.put("command", "showplayers");
+			json.put("command", "newturn");
 			System.out.println(points.size());
 			
 
@@ -286,10 +283,8 @@ public class Game {
 			try {
 				GameEndpoint.sendMessage(getId(), new Message(json));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (EncodeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// aman prosta painteri vinaa is unda ganaaxlos dafaze

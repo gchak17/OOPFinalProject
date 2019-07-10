@@ -34,8 +34,7 @@
 			} else if (json.type === "start") {
 				if (json.admin) {
 					if (json.forward) {
-						location
-								.replace("http://localhost:8080/OOPFinalProject/client.jsp")
+						location.replace("http://localhost:8080/OOPFinalProject/client.html")
 					}
 				} else {
 					alert("ar xar adzmini dzmao");

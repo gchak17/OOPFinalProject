@@ -9,9 +9,12 @@ function sendText(json) {
 	websocket.send(json);
 }
 
-function onMessage(evt) {
-	var json = JSON.parse(evt.data);
+var timerVar, seconds;
 
+function onMessage(evt){
+	
+	var json = JSON.parse(evt.data);
+	console.log(json.command);
 	if (json.command === "paint") {
 		drawImageText(evt.data);
 	} else if (json.command === "checkStatus") {
@@ -20,10 +23,11 @@ function onMessage(evt) {
 		showPlayerResults(json);
 	} else if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
-	} 
-//	else if (json.command === "showplayers"){
-//		showPlayers(json);
-//	}
+	} else if (json.command === "newturn"){
+		//showPlayerResults(json);
+		//timerVar = setInterval(timerFun, 1000);
+ 		//seconds = 10;
+	}
 }
 
 var canvas = document.getElementById("canvas-panel");
@@ -184,9 +188,17 @@ function showPlayerResults(json){
 		var newP = document.createElement("P");
 		var t = document.createTextNode(k + " : " + v);
 		newP.appendChild(t);
-		if(k === kson.artist){
+		if(k === json.artist){
 			newP.style.color = "yellow";
 		}
 		userPanel.appendChild(newP);
 	}
+}
+
+function timerFun() {
+	document.getElementById("timer-div").innerHTML = seconds--;
+  	if(seconds === -1){
+  		seconds = 10;
+  	 	clearInterval(timerVar);
+  	}
 }
