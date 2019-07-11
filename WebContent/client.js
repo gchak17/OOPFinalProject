@@ -41,11 +41,11 @@ function onMessage(evt){
 	} else if (json.command === "removecanvaslisteners"){
 		removeCanvasListeners();
 	} else if (json.command === "chooseWord"){
-//		console.log("came heeeeere");
-//		var word = json.one; //aq unda iyos popupit archeva
-//		console.log(word);
-//		json["chosen"] = word;
-//		chatSocket.send(json);//sendText(json);
+		console.log("came heeeeere");
+		var word = json.one; //aq unda iyos popupit archeva
+		console.log(word);
+		json["chosen"] = word;
+		websocket.send(json);//sendText(json);
 	}
 
 }

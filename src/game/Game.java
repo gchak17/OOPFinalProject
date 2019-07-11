@@ -232,7 +232,8 @@ public class Game {
 			players.remove(p);
 			if (players.size() == 0) {
 				turnOffTimers();
-				newRoundTimer.cancel();
+				if(newRoundTimer != null)
+					newRoundTimer.cancel();
 			}
 		}
 
@@ -259,8 +260,11 @@ public class Game {
 		}
 
 		private void turnOffTimers() {
-			startTurnTimer.cancel();
-			endTurnTimer.cancel();
+			if(startTurnTimer != null)
+				startTurnTimer.cancel();
+
+			if(endTurnTimer != null)
+				endTurnTimer.cancel();
 		}
 
 		public void endTurn() {
@@ -286,7 +290,6 @@ public class Game {
 		private void startTurn() {
 			turnCounter++;
 			choosePainter();
-			System.out.println("aman aarchia " + artist);
 			artist.shouldBeArtist(true);
 			sendNewTurnInformationsToSocket();
 			if (roundIsnotEnded) {
