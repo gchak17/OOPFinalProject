@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.Account;
+import managers.AccountData;
 
 /**
  * Servlet implementation class SeeFriendProfile
@@ -37,7 +38,11 @@ public class SeeFriendProfile extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Account friend = (Account) request.getSession().getAttribute("friend");
+		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
+		String friendName = request.getParameter("friendName");
+		Account friend = accountData.getAccountByUsername(friendName);
+		request.getSession().setAttribute("friend", friend);
+		System.out.println(friendName);
 		request.getRequestDispatcher("Profile.jsp").forward(request, response);
 	}
 

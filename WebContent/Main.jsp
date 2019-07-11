@@ -96,18 +96,22 @@
 	
 	<% Iterator<Account> friends = currAccount.getFriendList(); %>
 
-	
 	<% while(friends.hasNext())  {
 		%>
 		<% Account friend = friends.next(); %>
-		<form action="SeeFriendProfile" method="post">
-			<% session.setAttribute("friend", friend); %>
-			<input name = "friendName" type = "hidden" value = <%= friend.getUsername() %>>
-			<a href="<%=request.getContextPath()%>/SeeFriendProfile"> <%= friend.getUsername()%>	 </a>
-			<br>
+		
+		<form id="formId" action="<%=request.getContextPath()%>/SeeFriendProfile" method="post">
+		    <input type="hidden" name="friendName" value=<%=friend.getUsername()%> />
+		    <a href="javascript:myFunction()"><%=friend.getUsername()%></a>
 		</form>
 		<%
 	}%>
 	
+	<script>
+		function myFunction() {
+		  document.getElementById("formId").submit();
+		}
+	</script>
+
 </body>
 </html>
