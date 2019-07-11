@@ -91,15 +91,23 @@
 		<input type="submit" value="Log Out">
 	</form>
 	
+	
+	<p>Friends:<br></p>
+	
 	<% Iterator<Account> friends = currAccount.getFriendList(); %>
-    <ul>
-		<% while(friends.hasNext()) {
-			%>
-			<li>"<%= friends.next().getUsername() %>"</li>
-			<%
-		}%>
-	  
-	</ul>
+
+	
+	<% while(friends.hasNext())  {
+		%>
+		<% Account friend = friends.next(); %>
+		<form action="SeeFriendProfile" method="post">
+			<% session.setAttribute("friend", friend); %>
+			<input name = "friendName" type = "hidden" value = <%= friend.getUsername() %>>
+			<a href="<%=request.getContextPath()%>/SeeFriendProfile"> <%= friend.getUsername()%>	 </a>
+			<br>
+		</form>
+		<%
+	}%>
 	
 </body>
 </html>
