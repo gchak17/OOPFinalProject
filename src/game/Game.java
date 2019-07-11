@@ -24,6 +24,7 @@ public class Game {
 	private int secondsPerTurn;
 	private int numRounds;
 	private Timer startTurnTimer;
+	private Timer newRoundTimer;	
 	private Round round;
 	private int roundCounter;
 	private int artistIndex;
@@ -102,6 +103,7 @@ public class Game {
 		System.out.println("axali raundi");
 		roundCounter++;
 		chooseStarterPainter();
+		System.out.println(roundStarterArtist);
 		// this.round = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ?
 		// imena moshla xeliT
 		// rogoraa ?
@@ -110,12 +112,13 @@ public class Game {
 	}
 
 	public void endRound() {
+		
 		if (roundCounter == numRounds) {
 			endGame();
 		} else {
 
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask() {
+			newRoundTimer = new Timer();
+			newRoundTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					startNewRound();
@@ -176,7 +179,8 @@ public class Game {
 		private Timer endTurnTimer;
 
 		public Round(Player starterArtist) {
-			this.artist = starterArtist;
+			System.out.println("startter 2 " + starterArtist);
+			this.artist = starterArtist; 
 			this.date = new Date(System.currentTimeMillis());
 			this.turnCounter = 0;
 			initMaps();
@@ -227,8 +231,8 @@ public class Game {
 			}
 			players.remove(p);
 			if (players.size() == 0) {
-				endTurnTimer.cancel();
-				startTurnTimer.cancel();
+				turnOffTimers();
+				newRoundTimer.cancel();
 			}
 		}
 
@@ -245,11 +249,18 @@ public class Game {
 
 					artist = players.get(index);
 					if (artist.equals(roundStarterArtist)) {
+						artist.shouldBeArtist(false);
+						turnOffTimers();
 						endRound();
 						roundIsnotEnded = false;
 					}
 				}
 			}
+		}
+
+		private void turnOffTimers() {
+			startTurnTimer.cancel();
+			endTurnTimer.cancel();
 		}
 
 		public void endTurn() {
@@ -275,6 +286,7 @@ public class Game {
 		private void startTurn() {
 			turnCounter++;
 			choosePainter();
+			System.out.println("aman aarchia " + artist);
 			artist.shouldBeArtist(true);
 			sendNewTurnInformationsToSocket();
 			if (roundIsnotEnded) {
@@ -316,10 +328,8 @@ public class Game {
 				randomWords.add(rs.getString("word"));
 			}
 			artist.shouldBeArtist(true);
-
-			// sendWordsToArtist();
-			System.out.println(randomWords);
-
+			
+			sendWordsToArtist();
 		}
 
 		private void sendWordsToArtist() {
