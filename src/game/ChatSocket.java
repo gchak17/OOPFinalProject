@@ -42,9 +42,8 @@ public class ChatSocket {
 	}
 
 	@OnMessage
-	public void sendMessage(String message, Session session) throws IOException, EncodeException {
-		if (message == "")
-			return;
+	public void sendMessage(Message message, Session session) throws IOException, EncodeException {
+		if (message.toString().isEmpty()) return;
 		Date playerDate = new Date(System.currentTimeMillis());
 
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
@@ -57,7 +56,7 @@ public class ChatSocket {
 		String username = acc.getUsername();
 		Game.Round round = game.getRound();
 
-		if (message.equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
+		if (message.toString().equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
 			Date roundDate = round.getDate();
 
 			long diff = playerDate.getTime() - roundDate.getTime();
@@ -75,13 +74,13 @@ public class ChatSocket {
 
 			JSONObject js = new JSONObject();
 			js.append("username", username);
-			if (message.equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
+			if (message.toString().equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
 				if (!user.isArtist())
 					js.append("message", "guessed the word");
 			} else {
 				js.append("message", message);
 			}
-			curSes.getBasicRemote().sendText(js.toString());
+			curSes.getBasicRemote().sendObject(new Message(js));
 		}
 		chatlock.unlock();
 	}

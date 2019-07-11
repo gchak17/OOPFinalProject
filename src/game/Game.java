@@ -46,9 +46,7 @@ public class Game {
 		JSONObject json = new JSONObject();
 		json.put("command", "appearplayers");
 		for (Player p : players)  json.put(p.toString(), 0);
-		try {GameSocket.sendMessage(getId(), new Message(json));
-		}catch(IOException e) { e.printStackTrace();
-		}catch(EncodeException e) {e.printStackTrace();}
+		GameSocket.sendMessage(getId(), new Message(json));
 		
 		//javascript starts countdown from 5
 //		JSONObject json1 = new JSONObject();
@@ -237,6 +235,12 @@ public class Game {
 
 		public void endTurn() {
 			artist.endDrawing();
+			
+			JSONObject json = new JSONObject();
+			json.put("command", "removecanvaslisteners");
+			json.put("artist", artist.toString());
+			GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
+			
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
 
@@ -262,6 +266,12 @@ public class Game {
 				//	e.printStackTrace();
 				//}
 				artist.startDrawing();
+				
+				JSONObject json = new JSONObject();
+				json.put("command", "addcanvaslisteners");
+				json.put("artist", artist.toString());
+				GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
+				
 				endTurnTimer = new Timer();
 				endTurnTimer.schedule(new TimerTask() {
 					@Override
@@ -275,13 +285,7 @@ public class Game {
 		private void clearCanvas() {
 			JSONObject json = new JSONObject();
 			json.put("command", "clear");
-			try {
-				GameSocket.sendMessage(getId(), new Message(json));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (EncodeException e) {
-				e.printStackTrace();
-			}
+			GameSocket.sendMessage(getId(), new Message(json));
 		}
 
 		private void generateThreeWordsAndChooseOne() throws SQLException {
@@ -307,16 +311,7 @@ public class Game {
 				System.out.println(p.toString() + " : " + points.get(p));
 				json.put(p.toString(), points.get(p));
 			}
-			try {
-				GameSocket.sendMessage(getId(), new Message(json));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (EncodeException e) {
-				e.printStackTrace();
-			}
-			// aman prosta painteri vinaa is unda ganaaxlos dafaze
-			// da sityvis zomis shesabamisi xazebi gamoachinos
-			// System.out.println("vin xatavs ganaxlda dafaze da sityvis xazebi gamochnda");
+			GameSocket.sendMessage(getId(), new Message(json));
 		}
 
 		public void smbdGuessed(Player p, long sec) throws SQLException {
@@ -339,13 +334,7 @@ public class Game {
 				points.put(p, points.get(p) + turenPoint);
 			}
 			
-			try {
-				GameSocket.sendMessage(getId(), new Message(json));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (EncodeException e) {
-				e.printStackTrace();
-			}
+			GameSocket.sendMessage(getId(), new Message(json));
 		}
 
 		private void generatePointsForPlayers() {

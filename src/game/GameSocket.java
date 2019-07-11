@@ -113,10 +113,26 @@ public class GameSocket {
 		}
 	}
 
-	public static void sendMessage(String gameId, Message message) throws IOException, EncodeException {
+	public static void sendMessage(String gameId, Message message){
+		if(message.getJson().getString("command").equals("addcanvaslistener") || message.getJson().getString("command").equals("removecanvaslistener")) {
+			String artistUsername = message.getJson().getString("artist");
+			List<Session> peers = sessions.get(gameId);
+			for (Session peer : peers) {
+				if(((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player").toString().equals(artistUsername)) {
+					try {peer.getBasicRemote().sendObject(message);
+					} catch (IOException | EncodeException e) { e.printStackTrace();}
+				}
+			}
+			return;
+		}
+		
 		List<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
-			peer.getBasicRemote().sendObject(message);
+			try {
+				peer.getBasicRemote().sendObject(message);
+			} catch (IOException | EncodeException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
