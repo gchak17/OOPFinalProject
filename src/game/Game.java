@@ -277,13 +277,11 @@ public class Game {
 			artist.shouldBeArtist(true);
 			sendNewTurnInformationsToSocket();
 			if (roundIsnotEnded) {
-
 				try {
 					generateThreeWordsAndChooseOne();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-
 				artist.startDrawing();
 
 				JSONObject json = new JSONObject();
