@@ -13,18 +13,19 @@ var timerVar, seconds;
 
 function onMessage(evt){
 	var json = JSON.parse(evt.data);
+	
 	if (json.command === "paint") {
 		drawImageText(evt.data);
 	} else if (json.command === "checkStatus") {
 		isArtist = json.answer;
-	} else if (json.command === "showResults" || json.command === "showplayers") {
+	} else if (json.command === "showResults") {
 		showPlayerResults(json);
 	} else if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 	} else if (json.command === "newturn"){
  		seconds = json.seconds + 1;
 		//timerVar = setInterval(timerFun, 2000);
-		
+ 		
  		delete json.seconds;
 		showPlayerResults(json);
 	} else if (json.command === "appearplayers"){
@@ -58,8 +59,8 @@ function mouseUpFun(event){
 }
 
 function mouseDownFun(event) {
+
 	checkIfIsArtist();
-	
 	drawing = isArtist;
 	lastPos = getPos(event);
 }

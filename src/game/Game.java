@@ -14,7 +14,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.websocket.EncodeException;
 
-import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.json.JSONObject;
 import managers.ConnectionManager;
 import message.Message;
@@ -42,14 +41,14 @@ public class Game {
 		this.roundCounter = 0;
 		initMap();
 
-
+		
 		//appear players on canvas
-//		JSONObject json = new JSONObject();
-//		json.put("command", "appearplayers");
-//		for (Player p : players)  json.put(p.toString(), 0);
-//		try {GameEndpoint.sendMessage(getId(), new Message(json));
-//		}catch(IOException e) { e.printStackTrace();
-//		}catch(EncodeException e) {e.printStackTrace();}
+		JSONObject json = new JSONObject();
+		json.put("command", "appearplayers");
+		for (Player p : players)  json.put(p.toString(), 0);
+		try {GameEndpoint.sendMessage(getId(), new Message(json));
+		}catch(IOException e) { e.printStackTrace();
+		}catch(EncodeException e) {e.printStackTrace();}
 		
 		//javascript starts countdown from 5
 //		JSONObject json1 = new JSONObject();
@@ -70,7 +69,7 @@ public class Game {
 	private void initMap() {
 		points = new HashMap<Player, Integer>();
 		for(Player p : players) {
-			points.put(p,0);
+			points.put(p, 0);
 		}
 	}
 
@@ -101,17 +100,16 @@ public class Game {
 	}
 
 	public void startNewRound() {
+		System.out.println("axali raundi");
 		roundCounter++;
 		chooseStarterPainter();
-		//this.betweenRoundsTimer = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT
+		//this.round = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT
 										// rogoraa ?
 		Round r = new Round(roundStarterArtist);
 		this.round = r;
 	}
 
 	public void endRound() {
-		addRoundResToTotalScores();
-
 		if (roundCounter == numRounds) {
 			endGame();
 		} else {
@@ -122,19 +120,11 @@ public class Game {
 				public void run() {
 					startNewRound();
 				}
-			}, 10 * 1000);// aq roundidan amogebuli dro damchirdeba
+			}, 10 * 1000);// aq tavidan minichebuli dro damchirdeba
 			
 		}
 	}
 
-	private void addRoundResToTotalScores() {
-		Map<Player, Integer> roundPoints = round.getPoints();
-		for (Player key : points.keySet()) {
-			int prevRes = points.get(key);
-			int res = roundPoints.get(key) + prevRes;
-			points.put(key, res);
-		}
-	}
 
 	private void endGame() {
 		showFinalResults();
@@ -151,6 +141,7 @@ public class Game {
 	}
 
 	private void showFinalResults() {
+		//aq mainc amoagdos rame didi fanjara
 	}
 
 	private ArrayList<Player> playersWantToPlayAgain() {
@@ -175,8 +166,6 @@ public class Game {
 	public class Round {
 		private Player artist;
 		private Map<Player, Long> playersGuessedTimesForSingleTurn;
-		private boolean everybodyGuessed = false;
-		private Map<Player, Integer> RoundPoints;
 		private Map<Player, Integer> TurnPoints;
 		private Date date;
 		private Player roundStarter;
@@ -185,7 +174,8 @@ public class Game {
 		private String chosenWord = "word";
 		private Connection conn;
 		private ArrayList<String> randomWords = new ArrayList<String>();
-
+		private Timer endTurnTimer;
+		
 		public Round(Player starterArtist) {
 			this.artist = starterArtist;
 			this.roundStarter = starterArtist;
@@ -209,30 +199,26 @@ public class Game {
 		}
 
 		private void initMaps() {
-			RoundPoints = new HashMap<Player, Integer>();
 			playersGuessedTimesForSingleTurn = new HashMap<Player, Long>();
 			TurnPoints = new HashMap<Player, Integer>();
 			for (Player p : players) {
-				RoundPoints.put(p, 0);
 				playersGuessedTimesForSingleTurn.put(p, (long) 100);
 				TurnPoints.put(p, 0);
 			}
 		}
 
 		private void removePlayer(Player p) {
-			RoundPoints.remove(p);
 			playersGuessedTimesForSingleTurn.remove(p);
 			TurnPoints.remove(p);
 			if (p.equals(roundStarter)) {
-				int ind = players.indexOf(p);
-				roundStarter = players.get(++ind);
+				int ind = players.indexOf(p) + 1;
+				if(ind == players.size())
+					ind = 0;
+				roundStarter = players.get(ind);
 			}
 		}
 
-		public Map<Player, Integer> getPoints() {
-			return RoundPoints;
-		}
-
+		
 		private void choosePainter() {
 			if (turnCounter != 1) {
 				clearCanvas();
@@ -254,7 +240,15 @@ public class Game {
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
 
-			startTurn();
+			
+			Timer timer = new Timer();
+			timer.schedule(
+			new java.util.TimerTask() {
+	            public void run() {
+	            	startTurn();
+	            }
+	        }, 5000);
+			
 		}
 
 		private void startTurn() {
@@ -268,6 +262,13 @@ public class Game {
 				//	e.printStackTrace();
 				//}
 				artist.startDrawing();
+				endTurnTimer = new Timer();
+				endTurnTimer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						endTurn();
+					}
+				}, 10 * 1000);// gadmocemuli dro
 			}
 		}
 
@@ -303,7 +304,7 @@ public class Game {
 			json.put("seconds", secondsPerTurn);
 			json.put("artist", artist.toString()); // es gaawitlos an rame
 			for (Player p : points.keySet()) {
-				//System.out.println(p.toString() + " : " + points.get(p));
+				System.out.println(p.toString() + " : " + points.get(p));
 				json.put(p.toString(), points.get(p));
 			}
 			try {
@@ -321,10 +322,9 @@ public class Game {
 		public void smbdGuessed(Player p, long sec) throws SQLException {
 			playersGuessedTimesForSingleTurn.put(p, sec);
 
-			if (playersGuessedTimesForSingleTurn.size() == players.size()) {
-				everybodyGuessed = true;
-				artist.getTimer().cancel();
-				endTurn();// es ar vici zustad sachiroa tu ara, sheidzleba taimerma tviton gaushvas mainc?
+			if (playersGuessedTimesForSingleTurn.size() == players.size()-1) {
+				endTurnTimer.cancel();
+				endTurn();
 			}
 
 		}
@@ -333,8 +333,10 @@ public class Game {
 			JSONObject json = new JSONObject();
 			
 			json.put("command", "showResults");
-			for (Player p : RoundPoints.keySet()) {
-				json.put(p.toString(), points.get(p) + " + " + TurnPoints.get(p));
+			for (Player p : TurnPoints.keySet()) {
+				int turenPoint = TurnPoints.get(p);
+				json.put(p.toString(), points.get(p) + " + " + turenPoint);
+				points.put(p, points.get(p) + turenPoint);
 			}
 			
 			try {
@@ -351,7 +353,7 @@ public class Game {
 				// int res = 100 - playersGuessedTimesForSingleTurn.get(key);
 				int res = new Random().nextInt(50);
 				TurnPoints.put(key, res);
-				RoundPoints.put(key, RoundPoints.get(key) + res);
+				key.addScore(res);
 			}
 		}
 	}

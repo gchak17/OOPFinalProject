@@ -1,17 +1,12 @@
 package game;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 import dao.Account;
 
 public class Player {
 	private Account account;
-	private long timeLeft;
 	private boolean isArtist;
 	private Game game;
-	private long turnStartTimeMillis;
-	private Timer timer;
 	private int score;
 	private Room room;
 
@@ -22,29 +17,13 @@ public class Player {
 	}
 
 	public void startDrawing() {
-		assert (timeLeft > 0);
 		isArtist = true;
-		turnStartTimeMillis = System.currentTimeMillis();
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				game.getRound().endTurn();
-			}
-		}, 10 * 1000);// room.getTime();
-		System.out.println(account.getUsername() + " started turn, time remaining:" + getRemainingTimeSeconds());
+		System.out.println(account.getUsername() + " started turn, time remaining:" );
 	}
-
-	public long getRemainingTimeSeconds() {
-		if (isArtist)
-			return timeLeft - (System.currentTimeMillis() - timeLeft) / 1000;
-		return timeLeft;
-	}
-
+	
 	public void endDrawing() {
 		isArtist = false;
-		timeLeft -= (System.currentTimeMillis() - turnStartTimeMillis) / 1000;
-		System.out.println(account.getUsername() + " ended turn, time remaining:" + getRemainingTimeSeconds());
+		System.out.println(account.getUsername() + " ended turn, time remaining:");
 	}
 
 	public void setGame(Game game) {
@@ -90,8 +69,9 @@ public class Player {
 		return isArtist;
 	}
 
-	public Timer getTimer() {
-		return timer;
+	public void addScore(int res) {
+		score += res;
 	}
-
+	
+	
 }

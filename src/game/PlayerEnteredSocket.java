@@ -32,10 +32,9 @@ public class PlayerEnteredSocket {
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		ohHenloFrens(httpSession, peer);
 	}
-
+	
 	@OnClose
 	public void onClose(Session peer) throws IOException, EncodeException {
-
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		String id = (String) httpSession.getAttribute("gameId");
 		Room r = GameManager.getInstance().getRoomById(id);
