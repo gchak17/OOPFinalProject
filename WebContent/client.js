@@ -12,9 +12,7 @@ function sendText(json) {
 var timerVar, seconds;
 
 function onMessage(evt){
-	
 	var json = JSON.parse(evt.data);
-	console.log(json.command);
 	if (json.command === "paint") {
 		drawImageText(evt.data);
 	} else if (json.command === "checkStatus") {
@@ -24,9 +22,23 @@ function onMessage(evt){
 	} else if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 	} else if (json.command === "newturn"){
-		//showPlayerResults(json);
+ 		seconds = json.seconds + 1;
+		//timerVar = setInterval(timerFun, 2000);
+		
+ 		delete json.seconds;
+		showPlayerResults(json);
+	} else if (json.command === "appearplayers"){
+		delete json.command;
+		appearPlayers(json);
+	} else if (json.command === "startgametimer"){
+		seconds = 5 + 1;
 		//timerVar = setInterval(timerFun, 1000);
- 		//seconds = 10;
+	} else if (json.command === "appearartist"){
+		appearArtist(json);
+	} else if (json.command === "addcanvaslisteners"){
+		addCanvasListeners();
+	} else if (json.command === "removecanvaslisteners"){
+		removeCanvasListeners();
 	}
 }
 
@@ -40,18 +52,20 @@ var lastPos = null;
 
 var currCol = "black";
 var currWidth = 4;
+	
+function mouseUpFun(event){
+	drawing = false;
+}
 
-listen(canvas, 'mousedown', function(event) {
+function mouseDownFun(event) {
 	checkIfIsArtist();
 	
 	drawing = isArtist;
 	lastPos = getPos(event);
-});
+}
 
-listen(canvas, 'mousemove', function(event) {
-	if (!drawing) {
-		return;
-	}
+function mouseMoveFun(event){
+	if (!drawing) return;
 
 	var p = getPos(event);
 
@@ -74,7 +88,19 @@ listen(canvas, 'mousemove', function(event) {
 	sendText(json);
 
 	lastPos = p;
-});
+}
+
+function addCanvasListeners(){
+	listen(canvas, 'mouseup', mouseUpFun(event));
+	listen(canvas, 'mousedown', mouseDownFun(event));
+	listen(canvas, 'mousemove', mouseMoveFun(event));
+}
+
+function removeCanvasListeners(){
+	dontListen(canvas, 'mouseup', mouseUpFun(event));
+	dontListen(canvas, 'mousedown', mouseDownFun(event));
+	dontListen(canvas, 'mousemove', mouseMoveFun(event));
+}
 
 function checkIfIsArtist() {
 	var json = JSON.stringify({
@@ -110,16 +136,15 @@ function drawImageText(image) {
 	context.lineCap = "round";
 	context.moveTo(json.start.x, json.start.y);
 	context.lineTo(json.end.x, json.end.y);
-	context.stroke();
-	
+	context.stroke();	
 }
-
-listen(document, 'mouseup', function(event) {
-	drawing = false;
-});
 
 function listen(elem, type, listener) {
 	elem.addEventListener(type, listener, false);
+}
+
+function dontListen(elem, type, listener){
+	elem.removeEventListener(type, listener);
 }
 
 function getPos(event) {
@@ -175,30 +200,44 @@ function changeSizeAndPosition(){
 }
 
 function showPlayerResults(json){
+	delete json.command;
+	
+ 	var userPanel = document.getElementById("users-panel");
+	
+ 	while(userPanel.hasChildNodes()){   
+ 		userPanel.removeChild(userPanel.firstChild);
+ 	}
+	
+ 	var newArtist = json.artist;
+ 	delete json.artist;
+ 	for(var k in json){
+ 		var v = json[k];
+ 		var newP = document.createElement("P");
+ 		var t = document.createTextNode(k + " : " + v);
+ 		newP.appendChild(t);
+ 		if(k === newArtist) newP.style.color = "yellow";
+ 		userPanel.appendChild(newP);
+ 	}
+}
+
+function appearPlayers(json){
 	var userPanel = document.getElementById("users-panel");
 	
-	while(userPanel.hasChildNodes()){   
-		userPanel.removeChild(userPanel.firstChild);
-	}
-	
 	for(var k in json){
-		if(k === "command" || k === "artist") continue;
-		
 		var v = json[k];
 		var newP = document.createElement("P");
 		var t = document.createTextNode(k + " : " + v);
 		newP.appendChild(t);
-		if(k === json.artist){
-			newP.style.color = "yellow";
-		}
 		userPanel.appendChild(newP);
 	}
 }
 
-function timerFun() {
-	document.getElementById("timer-div").innerHTML = seconds--;
-  	if(seconds === -1){
-  		seconds = 10;
-  	 	clearInterval(timerVar);
-  	}
-}
+//function timerFun() {
+//	seconds--;
+//	//console.log(seconds);
+// 	document.getElementById("timer-div").innerHTML = seconds;
+//	if(seconds <= 0){
+//		console.log("checks");
+//		clearInterval(timerVar);
+//	}
+//}

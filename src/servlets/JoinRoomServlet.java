@@ -34,7 +34,7 @@ public class JoinRoomServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("joinRoomis geti");
+		//System.out.println("joinRoomis geti");
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class JoinRoomServlet extends HttpServlet {
 		request.setAttribute("id", id);
 
 		if (r.addPlayer(newPlayer)) {
-			System.out.println("daamata");
+			//System.out.println("daamata");
 			request.getRequestDispatcher("WaitingForOpponents.jsp").forward(request, response);
 		} else {
 			// utxras ro daarefreshos an sxva airchios
@@ -64,7 +64,5 @@ public class JoinRoomServlet extends HttpServlet {
 			// request.getRequestDispatcher("ShowWaitingRooms.jsp").forward(request,
 			// response);
 		}
-
 	}
-
 }

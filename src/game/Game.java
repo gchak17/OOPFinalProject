@@ -1,4 +1,4 @@
-package game;
+	package game;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,6 +13,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.websocket.EncodeException;
+
+import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.json.JSONObject;
 import managers.ConnectionManager;
 import message.Message;
@@ -22,24 +24,47 @@ public class Game {
 	private HashMap<Player, Integer> points;
 	private Player roundStarterArtist;
 	private String id;
-	private int time;
+	private int secondsPerTurn;
 	private int numRounds;
 	private Timer betweenRoundsTimer;
 	private Round round;
 	private int roundCounter;
 	private int artistIndex;
 
-	public Game(ArrayList<Player> players, int round, int time, String id) {
+	public Game(ArrayList<Player> players, int round, int secondsPerTurn, String id) {
 		this.players = players;
 		setGameForPlayers();
 		this.numRounds = round;
-		this.time = time;
+		this.secondsPerTurn = secondsPerTurn;
 		this.id = id;
 		this.points = new HashMap<Player, Integer>();
 		this.artistIndex = -1;
 		this.roundCounter = 0;
 		initMap();
-		startNewRound();
+
+
+		//appear players on canvas
+//		JSONObject json = new JSONObject();
+//		json.put("command", "appearplayers");
+//		for (Player p : players)  json.put(p.toString(), 0);
+//		try {GameEndpoint.sendMessage(getId(), new Message(json));
+//		}catch(IOException e) { e.printStackTrace();
+//		}catch(EncodeException e) {e.printStackTrace();}
+		
+		//javascript starts countdown from 5
+//		JSONObject json1 = new JSONObject();
+//		json1.put("command", "startgametimer");
+//		try{ GameEndpoint.sendMessage(getId(), new Message(json1));
+//		}catch (IOException | EncodeException e) { e.printStackTrace();}
+		
+		//game starts in 5 seconds
+		Timer timer = new Timer();
+		timer.schedule(
+		new java.util.TimerTask() {
+            public void run() {
+            	startNewRound();
+            }
+        }, 5000);
 	}
 
 	private void initMap() {
@@ -78,7 +103,7 @@ public class Game {
 	public void startNewRound() {
 		roundCounter++;
 		chooseStarterPainter();
-		this.betweenRoundsTimer = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT
+		//this.betweenRoundsTimer = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ? imena moshla xeliT
 										// rogoraa ?
 		Round r = new Round(roundStarterArtist);
 		this.round = r;
@@ -98,6 +123,7 @@ public class Game {
 					startNewRound();
 				}
 			}, 10 * 1000);// aq roundidan amogebuli dro damchirdeba
+			
 		}
 	}
 
@@ -236,11 +262,11 @@ public class Game {
 			choosePainter();
 			sendNewTurnInformationsToSocket();
 			if (roundIsnotEnded) {
-				try {
-					generateThreeWordsAndChooseOne();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				//try {
+					//generateThreeWordsAndChooseOne();
+				//} catch (SQLException e) {
+				//	e.printStackTrace();
+				//}
 				artist.startDrawing();
 			}
 		}
@@ -272,12 +298,12 @@ public class Game {
 		private void sendNewTurnInformationsToSocket() {
 			JSONObject json = new JSONObject();
 			json.put("command", "newturn");
-			System.out.println(points.size());
+			//System.out.println(points.size());
 			
-
+			json.put("seconds", secondsPerTurn);
 			json.put("artist", artist.toString()); // es gaawitlos an rame
 			for (Player p : points.keySet()) {
-				System.out.println(p.toString() + " : " + points.get(p));
+				//System.out.println(p.toString() + " : " + points.get(p));
 				json.put(p.toString(), points.get(p));
 			}
 			try {
