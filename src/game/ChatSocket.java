@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.servlet.http.HttpSession;
 import javax.websocket.EncodeException;
@@ -21,30 +22,58 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/client.html", encoders = { MessageEncoder.class }, decoders = {MessageDecoder.class }, configurator = Configuration.class)
+@ServerEndpoint(value = "/client.html", encoders = { MessageEncoder.class }, decoders = {
+		MessageDecoder.class }, configurator = Configuration.class)
 public class ChatSocket {
-	public static List<Session> sessionList = Collections.synchronizedList(new ArrayList<Session>());
+	// public static List<Session> sessionList = Collections.synchronizedList(new
+	// ArrayList<Session>());
 	private static ReentrantLock chatlock = new ReentrantLock();
+	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
+		String gameId = (String) httpSession.getAttribute("gameId");
+
 		Player user = (Player) httpSession.getAttribute("player");
 		Account acc = user.getAccount();
 		String username = acc.getUsername();// (String) httpSession.getAttribute("username");
 		session.getUserProperties().put("username", username);
-		sessionList.add(session);
+
+		List<Session> sessionLst;
+		if (sessions.containsKey(gameId)) {
+			sessionLst = sessions.get(gameId);
+			sessionLst.add(session);
+		} else {
+			sessionLst = Collections.synchronizedList(new ArrayList<Session>());
+			sessionLst.add(session);
+			sessions.put(gameId, sessionLst);
+		}
+
 	}
 
 	@OnClose
 	public void onClose(Session session) {
-		sessionList.remove(session);
+		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
+		String gameId = (String) httpSession.getAttribute("gameId");
+		
+		if (sessions.containsKey(gameId)) {
+			List<Session> sessionLst = sessions.get(gameId);
+			sessionLst.remove(session);
+		}
+		//sessionList.remove(session);
+
 	}
 
 	@OnMessage
-	public void sendMessage(Message message, Session session) throws IOException, EncodeException {
-		if (message.toString().isEmpty()) return;
+	public void sendMessage(Message msg, Session session) throws IOException, EncodeException {
 		Date playerDate = new Date(System.currentTimeMillis());
+		JSONObject json = msg.getJson();
+		if (!json.getString("command").equals("receiveMessage"))
+			return;
+		String message = json.getString("message");
+		if (message.toString().isEmpty())
+			return;
 
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
 		String gameId = (String) httpSession.getAttribute("gameId");
@@ -70,6 +99,7 @@ public class ChatSocket {
 		}
 
 		chatlock.lock();
+		List<Session> sessionList = sessions.get(gameId);
 		for (Session curSes : sessionList) {
 
 			JSONObject js = new JSONObject();

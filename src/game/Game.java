@@ -258,13 +258,14 @@ public class Game {
 		private void startTurn() {
 			turnCounter++;
 			choosePainter();
+			artist.shouldBeArtist(true);
 			sendNewTurnInformationsToSocket();
 			if (roundIsnotEnded) {
-				//try {
-					//generateThreeWordsAndChooseOne();
-				//} catch (SQLException e) {
-				//	e.printStackTrace();
-				//}
+				try {
+					generateThreeWordsAndChooseOne();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				artist.startDrawing();
 				
 				JSONObject json = new JSONObject();
@@ -293,12 +294,28 @@ public class Game {
 			Statement st = conn.createStatement();
 			String query = "SELECT * FROM words ORDER BY RAND() LIMIT 3;";
 			ResultSet rs = st.executeQuery(query);
+			randomWords = new ArrayList<String>();
 			while (rs.next()) {
 				randomWords.add(rs.getString("word"));
 			}
+			artist.shouldBeArtist(true);
+
+			//sendWordsToArtist();
 			System.out.println(randomWords);
 
 		}
+		
+		private void sendWordsToArtist() {
+			JSONObject json = new JSONObject();
+			json.put("command", "chooseWord");
+
+			json.put("one", randomWords.get(0));
+			json.put("two", randomWords.get(1));
+			json.put("three", randomWords.get(2));
+
+			GameSocket.sendMessage(getId(), new Message(json));
+		}
+
 
 		private void sendNewTurnInformationsToSocket() {
 			JSONObject json = new JSONObject();

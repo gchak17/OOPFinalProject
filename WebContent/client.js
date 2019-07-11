@@ -1,6 +1,6 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.html/web");
+var websocket = new WebSocket("ws://localhost:8081/OOPFinalProject/client.html/web");
 websocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -40,7 +40,14 @@ function onMessage(evt){
 		addCanvasListeners();
 	} else if (json.command === "removecanvaslisteners"){
 		removeCanvasListeners();
+	} else if (json.command === "chooseWord"){
+//		console.log("came heeeeere");
+//		var word = json.one; //aq unda iyos popupit archeva
+//		console.log(word);
+//		json["chosen"] = word;
+//		chatSocket.send(json);//sendText(json);
 	}
+
 }
 
 var canvas = document.getElementById("canvas-panel");

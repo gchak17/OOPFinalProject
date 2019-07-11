@@ -73,5 +73,9 @@ public class Player {
 		score += res;
 	}
 	
+	public void shouldBeArtist(boolean shouldBe) {
+		isArtist = shouldBe;
+	}
+	
 	
 }
