@@ -127,6 +127,36 @@ public class GameSocket {
 		}
 		
 		List<Session> peers = sessions.get(gameId);
+		
+//		JSONObject json = message.getJson();
+//		String command = json.getString("command");
+//
+//		if (command.contentEquals("chooseWord")) {
+//			HttpSession httpSession ;
+//			for (Session peer : peers) {
+//				httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+//				Player user = (Player) httpSession.getAttribute("player");
+//				
+//				if (!user.isArtist()) {
+//					json.put("command", "dont choose");
+//				} else {
+//					json.put("command", "chooseWord");
+//				}
+//				try {
+//					peer.getBasicRemote().sendObject(message);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (EncodeException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//			return;
+//		}
+
+		
+		//List<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
 			try {
 				peer.getBasicRemote().sendObject(message);
