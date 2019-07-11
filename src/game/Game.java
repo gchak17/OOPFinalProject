@@ -1,6 +1,5 @@
 package game;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -12,7 +11,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.websocket.EncodeException;
 
 import org.json.JSONObject;
 import managers.ConnectionManager;
@@ -25,7 +23,7 @@ public class Game {
 	private String id;
 	private int secondsPerTurn;
 	private int numRounds;
-	private Timer betweenRoundsTimer;
+	private Timer startTurnTimer;
 	private Round round;
 	private int roundCounter;
 	private int artistIndex;
@@ -219,6 +217,7 @@ public class Game {
 				}
 			} else if (p.equals(artist)) {
 				endTurn();
+				
 				int index = players.indexOf(p) - 1;
 				if (index == -1) {
 					artist = null;
@@ -227,8 +226,10 @@ public class Game {
 				}
 			}
 			players.remove(p);
-			if (players.size() == 0)
+			if (players.size() == 0) {
 				endTurnTimer.cancel();
+				startTurnTimer.cancel();
+			}
 		}
 
 		private void choosePainter() {
@@ -262,8 +263,8 @@ public class Game {
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
 
-			Timer timer = new Timer();
-			timer.schedule(new java.util.TimerTask() {
+			startTurnTimer = new Timer();
+			startTurnTimer.schedule(new java.util.TimerTask() {
 				public void run() {
 					startTurn();
 				}
