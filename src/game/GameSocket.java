@@ -14,9 +14,8 @@ import org.json.JSONObject;
 
 import message.*;
 
-@ServerEndpoint(value = "/client.jsp/web", encoders = { MessageEncoder.class }, decoders = {
-		MessageDecoder.class }, configurator = GameSocketConfig.class)
-public class GameEndpoint {
+@ServerEndpoint(value = "/client.html/web", encoders = { MessageEncoder.class }, decoders = {MessageDecoder.class }, configurator = Configuration.class)
+public class GameSocket {
 	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 
 	@OnOpen

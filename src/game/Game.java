@@ -46,7 +46,7 @@ public class Game {
 		JSONObject json = new JSONObject();
 		json.put("command", "appearplayers");
 		for (Player p : players)  json.put(p.toString(), 0);
-		try {GameEndpoint.sendMessage(getId(), new Message(json));
+		try {GameSocket.sendMessage(getId(), new Message(json));
 		}catch(IOException e) { e.printStackTrace();
 		}catch(EncodeException e) {e.printStackTrace();}
 		
@@ -276,7 +276,7 @@ public class Game {
 			JSONObject json = new JSONObject();
 			json.put("command", "clear");
 			try {
-				GameEndpoint.sendMessage(getId(), new Message(json));
+				GameSocket.sendMessage(getId(), new Message(json));
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (EncodeException e) {
@@ -308,7 +308,7 @@ public class Game {
 				json.put(p.toString(), points.get(p));
 			}
 			try {
-				GameEndpoint.sendMessage(getId(), new Message(json));
+				GameSocket.sendMessage(getId(), new Message(json));
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (EncodeException e) {
@@ -340,7 +340,7 @@ public class Game {
 			}
 			
 			try {
-				GameEndpoint.sendMessage(getId(), new Message(json));
+				GameSocket.sendMessage(getId(), new Message(json));
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (EncodeException e) {

@@ -20,9 +20,8 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/PublishRoom", encoders = { MessageEncoder.class }, decoders = {
-		MessageDecoder.class }, configurator = GameSocketConfig.class)
-public class PlayerEnteredSocket {
+@ServerEndpoint(value = "/PublishRoom", encoders = { MessageEncoder.class }, decoders = {MessageDecoder.class }, configurator = Configuration.class)
+public class WaitingRoomSocket {
 	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 	private static boolean gameIsNotStarted = true;
 
