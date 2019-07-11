@@ -114,7 +114,7 @@ public class GameSocket {
 	}
 
 	public static void sendMessage(String gameId, Message message){
-		if(message.getJson().getString("command").equals("addcanvaslistener") || message.getJson().getString("command").equals("removecanvaslistener")) {
+		if(message.getJson().getString("command").equals("addcanvaslisteners") || message.getJson().getString("command").equals("removecanvaslisteners")) {
 			String artistUsername = message.getJson().getString("artist");
 			List<Session> peers = sessions.get(gameId);
 			for (Session peer : peers) {

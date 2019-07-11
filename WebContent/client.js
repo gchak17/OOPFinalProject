@@ -53,19 +53,18 @@ var lastPos = null;
 
 var currCol = "black";
 var currWidth = 4;
-	
-function mouseUpFun(event){
+
+var mouseUpFun = function() {
 	drawing = false;
 }
 
-function mouseDownFun(event) {
-
+var mouseDownFun = function() {
 	checkIfIsArtist();
 	drawing = isArtist;
 	lastPos = getPos(event);
 }
 
-function mouseMoveFun(event){
+var mouseMoveFun = function() {
 	if (!drawing) return;
 
 	var p = getPos(event);
@@ -92,15 +91,15 @@ function mouseMoveFun(event){
 }
 
 function addCanvasListeners(){
-	listen(canvas, 'mouseup', mouseUpFun(event));
-	listen(canvas, 'mousedown', mouseDownFun(event));
-	listen(canvas, 'mousemove', mouseMoveFun(event));
+	document.addEventListener('mouseup', mouseUpFun);
+	canvas.addEventListener('mousedown', mouseDownFun);	
+	canvas.addEventListener('mousemove', mouseMoveFun);
 }
 
 function removeCanvasListeners(){
-	dontListen(canvas, 'mouseup', mouseUpFun(event));
-	dontListen(canvas, 'mousedown', mouseDownFun(event));
-	dontListen(canvas, 'mousemove', mouseMoveFun(event));
+	document.addEventListener('mouseup', mouseUpFun);
+	canvas.addEventListener('mousedown', mouseDownFun);	
+	canvas.addEventListener('mousemove', mouseMoveFun);
 }
 
 function checkIfIsArtist() {
@@ -138,14 +137,6 @@ function drawImageText(image) {
 	context.moveTo(json.start.x, json.start.y);
 	context.lineTo(json.end.x, json.end.y);
 	context.stroke();	
-}
-
-function listen(elem, type, listener) {
-	elem.addEventListener(type, listener, false);
-}
-
-function dontListen(elem, type, listener){
-	elem.removeEventListener(type, listener);
 }
 
 function getPos(event) {
