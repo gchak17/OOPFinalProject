@@ -1,26 +1,46 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>whiteboard</title>
-    <link href="client.css" rel="stylesheet" type="text/css">
+<meta charset="ISO-8859-1">
+<title>whiteboard</title>
+<link href="client.css" rel="stylesheet" type="text/css">
 </head>
-<body onresize="changeSizeAndPosition()" onload="changeSizeAndPosition()"> 
+<body onresize="changeSizeAndPosition()"
+	onload="changeSizeAndPosition()">
 
-    <div id="users-panel" class="side-panel"></div>
+	<div id="users-panel" class="side-panel"></div>
 	<div id="chat-panel" class="side-panel">
 		<div id="chat-box-div" class="chat-box-class"></div>
-		<input type="text" placeholder=" type message" id="chat-text" size="30" required="required">		
-        <button onclick="clickOnSend()" class="send-button">Send</button>
+		<input type="text" placeholder=" type message" id="chat-text"
+			size="30" required="required">
+		<button onclick="clickOnSend()" class="send-button">Send</button>
 	</div>
 
-    <canvas id="canvas-panel"></canvas>
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
 
-    <div id="word-panel" class="center-panel">
-        <div id="timer-div"></div>
-    </div>
-    <div id="paint-options-panel" class="center-panel">
-    <!--    
+		<!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2>Choose A Word</h2>
+			</div>
+			<div class="modal-body">
+				<input type="button" value="word1" id="word-button1"></input> 
+				<input type="button" value="word2" id="word-button2"></input>
+				<input type="button" value="word3" id="word-button3"></input>
+			</div>
+		</div>
+
+	</div> <!-- The Modal ends here -->
+
+
+	<canvas id="canvas-panel"></canvas>
+
+	<div id="word-panel" class="center-panel">
+		<div id="timer-div"></div>
+	</div>
+	<div id="paint-options-panel" class="center-panel">
+		<!--    
         <div id="choosecolor">choose color:</div>
         <div id="green" onclick="color(this)" class="paint-options-panel-colors"></div>
         <div id="blue" onclick="color(this)" class="paint-options-panel-colors"></div>
@@ -43,8 +63,8 @@
 
         <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()"> 
     -->
-    </div> 
-    <script src = "client.js"></script>
-    <script src = "chat.js"></script>
+	</div>
+	<script src="client.js"></script>
+	<script src="chat.js"></script>
 </body>
 </html>

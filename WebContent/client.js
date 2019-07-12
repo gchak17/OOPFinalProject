@@ -1,6 +1,7 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var gameSocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client/game");
+var gameSocket = new WebSocket(
+		"ws://localhost:8081/OOPFinalProject/client/game");
 gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -10,10 +11,11 @@ function sendText(json) {
 }
 
 var timerVar, seconds;
+var modal = document.getElementById("myModal");
 
-function onMessage(evt){
+function onMessage(evt) {
 	var json = JSON.parse(evt.data);
-	
+
 	if (json.command === "paint") {
 		drawImageText(evt.data);
 	} else if (json.command === "checkStatus") {
@@ -22,36 +24,60 @@ function onMessage(evt){
 		showPlayerResults(json);
 	} else if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
-	} else if (json.command === "newturn"){
- 		seconds = json.seconds + 1;
-		//timerVar = setInterval(timerFun, 2000);
- 		
- 		delete json.seconds;
+	} else if (json.command === "newturn") {
+		seconds = json.seconds + 1;
+		// timerVar = setInterval(timerFun, 2000);
+
+		delete json.seconds;
 		showPlayerResults(json);
-	} else if (json.command === "appearplayers"){
+	} else if (json.command === "appearplayers") {
 		delete json.command;
 		appearPlayers(json);
-	} else if (json.command === "startgametimer"){
+	} else if (json.command === "startgametimer") {
 		seconds = 5 + 1;
-		//timerVar = setInterval(timerFun, 1000);
-	} else if (json.command === "appearartist"){
+		// timerVar = setInterval(timerFun, 1000);
+	} else if (json.command === "appearartist") {
 		appearArtist(json);
-	} else if (json.command === "addcanvaslisteners"){
+	} else if (json.command === "addcanvaslisteners") {
 		console.log(json.command);
 		addCanvasListeners();
-	} else if (json.command === "removecanvaslisteners"){
+	} else if (json.command === "removecanvaslisteners") {
 		console.log(json.command);
 		removeCanvasListeners();
-	} else if (json.command === "endgame"){
-		location.replace("http://localhost:8080/OOPFinalProject/Main.jsp");
-	} else if (json.command === "chooseWord"){
-		var chosenWord = json.one; //aq unda iyos popupit archeva
-		var newJson = JSON.stringify({
-			"command" : json.command,
-			"chosen" : chosenWord
-		});
-		gameSocket.send(newJson);
+	} else if (json.command === "endgame") {
+		location.replace("http://localhost:8081/OOPFinalProject/Main.jsp");
+	} else if (json.command === "chooseWord") {
+		document.getElementById("word-button1").value = json.one;
+		document.getElementById("word-button2").value = json.two;
+		document.getElementById("word-button3").value = json.three;
+		
+		modal.style.display = "block";
+		chooseTheWord(json);
 	}
+}
+
+function chooseTheWord(json) {
+	document.getElementById("word-button1").onclick = function() {
+		setTheWordAndSend(json.one, json);
+	}
+	document.getElementById("word-button2").onclick = function() {
+		setTheWordAndSend(json.two, json);
+	}
+	document.getElementById("word-button3").onclick = function() {
+		setTheWordAndSend(json.three, json);
+	}
+}
+
+function setTheWordAndSend(word, json) {
+	var chosenWord = word;
+	modal.style.display = "none";
+
+	var newJson = JSON.stringify({
+		"command" : json.command,
+		"chosen" : chosenWord
+	});
+	console.log(chosenWord);
+	gameSocket.send(newJson)
 }
 
 var canvas = document.getElementById("canvas-panel");
@@ -76,7 +102,8 @@ var mouseDownFun = function() {
 }
 
 var mouseMoveFun = function() {
-	if (!drawing) return;
+	if (!drawing)
+		return;
 
 	var p = getPos(event);
 
@@ -101,15 +128,15 @@ var mouseMoveFun = function() {
 	lastPos = p;
 }
 
-function addCanvasListeners(){
+function addCanvasListeners() {
 	document.addEventListener('mouseup', mouseUpFun);
-	canvas.addEventListener('mousedown', mouseDownFun);	
+	canvas.addEventListener('mousedown', mouseDownFun);
 	canvas.addEventListener('mousemove', mouseMoveFun);
 }
 
-function removeCanvasListeners(){
+function removeCanvasListeners() {
 	document.addEventListener('mouseup', mouseUpFun);
-	canvas.addEventListener('mousedown', mouseDownFun);	
+	canvas.addEventListener('mousedown', mouseDownFun);
 	canvas.addEventListener('mousemove', mouseMoveFun);
 }
 
@@ -130,7 +157,7 @@ function width(obj) {
 
 function clearCanvas() {
 	checkIfIsArtist();
-	if(isArtist){
+	if (isArtist) {
 		var json = JSON.stringify({
 			"command" : "clear"
 		});
@@ -147,86 +174,90 @@ function drawImageText(image) {
 	context.lineCap = "round";
 	context.moveTo(json.start.x, json.start.y);
 	context.lineTo(json.end.x, json.end.y);
-	context.stroke();	
+	context.stroke();
 }
 
 function getPos(event) {
 	var x = event.clientX - offsetLeft;
 	var y = event.clientY - offsetTop;
-	return [x, y];
+	return [ x, y ];
 }
 
-function changeSizeAndPosition(){
-    //canvas-panel
-    document.getElementById("canvas-panel").width = innerWidth * 0.6;
-    document.getElementById("canvas-panel").height = innerHeight * 0.6;
-    document.getElementById("canvas-panel").style.top = innerHeight * 0.2 + "px";
-    document.getElementById("canvas-panel").style.left = innerWidth * 0.2 + "px";
+function changeSizeAndPosition() {
+	// canvas-panel
+	document.getElementById("canvas-panel").width = innerWidth * 0.6;
+	document.getElementById("canvas-panel").height = innerHeight * 0.6;
+	document.getElementById("canvas-panel").style.top = innerHeight * 0.2
+			+ "px";
+	document.getElementById("canvas-panel").style.left = innerWidth * 0.2
+			+ "px";
 
-    //center-panel class
-    var x = document.getElementsByClassName("center-panel");
-    for (var i = 0; i < x.length; i++) {
-        x[i].style.width = innerWidth * 0.6 + "px";
-        x[i].style.height = innerHeight * 0.2 + "px";
-        x[i].style.left = innerWidth * 0.2 + "px";
-    }
+	// center-panel class
+	var x = document.getElementsByClassName("center-panel");
+	for (var i = 0; i < x.length; i++) {
+		x[i].style.width = innerWidth * 0.6 + "px";
+		x[i].style.height = innerHeight * 0.2 + "px";
+		x[i].style.left = innerWidth * 0.2 + "px";
+	}
 
-    //word-panel
-    document.getElementById("word-panel").style.top = "0px";
+	// word-panel
+	document.getElementById("word-panel").style.top = "0px";
 
-    //paint-options-panel
-    document.getElementById("paint-options-panel").style.top = innerHeight * 0.8 + "px";
+	// paint-options-panel
+	document.getElementById("paint-options-panel").style.top = innerHeight
+			* 0.8 + "px";
 
-    //side-panel class
-    var x = document.getElementsByClassName("side-panel");
-    for (var i = 0; i < x.length; i++) {
-        x[i].style.width = innerWidth * 0.2 + "px";
-        x[i].style.height = innerHeight + "px";
-        x[i].style.top = "0px";
-    }
+	// side-panel class
+	var x = document.getElementsByClassName("side-panel");
+	for (var i = 0; i < x.length; i++) {
+		x[i].style.width = innerWidth * 0.2 + "px";
+		x[i].style.height = innerHeight + "px";
+		x[i].style.top = "0px";
+	}
 
-    //users-panel
-    document.getElementById("users-panel").style.left = "0px";
+	// users-panel
+	document.getElementById("users-panel").style.left = "0px";
 
-    //chat-panel
-    document.getElementById("chat-panel").style.left = innerWidth * 0.8 + "px";
+	// chat-panel
+	document.getElementById("chat-panel").style.left = innerWidth * 0.8 + "px";
 
-    //chat-box class
-    var x = document.getElementsByClassName("chat-box-class");
-    for (var i = 0; i < x.length; i++) {
-        x[i].style.width = innerWidth * 0.18 + "px";
-        x[i].style.height = innerHeight * 0.87 + "px";
-    }
+	// chat-box class
+	var x = document.getElementsByClassName("chat-box-class");
+	for (var i = 0; i < x.length; i++) {
+		x[i].style.width = innerWidth * 0.18 + "px";
+		x[i].style.height = innerHeight * 0.87 + "px";
+	}
 
 	offsetLeft = canvas.offsetLeft;
 	offsetTop = canvas.offsetTop;
 }
 
-function showPlayerResults(json){
+function showPlayerResults(json) {
 	delete json.command;
-	
- 	var userPanel = document.getElementById("users-panel");
-	
- 	while(userPanel.hasChildNodes()){   
- 		userPanel.removeChild(userPanel.firstChild);
- 	}
-	
- 	var newArtist = json.artist;
- 	delete json.artist;
- 	for(var k in json){
- 		var v = json[k];
- 		var newP = document.createElement("P");
- 		var t = document.createTextNode(k + " : " + v);
- 		newP.appendChild(t);
- 		if(k === newArtist) newP.style.color = "yellow";
- 		userPanel.appendChild(newP);
- 	}
+
+	var userPanel = document.getElementById("users-panel");
+
+	while (userPanel.hasChildNodes()) {
+		userPanel.removeChild(userPanel.firstChild);
+	}
+
+	var newArtist = json.artist;
+	delete json.artist;
+	for ( var k in json) {
+		var v = json[k];
+		var newP = document.createElement("P");
+		var t = document.createTextNode(k + " : " + v);
+		newP.appendChild(t);
+		if (k === newArtist)
+			newP.style.color = "yellow";
+		userPanel.appendChild(newP);
+	}
 }
 
-function appearPlayers(json){
+function appearPlayers(json) {
 	var userPanel = document.getElementById("users-panel");
-	
-	for(var k in json){
+
+	for ( var k in json) {
 		var v = json[k];
 		var newP = document.createElement("P");
 		var t = document.createTextNode(k + " : " + v);
@@ -235,12 +266,12 @@ function appearPlayers(json){
 	}
 }
 
-//function timerFun() {
-//	seconds--;
-//	//console.log(seconds);
-// 	document.getElementById("timer-div").innerHTML = seconds;
-//	if(seconds <= 0){
-//		console.log("checks");
-//		clearInterval(timerVar);
-//	}
-//}
+// function timerFun() {
+// seconds--;
+// //console.log(seconds);
+// document.getElementById("timer-div").innerHTML = seconds;
+// if(seconds <= 0){
+// console.log("checks");
+// clearInterval(timerVar);
+// }
+// }
