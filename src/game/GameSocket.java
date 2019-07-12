@@ -170,8 +170,7 @@ public class GameSocket {
 	JSONObject json = message.getJson();
 	String command = json.getString("command");
 
-	if (command.equals("chooseWord") || command.equals("addcanvaslisteners") || command.equals("removecanvaslisteners")) {
-		//System.out.println(command);
+	if (command.equals("chooseWord") || command.equals("startturn") || command.equals("endturn")) {
 		sendOnlyToArtist(gameId, message);
 	} else {
 		sendToEveryone(message, gameId);
@@ -183,8 +182,8 @@ public class GameSocket {
 		for (Session peer : peers) {
 			if (((Player) ((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player"))
 					.isArtist()) {
-				System.out.println(((Player) ((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player"))
-					.toString() + " " + message.toString());
+				//System.out.println(((Player) ((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player"))
+				//	.toString() + " " + message.toString());
 				try {
 					peer.getBasicRemote().sendObject(message);
 				} catch (IOException | EncodeException e) {

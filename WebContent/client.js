@@ -38,12 +38,6 @@ function onMessage(evt) {
 		// timerVar = setInterval(timerFun, 1000);
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
-	} else if (json.command === "addcanvaslisteners") {
-		console.log(json.command);
-		addCanvasListeners();
-	} else if (json.command === "removecanvaslisteners") {
-		console.log(json.command);
-		removeCanvasListeners();
 	} else if (json.command === "endgame") {
 		location.replace("http://localhost:8081/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
@@ -53,6 +47,11 @@ function onMessage(evt) {
 		
 		modal.style.display = "block";
 		chooseTheWord(json);
+	} else if (json.command === "startturn"){
+		isArtist = true;
+		addCanvasListeners();
+	} else if (json.command === "endturn"){
+		isArtist = false;
 	}
 }
 
@@ -121,6 +120,11 @@ var mouseMoveFun = function() {
 		"width" : currWidth
 	});
 
+	if(!isArtist) {
+		removeCanvasListeners();
+		return;
+	}
+	
 	drawImageText(json);
 	// string aris es json
 	sendText(json);

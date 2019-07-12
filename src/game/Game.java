@@ -107,8 +107,7 @@ public class Game {
 		// this.round = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ?
 		// imena moshla xeliT
 		// rogoraa ?
-		Round r = new Round(roundStarterArtist);
-		this.round = r;
+		this.round = new Round(roundStarterArtist);
 	}
 
 	public void endRound() {
@@ -276,7 +275,7 @@ public class Game {
 
 		public void endTurn() {
 			JSONObject json = new JSONObject();
-			json.put("command", "removecanvaslisteners");
+			json.put("command", "endturn");
 			json.put("artist", artist.toString());
 			GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
 			
@@ -291,7 +290,6 @@ public class Game {
 					startTurn();
 				}
 			}, 5000);
-
 		}
 
 		private void startTurn() {
@@ -308,9 +306,10 @@ public class Game {
 				artist.startDrawing();
 
 				JSONObject json = new JSONObject();
-				json.put("command", "addcanvaslisteners");
+				json.put("command", "startturn");
 				json.put("artist", artist.toString());
 				GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
+				
 				this.date = new Date(System.currentTimeMillis());
 				endTurnTimer = new Timer();
 				endTurnTimer.schedule(new TimerTask() {
@@ -318,7 +317,7 @@ public class Game {
 					public void run() {
 						endTurn();
 					}
-				}, 10 * 1000);// gadmocemuli dro
+				}, secondsPerTurn * 1000);
 			}
 		}
 
