@@ -86,7 +86,7 @@ public class ChatSocket {
 		Account acc = user.getAccount();
 		String username = acc.getUsername();
 		Game.Round round = game.getRound();
-		if (!round.isTurnEnded()) {
+		if (round != null && !round.isTurnEnded()) {
 			Map<Player, Long> times = round.guessedTimes();
 			if (times.get(user) == (long) game.secsPerTurn()) {
 				if (message.toLowerCase().equals(round.getChosenWord().toLowerCase())) {

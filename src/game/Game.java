@@ -199,6 +199,7 @@ public class Game {
 
 			startTurn();
 		}
+		
 
 		public String getChosenWord() {
 			return chosenWord;
@@ -289,7 +290,6 @@ public class Game {
 			json.put("command", "endturn");
 			json.put("artist", artist.toString());
 			GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
-
 			artist.endDrawing();
 
 			generatePointsForPlayers();
@@ -323,6 +323,7 @@ public class Game {
 				GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
 
 				this.date = new Date(System.currentTimeMillis());
+				
 				endTurnTimer = new Timer();
 				endTurnTimer.schedule(new TimerTask() {
 					@Override
@@ -404,13 +405,16 @@ public class Game {
 		}
 
 		private void generatePointsForPlayers() {
+			int allPoints = 0;
 			for (Player key : playersGuessedTimesForSingleTurn.keySet()) {
 				int seconds = (int) (playersGuessedTimesForSingleTurn.get(key) / 1000);
 				 int res = 100 * seconds/secondsPerTurn;
+				 allPoints += res;
 				 System.out.println(res);
 				TurnPoints.put(key, res);
 				key.addScore(res);
 			}
+			TurnPoints.put(artist, allPoints / playersGuessedTimesForSingleTurn.size() - 1);
 		}
 		
 		public boolean isTurnEnded() {

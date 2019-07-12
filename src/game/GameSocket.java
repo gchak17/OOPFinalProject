@@ -130,12 +130,13 @@ public class GameSocket {
 			sendToEveryoneButMe(message, httpSession, session);
 		}
 	}
-	
+
 	private static String hideTheWord(String word) {
 		String result = "";
 		for (int i = 0; i < word.length(); i++) {
 			result += "_";
-			if (i != word.length() - 1) result += " ";
+			if (i != word.length() - 1)
+				result += " ";
 		}
 		return result;
 	}
@@ -164,12 +165,11 @@ public class GameSocket {
 		}
 	}
 
+	public static void sendMessage(String gameId, Message message) {
+		JSONObject json = message.getJson();
+		String command = json.getString("command");
 
-	public static void sendMessage(String gameId, Message message){
-	JSONObject json = message.getJson();
-	String command = json.getString("command");
-
-	if (command.equals("startturn") || command.equals("endturn")) {
+		if (command.equals("startturn") || command.equals("endturn")) {
 			// System.out.println(command);
 			sendOnlyToArtist(gameId, message);
 		} else if (command.equals("chooseWord")) {
@@ -186,7 +186,7 @@ public class GameSocket {
 			sendToEveryone(message, gameId);
 		}
 	}
-	
+
 	private static void sendDifferentCommands(String gameId, Message message) throws IOException, EncodeException {
 		List<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
@@ -200,7 +200,7 @@ public class GameSocket {
 				json.put("command", "don't choose");
 				peer.getBasicRemote().sendObject(message);
 			}
-			
+
 		}
 	}
 
