@@ -11,6 +11,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Rooms</title>
+<script type="text/javascript" src="notificationSocket.js"></script>
 </head>
 <body>
 	<% 

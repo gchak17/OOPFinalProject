@@ -11,6 +11,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Your Notifications</title>
+<script type="text/javascript" src="notificationSocket.js"></script>
 </head>
 
 <body>
