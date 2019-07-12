@@ -15,12 +15,13 @@ var modal = document.getElementById("myModal");
 
 function onMessage(evt) {
 	var json = JSON.parse(evt.data);
-
+	console.log(json.command);
 	if (json.command === "paint") {
 		drawImageText(evt.data);
 	} else if (json.command === "checkStatus") {
 		isArtist = json.answer;
 	} else if (json.command === "showResults") {
+		document.getElementById("word-place").innerHTML = "";
 		showPlayerResults(json);
 	} else if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
@@ -52,18 +53,27 @@ function onMessage(evt) {
 		addCanvasListeners();
 	} else if (json.command === "endturn"){
 		isArtist = false;
+	} else if (json.command === "don't choose"){
+		document.getElementById("guesserModal").style.display = "block";
+	} else if (json.command === "wordIsChosen"){
+		document.getElementById("guesserModal").style.display = "none";
+		var word = json.chosen;
+		document.getElementById("word-place").innerHTML = word;
 	}
 }
 
 function chooseTheWord(json) {
 	document.getElementById("word-button1").onclick = function() {
 		setTheWordAndSend(json.one, json);
+		document.getElementById("word-place").innerHTML = json.one;
 	}
 	document.getElementById("word-button2").onclick = function() {
 		setTheWordAndSend(json.two, json);
+		document.getElementById("word-place").innerHTML = json.two;
 	}
 	document.getElementById("word-button3").onclick = function() {
 		setTheWordAndSend(json.three, json);
+		document.getElementById("word-place").innerHTML = json.three;
 	}
 }
 
