@@ -59,7 +59,17 @@ function onMessage(evt) {
 		document.getElementById("guesserModal").style.display = "none";
 		var word = json.chosen;
 		document.getElementById("word-place").innerHTML = word;
+	} else if (json.command === "autochooseword"){
+		chooseTheWordAutomatically(json);
 	}
+}
+
+function chooseTheWordAutomatically(json){
+	var arr = ["one", "two", "three"]; 
+	var el = arr[Math.floor(Math.random() * arr.length)];
+	setTheWordAndSend(json[el], json);
+	document.getElementById("word-place").innerHTML = json[el];
+	//console.log("random word: " + json[el]);
 }
 
 function chooseTheWord(json) {
@@ -82,7 +92,7 @@ function setTheWordAndSend(word, json) {
 	modal.style.display = "none";
 
 	var newJson = JSON.stringify({
-		"command" : json.command,
+		"command" : "wordIsChosen",
 		"chosen" : chosenWord
 	});
 	console.log(chosenWord);

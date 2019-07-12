@@ -1,7 +1,7 @@
 package game;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -184,11 +184,12 @@ public class Game {
 		private Date date;
 		private int turnCounter;
 		private boolean roundIsnotEnded = true;
-		private String chosenWord; // = "word";
+		private String chosenWord = "";
 		private Connection conn;
 		private ArrayList<String> randomWords = new ArrayList<String>();
 		private Timer endTurnTimer;
 		private boolean turnIsEnded;
+		private Date wordChosenTime;
 
 		public Round(Player starterArtist) {
 			// System.out.println("startter 2 " + starterArtist);
@@ -286,10 +287,13 @@ public class Game {
 
 		public void endTurn() {
 			turnIsEnded = true;
+			chosenWord = "";
 			JSONObject json = new JSONObject();
 			json.put("command", "endturn");
 			json.put("artist", artist.toString());
 			GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
+			
+			setChosenWordTime(null);
 			artist.endDrawing();
 
 			generatePointsForPlayers();
@@ -310,8 +314,26 @@ public class Game {
 			artist.shouldBeArtist(true);
 			sendNewTurnInformationsToSocket();
 			if (roundIsnotEnded) {
+				long diff = 10 * 1000;
 				try {
+					Date newDate1 = new Date(System.currentTimeMillis());
 					generateThreeWordsAndChooseOne();
+					Date newDate2 = wordChosenTime;
+					
+					if (newDate2 != null) {
+						diff = newDate2.getTime() - newDate1.getTime();
+					}
+					
+					Timer newTimer = new Timer();
+					newTimer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							//System.out.println(chosenWord);
+							if(chosenWord.isEmpty()) sendWordsToArtist("autochooseword");
+						}
+					}, 10 * 1000);
+					
+					
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -330,7 +352,7 @@ public class Game {
 					public void run() {
 						endTurn();
 					}
-				}, secondsPerTurn * 1000);
+				}, secondsPerTurn * 1000 + diff);
 			}
 		}
 
@@ -351,12 +373,12 @@ public class Game {
 			}
 			artist.shouldBeArtist(true);
 
-			sendWordsToArtist();
+			sendWordsToArtist("chooseWord");
 		}
 
-		private void sendWordsToArtist() {
+		private void sendWordsToArtist(String passedCommand) {
 			JSONObject json = new JSONObject();
-			json.put("command", "chooseWord");
+			json.put("command", passedCommand);
 
 			json.put("one", randomWords.get(0));
 			json.put("two", randomWords.get(1));
@@ -419,6 +441,11 @@ public class Game {
 		
 		public boolean isTurnEnded() {
 			return turnIsEnded;
+		}
+
+
+		public void setChosenWordTime(Date date) {
+			wordChosenTime = date;
 		}
 	}
 }

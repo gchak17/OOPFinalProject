@@ -1,6 +1,6 @@
 package game;
 
-import java.io.EOFException;
+import java.util.Date;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,15 +115,17 @@ public class GameSocket {
 		} else if (command.equals("clear")) {
 			String id = (String) httpSession.getAttribute("gameId");
 			sendToEveryone(message, id);
-		} else if (command.equals("chooseWord")) {
+		} else if (command.equals("wordIsChosen")) {
 			String word = json.getString("chosen");
 			String gameId = (String) httpSession.getAttribute("gameId");
 
 			Game game = GameManager.getInstance().getGame(gameId);
 			Game.Round round = game.getRound();
 			round.setChosenWord(word);
+			round.setChosenWordTime(new Date(System.currentTimeMillis()));
+			
 			JSONObject js = new JSONObject();
-			js.put("command", "wordIsChosen");
+			js.put("command", command);
 			js.put("chosen", hideTheWord(word));
 			sendToEveryoneButMe(new Message(js), httpSession, session);
 		} else {
@@ -182,6 +184,8 @@ public class GameSocket {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else if (command.equals("autochooseword")) {
+			sendOnlyToArtist(gameId, message);
 		} else {
 			sendToEveryone(message, gameId);
 		}
