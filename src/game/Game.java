@@ -100,10 +100,10 @@ public class Game {
 	}
 
 	public void startNewRound() {
-		System.out.println("axali raundi");
+		//System.out.println("axali raundi");
 		roundCounter++;
 		chooseStarterPainter();
-		System.out.println(roundStarterArtist);
+		//System.out.println(roundStarterArtist);
 		// this.round = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ?
 		// imena moshla xeliT
 		// rogoraa ?
@@ -186,7 +186,7 @@ public class Game {
 		private Timer endTurnTimer;
 
 		public Round(Player starterArtist) {
-			System.out.println("startter 2 " + starterArtist);
+			// System.out.println("startter 2 " + starterArtist);
 			this.artist = starterArtist; 
 			this.date = new Date(System.currentTimeMillis());
 			this.turnCounter = 0;
@@ -275,13 +275,13 @@ public class Game {
 		}
 
 		public void endTurn() {
-			artist.endDrawing();
-
 			JSONObject json = new JSONObject();
 			json.put("command", "removecanvaslisteners");
 			json.put("artist", artist.toString());
 			GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
-
+			
+			artist.endDrawing();
+			
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
 
@@ -361,7 +361,7 @@ public class Game {
 			json.put("seconds", secondsPerTurn);
 			json.put("artist", artist.toString()); // es gaawitlos an rame
 			for (Player p : points.keySet()) {
-				System.out.println(p.toString() + " : " + points.get(p));
+				//System.out.println(p.toString() + " : " + points.get(p));
 				json.put(p.toString(), points.get(p));
 			}
 			GameSocket.sendMessage(getId(), new Message(json));

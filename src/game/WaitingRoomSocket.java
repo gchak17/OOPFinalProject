@@ -20,7 +20,8 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/PublishRoom", encoders = { MessageEncoder.class }, decoders = {MessageDecoder.class }, configurator = Configuration.class)
+@ServerEndpoint(value = "/PublishRoom", encoders = { MessageEncoder.class }, 
+				decoders = {MessageDecoder.class }, configurator = Configuration.class)
 public class WaitingRoomSocket {
 	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 	private static boolean gameIsNotStarted = true;
@@ -43,7 +44,7 @@ public class WaitingRoomSocket {
 		if (gameIsNotStarted) {
 			if (user.equals(
 					GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
-				System.out.println("admini gavida");
+				//System.out.println("admini gavida");
 				removeEveryone(peer, id);
 			} else {
 				r.removePlayer(user);

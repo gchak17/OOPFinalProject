@@ -15,30 +15,33 @@ import org.json.JSONObject;
 
 import message.*;
 
-@ServerEndpoint(value = "/client.html/web", encoders = { MessageEncoder.class }, decoders = {
-		MessageDecoder.class }, configurator = Configuration.class)
+@ServerEndpoint(value = "/client/game", encoders = { MessageEncoder.class }, 
+				decoders = {MessageDecoder.class }, configurator = Configuration.class)
 public class GameSocket {
 	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 
-	
 	@OnError
-	public void onError(Throwable t) throws Throwable {
-	    // Most likely cause is a user closing their browser. Check to see if
-	    // the root cause is EOF and if it is ignore it.
-	    // Protect against infinite loops.
-	    int count = 0;
-	    Throwable root = t;
-	    while (root.getCause() != null && count < 20) {
-	        root = root.getCause();
-	        count ++;
-	    }
-	    if (root instanceof EOFException) {
-	        // Assume this is triggered by the user closing their browser and
-	        // ignore it.
-	    } else {
-	        throw t;
-	    }
-	}
+    public void onError(Throwable t) {
+        System.out.println(t.getMessage());
+    }
+//	@OnError
+//	public void onError(Throwable t) throws Throwable {
+//	    // Most likely cause is a user closing their browser. Check to see if
+//	    // the root cause is EOF and if it is ignore it.
+//	    // Protect against infinite loops.
+//	    int count = 0;
+//	    Throwable root = t;
+//	    while (root.getCause() != null && count < 20) {
+//	        root = root.getCause();
+//	        count ++;
+//	    }
+//	    if (root instanceof EOFException) {
+//	        // Assume this is triggered by the user closing their browser and
+//	        // ignore it.
+//	    } else {
+//	        throw t;
+//	    }
+//	}
 	
 	@OnOpen
 	public void onOpen(Session curS, EndpointConfig config) {
@@ -58,7 +61,7 @@ public class GameSocket {
 		sessions.put(id, ses);
 
 		if (ses.size() == r.getPlayers().size()) {
-			System.out.println(r.getRounds() + " " + r.getTime());
+			//System.out.println(r.getRounds() + " " + r.getTime());
 			Game g = new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
 			GameManager.getInstance().addGame(g);
 		}
@@ -113,7 +116,7 @@ public class GameSocket {
 			String id = (String) httpSession.getAttribute("gameId");
 			sendToEveryone(message, id);
 		} else if(command.equals("chooseWord")){
-			System.out.println("ariqa");
+			//System.out.println("ariqa");
 		}else {
 			sendToEveryoneButMe(message, httpSession, session);
 		}
@@ -162,12 +165,13 @@ public class GameSocket {
 	JSONObject json = message.getJson();
 	String command = json.getString("command");
 
-	if ( command.contentEquals("chooseWord")) {
-		System.out.println(command);
+	if (command.equals("chooseWord") || command.equals("addcanvaslisteners") || command.equals("removecanvaslisteners")) {
+		//System.out.println(command);
 		sendOnlyToArtist(gameId, message);
 	} else {
 		sendToEveryone(message, gameId);
 	}
+}
 //=======
 	
 
@@ -197,24 +201,20 @@ public class GameSocket {
 //			}
 //			return;
 //		}
-
-	}
-
 	private static void sendOnlyToArtist(String gameId, Message message) {
 		List<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
 			if (((Player) ((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player"))
 					.isArtist()) {
-				System.out.println("egzavneba");
-//>>>>>>> 8aeaf297e8907d070eb6adca8641603a3a318c79
+				System.out.println(((Player) ((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player"))
+					.toString() + " " + message.toString());
 				try {
 					peer.getBasicRemote().sendObject(message);
 				} catch (IOException | EncodeException e) {
 					e.printStackTrace();
 				}
+				return;
 			}
 		}
-
 	}
-
 }

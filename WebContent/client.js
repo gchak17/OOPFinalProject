@@ -1,12 +1,12 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var websocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.html/web");
-websocket.onmessage = function(evt) {
+var gameSocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client/game");
+gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };
 
 function sendText(json) {
-	websocket.send(json);
+	gameSocket.send(json);
 }
 
 var timerVar, seconds;
@@ -37,19 +37,21 @@ function onMessage(evt){
 	} else if (json.command === "appearartist"){
 		appearArtist(json);
 	} else if (json.command === "addcanvaslisteners"){
+		console.log(json.command);
 		addCanvasListeners();
 	} else if (json.command === "removecanvaslisteners"){
+		console.log(json.command);
 		removeCanvasListeners();
 	} else if (json.command === "endgame"){
 		location.replace("http://localhost:8080/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord"){
-		console.log("came heeeeere");
-		var word = json.one; //aq unda iyos popupit archeva
-		console.log(word);
-		json["chosen"] = word;
-		websocket.send(json);//sendText(json);
+		var chosenWord = json.one; //aq unda iyos popupit archeva
+		var newJson = JSON.stringify({
+			"command" : json.command,
+			"chosen" : chosenWord
+		});
+		gameSocket.send(newJson);
 	}
-
 }
 
 var canvas = document.getElementById("canvas-panel");

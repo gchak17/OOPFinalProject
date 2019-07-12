@@ -1,4 +1,4 @@
-var chatSocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client.html");
+var chatSocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client/chat");
 
 chatSocket.onmessage = function(evt){
 	onChatMessage(evt)
@@ -20,6 +20,6 @@ function clickOnSend() {
 		"command" : "receiveMessage",
 		"message" : document.getElementById("chat-text").value
 	});
-	console.log("got here");
+	//console.log("got here");
 	chatSocket.send(json);
 }

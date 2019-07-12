@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -22,8 +23,8 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/client.html", encoders = { MessageEncoder.class }, decoders = {
-		MessageDecoder.class }, configurator = Configuration.class)
+@ServerEndpoint(value = "/client/chat", encoders = { MessageEncoder.class }, 
+				decoders = {MessageDecoder.class }, configurator = Configuration.class)
 public class ChatSocket {
 	// public static List<Session> sessionList = Collections.synchronizedList(new
 	// ArrayList<Session>());
@@ -72,7 +73,7 @@ public class ChatSocket {
 		if (!json.getString("command").equals("receiveMessage"))
 			return;
 		String message = json.getString("message");
-		if (message.toString().isEmpty())
+		if (message.isEmpty())
 			return;
 
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
@@ -85,7 +86,7 @@ public class ChatSocket {
 		String username = acc.getUsername();
 		Game.Round round = game.getRound();
 
-		if (message.toString().equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
+		if (message.equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
 			Date roundDate = round.getDate();
 
 			long diff = playerDate.getTime() - roundDate.getTime();
@@ -114,4 +115,9 @@ public class ChatSocket {
 		}
 		chatlock.unlock();
 	}
+	
+	@OnError
+    public void onError(Throwable t) {
+        System.out.println(t.getMessage());
+    }
 }

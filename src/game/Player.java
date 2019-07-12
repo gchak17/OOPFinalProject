@@ -18,12 +18,12 @@ public class Player {
 
 	public void startDrawing() {
 		isArtist = true;
-		System.out.println(account.getUsername() + " started turn, time remaining:" );
+		//System.out.println(account.getUsername() + " started turn, time remaining:" );
 	}
 	
 	public void endDrawing() {
 		isArtist = false;
-		System.out.println(account.getUsername() + " ended turn, time remaining:");
+		//System.out.println(account.getUsername() + " ended turn, time remaining:");
 	}
 
 	public void setGame(Game game) {
