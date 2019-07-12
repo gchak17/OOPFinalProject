@@ -15,6 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="js_lib/css/lib/control/iconselect.css" >
     <script type="text/javascript" src="js_lib/control/iconselect.js"></script>
     <script type="text/javascript" src="js_lib/iscroll.js"></script>
+    <script type="text/javascript" src="notificationSocket.js"></script>
     
 </head>
 <body>
@@ -79,9 +80,7 @@
 		<input type="submit" value="Show Rooms">
 	</form>
 	
-	<form action="AddFriendServlet" method="post">
-		<input type="submit" value="Add Friend">
-	</form>
+	<button onclick="location.href='AddFriend.html'" type="button">Add Friend</button>
 	
 	<form action="NotificationsServlet" method="post">
 		<input type="submit" value="See Notifications">

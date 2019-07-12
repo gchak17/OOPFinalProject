@@ -1,6 +1,8 @@
 package servlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -8,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
 
 import dao.Account;
 import dao.Avatar;
@@ -41,25 +45,45 @@ public class SendRequestServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+        String json = "";
+        if(br != null){
+            json = br.readLine();
+        }
+		JSONObject data = new JSONObject(json);
+		String friendUserName = data.getString("friendusername");
+		
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		FriendRequestManager friendRequestManager = (FriendRequestManager) getServletContext().getAttribute("friendRequestManager");
-		String friendUserName = request.getParameter("friendusername");
 		Account user = (Account)request.getSession().getAttribute("user");
 		
 		PrintWriter out = response.getWriter(); 
-		response.setContentType("text/html");
+		
+		response.setContentType("application/json");
+		JSONObject resp = new JSONObject();
+		resp.put("success", false);
+		resp.put("responseText", "unknown error");
 		if(user.getUsername().equals(friendUserName)) {
-			out.append("<p> that's your username.</p>");
+			resp.put("responseText", "that's your username.");
 		}else if(accountData.nameInUse(friendUserName)){
 			if(user.getFriendByUsername(friendUserName) != null){
-				out.append("<p> " + friendUserName + " is already your friend.</p>");
+				resp.put("responseText", friendUserName + " is already your friend.");
 			}else{
 				//call send request method
 				friendRequestManager.sendFriendRequest(user.getID(), accountData.getAccountByUsername(friendUserName).getID());
-				out.append("<p> friend request to " + friendUserName + " is sent.</p>");
+				resp.put("responseText", "friend request to " + friendUserName + " is sent.");
+				resp.put("success", true);
+				JSONObject notificationLog = new JSONObject();
+				notificationLog.put("notificationType", "friendRequest");
+				notificationLog.put("senderID", user.getID());
+				notificationLog.put("receiverID", accountData.getAccountByUsername(friendUserName).getID());
+				resp.put("notificationLog", notificationLog);
 			}
 		}else{
-			out.append("<p>user with that name does not exist.</p>");
+			resp.put("responseText", "user with that name does not exist.");
+			out.append(resp.toString());
 		}
+		
+		out.append(resp.toString());
 	}
 }
