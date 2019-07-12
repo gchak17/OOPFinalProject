@@ -180,7 +180,7 @@ public class Game {
 		private Date date;
 		private int turnCounter;
 		private boolean roundIsnotEnded = true;
-		private String chosenWord = "word";
+		private String chosenWord; //= "word";
 		private Connection conn;
 		private ArrayList<String> randomWords = new ArrayList<String>();
 		private Timer endTurnTimer;
@@ -188,7 +188,7 @@ public class Game {
 		public Round(Player starterArtist) {
 			// System.out.println("startter 2 " + starterArtist);
 			this.artist = starterArtist; 
-			this.date = new Date(System.currentTimeMillis());
+			//this.date = new Date(System.currentTimeMillis());
 			this.turnCounter = 0;
 			initMaps();
 
@@ -311,7 +311,7 @@ public class Game {
 				json.put("command", "addcanvaslisteners");
 				json.put("artist", artist.toString());
 				GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
-
+				this.date = new Date(System.currentTimeMillis());
 				endTurnTimer = new Timer();
 				endTurnTimer.schedule(new TimerTask() {
 					@Override

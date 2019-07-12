@@ -85,17 +85,27 @@ public class ChatSocket {
 		Account acc = user.getAccount();
 		String username = acc.getUsername();
 		Game.Round round = game.getRound();
-
-		if (message.equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
+		
+		if (message.toLowerCase().equals(round.getChosenWord().toLowerCase())) {
 			Date roundDate = round.getDate();
 
 			long diff = playerDate.getTime() - roundDate.getTime();
 			try {
-				if (!user.isArtist())
+				if (!user.isArtist()) {
 					round.smbdGuessed(user, diff);
+					message = "guessed the word";
+				} else {
+					message = "The artist shouldn't reveal the word";
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		} else if (stringsAreSimilar(message.toLowerCase(), round.getChosenWord().toLowerCase())) {
+			if (!user.isArtist()) {
+				message = "You are close to the answer";
+			} else {
+				message = "The artist shouldn't give hints in the chat";
 			}
 		}
 
@@ -105,17 +115,63 @@ public class ChatSocket {
 
 			JSONObject js = new JSONObject();
 			js.append("username", username);
-			if (message.toString().equals(round.getChosenWord())) {// aq unda iyos sityvis shemowmeba
-				if (!user.isArtist())
-					js.append("message", "guessed the word");
-			} else {
-				js.append("message", message);
-			}
+			js.append("message", message);
 			curSes.getBasicRemote().sendObject(new Message(js));
 		}
 		chatlock.unlock();
 	}
 	
+	/*
+	 * returns true if two strings don't mismatch by more than two characters;
+	 */
+	private boolean stringsAreSimilar(String message, String chosenWord) {
+		int compLengths = message.length() - chosenWord.length();
+		if (compLengths > 2 || compLengths < -2) return false;
+		
+		if (compLengths == 0) {
+			return checkForSameSize(message, chosenWord);
+		} else if (compLengths > 0) {
+			return checkForSizeMismatch(message, chosenWord, compLengths);
+		} else {
+			return checkForSizeMismatch(chosenWord, message, compLengths * -1);
+		}	
+	}
+	
+	/*
+	 * de deep
+	 * This method compares two strings that have different lengths (difference equals to or is less
+	 * then two). It goes over the bigger word and cuts out the number of charcters that two string are
+	 * mismatched by and then compares the said word to another, smaller word. 
+	 * If strings match after cutting out the characters, the method return true;
+	 */
+	private boolean checkForSizeMismatch(String biggerWord, String smallerWord, int num) {
+		for (int i = 0; i < biggerWord.length(); i++) {
+			String cutDownWord = biggerWord.substring(0, i);
+			if (i < biggerWord.length() -1) cutDownWord+= biggerWord.substring(i+1);
+			
+			if (num == 2) {
+				for (int j = 0; j < cutDownWord.length(); j++) {
+					String twoCuts = cutDownWord.substring(0, j);
+					if (j < cutDownWord.length() - 1) twoCuts += cutDownWord.substring(j+1);
+					
+					if (twoCuts.equals(smallerWord)) return true;
+				}
+				
+			} else if (cutDownWord.equals(smallerWord)) return true;
+		}
+		return false;
+	}
+
+	private boolean checkForSameSize(String message, String chosenWord) {
+		int mismatchCounter = 0;
+		for (int i = 0; i < message.length(); i++) {
+			if (mismatchCounter > 2) return false;
+			
+			if (message.charAt(i) != chosenWord.charAt(i)) mismatchCounter++;
+		}
+		return true;
+	}
+
 	@OnError
     public void onError(Throwable t) {
         System.out.println(t.getMessage());

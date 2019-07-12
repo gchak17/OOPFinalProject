@@ -116,7 +116,12 @@ public class GameSocket {
 			String id = (String) httpSession.getAttribute("gameId");
 			sendToEveryone(message, id);
 		} else if(command.equals("chooseWord")){
-			//System.out.println("ariqa");
+			String word = json.getString("chosen");
+			String gameId = (String) httpSession.getAttribute("gameId");
+
+			Game game = GameManager.getInstance().getGame(gameId);
+			Game.Round round = game.getRound();
+			round.setChosenWord(word);;
 		}else {
 			sendToEveryoneButMe(message, httpSession, session);
 		}
@@ -172,35 +177,7 @@ public class GameSocket {
 		sendToEveryone(message, gameId);
 	}
 }
-//=======
-	
 
-//		JSONObject json = message.getJson();
-//		String command = json.getString("command");
-//
-//		if (command.contentEquals("chooseWord")) {
-//			HttpSession httpSession ;
-//			for (Session peer : peers) {
-//				httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
-//				Player user = (Player) httpSession.getAttribute("player");
-//				
-//				if (!user.isArtist()) {
-//					json.put("command", "dont choose");
-//				} else {
-//					json.put("command", "chooseWord");
-//				}
-//				try {
-//					peer.getBasicRemote().sendObject(message);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (EncodeException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//			return;
-//		}
 	private static void sendOnlyToArtist(String gameId, Message message) {
 		List<Session> peers = sessions.get(gameId);
 		for (Session peer : peers) {
