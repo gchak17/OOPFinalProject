@@ -20,7 +20,7 @@
 		//var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
 		var websocket = new WebSocket(
-				"ws://localhost:8080/OOPFinalProject/PublishRoom");
+				"ws://localhost:8888/OOPFinalProject/PublishRoom");
 		websocket.onmessage = function(evt) {
 			updatePage(evt)
 		};
@@ -34,7 +34,7 @@
 			} else if (json.type === "start") {
 				if (json.admin) {
 					if (json.forward) {
-						location.replace("http://localhost:8080/OOPFinalProject/client.html");
+						location.replace("http://localhost:8888/OOPFinalProject/client.html");
 					}
 				} else {
 					alert("ar xar adzmini dzmao");

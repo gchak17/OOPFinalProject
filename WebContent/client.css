@@ -44,7 +44,7 @@ body{
 	background-color: aliceblue; 
 }
 
-.chat-box-class{
+#chat-box-div{
 	border-radius: thin;
 	border-style: solid;
 	border-color: #e03bd4;

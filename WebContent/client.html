@@ -12,7 +12,7 @@
 	<div id="chat-panel" class="side-panel">
 		<div id="chat-box-div" class="chat-box-class"></div>
 		<input type="text" placeholder=" type message" id="chat-text"
-			size="30" required="required">
+			size="30" required="required" onkeydown="if (event.keyCode == 13) clickOnSend()"/>
 		<button onclick="clickOnSend()" class="send-button">Send</button>
 	</div>
 

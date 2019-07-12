@@ -1,7 +1,7 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
 var gameSocket = new WebSocket(
-		"ws://localhost:8081/OOPFinalProject/client/game");
+		"ws://localhost:8888/OOPFinalProject/client/game");
 gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -40,7 +40,7 @@ function onMessage(evt) {
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
 	} else if (json.command === "endgame") {
-		location.replace("http://localhost:8081/OOPFinalProject/Main.jsp");
+		location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
 		document.getElementById("word-button1").value = json.one;
 		document.getElementById("word-button2").value = json.two;

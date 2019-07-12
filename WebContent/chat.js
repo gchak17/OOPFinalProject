@@ -1,8 +1,10 @@
-var chatSocket = new WebSocket("ws://localhost:8080/OOPFinalProject/client/chat");
+var chatSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/chat");
 
 chatSocket.onmessage = function(evt){
 	onChatMessage(evt)
 };
+
+
 
 function onChatMessage(evt) {
 	var json = JSON.parse(evt.data);
@@ -13,6 +15,7 @@ function onChatMessage(evt) {
 
 	document.getElementById("chat-box-div").appendChild(node);
 	document.getElementById("chat-text").value = "";
+	document.getElementById("chat-box-div").scrollTop = document.getElementById("chat-box-div").scrollHeight
 }
 
 function clickOnSend() {
