@@ -40,6 +40,8 @@ function onMessage(evt){
 		addCanvasListeners();
 	} else if (json.command === "removecanvaslisteners"){
 		removeCanvasListeners();
+	} else if (json.command === "endgame"){
+		location.replace("http://localhost:8080/OOPFinalProject/Main.jsp");
 	}
 }
 

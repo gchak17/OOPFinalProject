@@ -125,26 +125,10 @@ public class Game {
 
 
 	private void endGame() {
-		showFinalResults();
-
-		ArrayList<Player> leftPlayers = playersWantToPlayAgain();
-		if (leftPlayers.size() > 0) {
-			// start game from 0
-			this.players = leftPlayers;
-			points = new HashMap<Player, Integer>();
-			roundCounter = 0;
-			chooseStarterPainter();
-			startNewRound();
-		}
-	}
-
-	private void showFinalResults() {
-		//aq mainc amoagdos rame didi fanjara
-	}
-
-	private ArrayList<Player> playersWantToPlayAgain() {
-		// ask if they want to play again
-		return new ArrayList<Player>();
+		//showfinalresults and redirect to main jsp
+		JSONObject json = new JSONObject();
+		json.put("command", "endgame");
+		GameSocket.sendMessage(id, new Message(json));
 	}
 
 	public ArrayList<Player> getPlayers() {

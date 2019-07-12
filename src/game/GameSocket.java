@@ -36,6 +36,7 @@ public class GameSocket {
 		sessions.put(id, ses);
 
 		if (ses.size() == r.getPlayers().size()) {
+			System.out.println(r.getRounds() + " " + r.getTime());
 			Game g = new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
 			GameManager.getInstance().addGame(g);
 		}
@@ -124,14 +125,14 @@ public class GameSocket {
 				}
 			}
 			return;
-		}
-		
-		List<Session> peers = sessions.get(gameId);
-		for (Session peer : peers) {
-			try {
-				peer.getBasicRemote().sendObject(message);
-			} catch (IOException | EncodeException e) {
-				e.printStackTrace();
+		}else {
+			List<Session> peers = sessions.get(gameId);
+			for (Session peer : peers) {
+				try {
+					peer.getBasicRemote().sendObject(message);
+				} catch (IOException | EncodeException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
