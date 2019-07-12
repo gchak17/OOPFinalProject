@@ -1,5 +1,6 @@
 package game;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,10 +15,31 @@ import org.json.JSONObject;
 
 import message.*;
 
-@ServerEndpoint(value = "/client.html/web", encoders = { MessageEncoder.class }, decoders = {MessageDecoder.class }, configurator = Configuration.class)
+@ServerEndpoint(value = "/client.html/web", encoders = { MessageEncoder.class }, decoders = {
+		MessageDecoder.class }, configurator = Configuration.class)
 public class GameSocket {
 	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 
+	
+	@OnError
+	public void onError(Throwable t) throws Throwable {
+	    // Most likely cause is a user closing their browser. Check to see if
+	    // the root cause is EOF and if it is ignore it.
+	    // Protect against infinite loops.
+	    int count = 0;
+	    Throwable root = t;
+	    while (root.getCause() != null && count < 20) {
+	        root = root.getCause();
+	        count ++;
+	    }
+	    if (root instanceof EOFException) {
+	        // Assume this is triggered by the user closing their browser and
+	        // ignore it.
+	    } else {
+	        throw t;
+	    }
+	}
+	
 	@OnOpen
 	public void onOpen(Session curS, EndpointConfig config) {
 		HttpSession httpSession = (HttpSession) curS.getUserProperties().get("HttpSession");
@@ -48,6 +70,8 @@ public class GameSocket {
 
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		String id = (String) httpSession.getAttribute("gameId");
+		List<Session> peers = sessions.get(id);
+		peers.remove(peer);
 
 		Game g = GameManager.getInstance().getGame(id);
 		g.removePlayer((Player) httpSession.getAttribute("player"));
@@ -55,17 +79,14 @@ public class GameSocket {
 		JSONObject json = new JSONObject();
 		json.put("command", "showplayers");
 		for (Player p : g.getPoints().keySet()) {
-			System.out.println("waishala da darcha" + p);
 			json.put(p.toString(), g.getPoints().get(p));
 		}
 
 		Message message = new Message(json);
-		List<Session> peers = sessions.get(id);
 		for (Session s : peers) {
-			if (!s.equals(peer))
-				s.getBasicRemote().sendObject(message);
+			s.getBasicRemote().sendObject(message);
 		}
-		peers.remove(peer);
+
 	}
 
 	@OnMessage
@@ -89,8 +110,11 @@ public class GameSocket {
 			session.getBasicRemote().sendObject(message);
 
 		} else if (command.equals("clear")) {
-			sendToEveryone(message, httpSession);
-		} else {
+			String id = (String) httpSession.getAttribute("gameId");
+			sendToEveryone(message, id);
+		} else if(command.equals("chooseWord")){
+			System.out.println("ariqa");
+		}else {
 			sendToEveryoneButMe(message, httpSession, session);
 		}
 	}
@@ -106,28 +130,83 @@ public class GameSocket {
 		}
 	}
 
-	private static void sendToEveryone(Message message, HttpSession httpSession) throws IOException, EncodeException {
-		String id = (String) httpSession.getAttribute("gameId");
+	private static void sendToEveryone(Message message, String id) {
 		List<Session> peers = sessions.get(id);
 		for (Session peer : peers) {
-			peer.getBasicRemote().sendObject(message);
+			try {
+				peer.getBasicRemote().sendObject(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (EncodeException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
+//<<<<<<< HEAD
 	public static void sendMessage(String gameId, Message message){
-		if(message.getJson().getString("command").equals("addcanvaslisteners") || message.getJson().getString("command").equals("removecanvaslisteners")) {
-			String artistUsername = message.getJson().getString("artist");
-			List<Session> peers = sessions.get(gameId);
-			for (Session peer : peers) {
-				if(((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player").toString().equals(artistUsername)) {
-					try {peer.getBasicRemote().sendObject(message);
-					} catch (IOException | EncodeException e) { e.printStackTrace();}
-				}
-			}
-			return;
-		}else {
-			List<Session> peers = sessions.get(gameId);
-			for (Session peer : peers) {
+	// 	if(message.getJson().getString("command").equals("addcanvaslisteners") || message.getJson().getString("command").equals("removecanvaslisteners")) {
+	// 		String artistUsername = message.getJson().getString("artist");
+	// 		List<Session> peers = sessions.get(gameId);
+	// 		for (Session peer : peers) {
+	// 			if(((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player").toString().equals(artistUsername)) {
+	// 				try {peer.getBasicRemote().sendObject(message);
+	// 				} catch (IOException | EncodeException e) { e.printStackTrace();}
+	// 			}
+	// 		}
+	// 		return;
+	// 	}else {
+	// 		List<Session> peers = sessions.get(gameId);
+	// 		for (Session peer : peers) {public static void sendMessage(String gameId, Message message) {
+
+	JSONObject json = message.getJson();
+	String command = json.getString("command");
+
+	if ( command.contentEquals("chooseWord")) {
+		System.out.println(command);
+		sendOnlyToArtist(gameId, message);
+	} else {
+		sendToEveryone(message, gameId);
+	}
+//=======
+	
+
+//		JSONObject json = message.getJson();
+//		String command = json.getString("command");
+//
+//		if (command.contentEquals("chooseWord")) {
+//			HttpSession httpSession ;
+//			for (Session peer : peers) {
+//				httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+//				Player user = (Player) httpSession.getAttribute("player");
+//				
+//				if (!user.isArtist()) {
+//					json.put("command", "dont choose");
+//				} else {
+//					json.put("command", "chooseWord");
+//				}
+//				try {
+//					peer.getBasicRemote().sendObject(message);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (EncodeException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//			return;
+//		}
+
+	}
+
+	private static void sendOnlyToArtist(String gameId, Message message) {
+		List<Session> peers = sessions.get(gameId);
+		for (Session peer : peers) {
+			if (((Player) ((HttpSession) peer.getUserProperties().get("HttpSession")).getAttribute("player"))
+					.isArtist()) {
+				System.out.println("egzavneba");
+//>>>>>>> 8aeaf297e8907d070eb6adca8641603a3a318c79
 				try {
 					peer.getBasicRemote().sendObject(message);
 				} catch (IOException | EncodeException e) {
@@ -135,5 +214,7 @@ public class GameSocket {
 				}
 			}
 		}
+
 	}
+
 }

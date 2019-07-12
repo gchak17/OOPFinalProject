@@ -42,7 +42,14 @@ function onMessage(evt){
 		removeCanvasListeners();
 	} else if (json.command === "endgame"){
 		location.replace("http://localhost:8080/OOPFinalProject/Main.jsp");
+	} else if (json.command === "chooseWord"){
+		console.log("came heeeeere");
+		var word = json.one; //aq unda iyos popupit archeva
+		console.log(word);
+		json["chosen"] = word;
+		websocket.send(json);//sendText(json);
 	}
+
 }
 
 var canvas = document.getElementById("canvas-panel");

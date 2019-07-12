@@ -16,5 +16,10 @@ function onChatMessage(evt) {
 }
 
 function clickOnSend() {
-	chatSocket.send(document.getElementById("chat-text").value);
+	var json = JSON.stringify({
+		"command" : "receiveMessage",
+		"message" : document.getElementById("chat-text").value
+	});
+	console.log("got here");
+	chatSocket.send(json);
 }
