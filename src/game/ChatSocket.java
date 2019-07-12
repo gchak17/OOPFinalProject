@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.servlet.http.HttpSession;
@@ -23,8 +24,8 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/client/chat", encoders = { MessageEncoder.class }, 
-				decoders = {MessageDecoder.class }, configurator = Configuration.class)
+@ServerEndpoint(value = "/client/chat", encoders = { MessageEncoder.class }, decoders = {
+		MessageDecoder.class }, configurator = Configuration.class)
 public class ChatSocket {
 	// public static List<Session> sessionList = Collections.synchronizedList(new
 	// ArrayList<Session>());
@@ -57,12 +58,12 @@ public class ChatSocket {
 	public void onClose(Session session) {
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
 		String gameId = (String) httpSession.getAttribute("gameId");
-		
+
 		if (sessions.containsKey(gameId)) {
 			List<Session> sessionLst = sessions.get(gameId);
 			sessionLst.remove(session);
 		}
-		//sessionList.remove(session);
+		// sessionList.remove(session);
 
 	}
 
@@ -85,27 +86,37 @@ public class ChatSocket {
 		Account acc = user.getAccount();
 		String username = acc.getUsername();
 		Game.Round round = game.getRound();
-		
-		if (message.toLowerCase().equals(round.getChosenWord().toLowerCase())) {
-			Date roundDate = round.getDate();
+		if (!round.isTurnEnded()) {
+			Map<Player, Long> times = round.guessedTimes();
+			if (times.get(user) == (long) game.secsPerTurn()) {
+				if (message.toLowerCase().equals(round.getChosenWord().toLowerCase())) {
+					Date roundDate = round.getDate();
 
-			long diff = playerDate.getTime() - roundDate.getTime();
-			try {
-				if (!user.isArtist()) {
-					round.smbdGuessed(user, diff);
-					message = "guessed the word";
-				} else {
-					message = "The artist shouldn't reveal the word";
+					long diff = playerDate.getTime() - roundDate.getTime();
+					try {
+						if (!user.isArtist()) {
+							round.smbdGuessed(user, diff);
+							System.out.println(diff);
+							message = "guessed the word";
+						} else {
+							prevetnOthersFromSeeing(session, "The artist shouldn't reveal the word", username);
+							return;
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else if (stringsAreSimilar(message.toLowerCase(), round.getChosenWord().toLowerCase())) {
+					if (!user.isArtist()) {
+						message = "You are close to the answer";
+					} else {
+						prevetnOthersFromSeeing(session, "The artist shouldn't give hints in the chat", username);
+						return;
+					}
 				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else if (stringsAreSimilar(message.toLowerCase(), round.getChosenWord().toLowerCase())) {
-			if (!user.isArtist()) {
-				message = "You are close to the answer";
-			} else {
-				message = "The artist shouldn't give hints in the chat";
+			} else if (message.toLowerCase().equals(round.getChosenWord().toLowerCase())) {
+				prevetnOthersFromSeeing(session, "already guessed the word", username);
+				return;
 			}
 		}
 
@@ -121,43 +132,63 @@ public class ChatSocket {
 		chatlock.unlock();
 	}
 	
+	private void prevetnOthersFromSeeing(Session session, String message, String username) {
+		JSONObject jas = new JSONObject();
+		jas.append("username", username);
+		jas.append("message", message);
+		try {
+			session.getBasicRemote().sendObject(new Message(jas));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EncodeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	/*
 	 * returns true if two strings don't mismatch by more than two characters;
 	 */
 	private boolean stringsAreSimilar(String message, String chosenWord) {
 		int compLengths = message.length() - chosenWord.length();
-		if (compLengths > 2 || compLengths < -2) return false;
-		
+		if (compLengths > 2 || compLengths < -2)
+			return false;
+
 		if (compLengths == 0) {
 			return checkForSameSize(message, chosenWord);
 		} else if (compLengths > 0) {
 			return checkForSizeMismatch(message, chosenWord, compLengths);
 		} else {
 			return checkForSizeMismatch(chosenWord, message, compLengths * -1);
-		}	
+		}
 	}
-	
+
 	/*
-	 * de deep
-	 * This method compares two strings that have different lengths (difference equals to or is less
-	 * then two). It goes over the bigger word and cuts out the number of charcters that two string are
-	 * mismatched by and then compares the said word to another, smaller word. 
-	 * If strings match after cutting out the characters, the method return true;
+	 * de deep This method compares two strings that have different lengths
+	 * (difference equals to or is less then two). It goes over the bigger word and
+	 * cuts out the number of charcters that two string are mismatched by and then
+	 * compares the said word to another, smaller word. If strings match after
+	 * cutting out the characters, the method return true;
 	 */
 	private boolean checkForSizeMismatch(String biggerWord, String smallerWord, int num) {
 		for (int i = 0; i < biggerWord.length(); i++) {
 			String cutDownWord = biggerWord.substring(0, i);
-			if (i < biggerWord.length() -1) cutDownWord+= biggerWord.substring(i+1);
-			
+			if (i < biggerWord.length() - 1)
+				cutDownWord += biggerWord.substring(i + 1);
+
 			if (num == 2) {
 				for (int j = 0; j < cutDownWord.length(); j++) {
 					String twoCuts = cutDownWord.substring(0, j);
-					if (j < cutDownWord.length() - 1) twoCuts += cutDownWord.substring(j+1);
-					
-					if (twoCuts.equals(smallerWord)) return true;
+					if (j < cutDownWord.length() - 1)
+						twoCuts += cutDownWord.substring(j + 1);
+
+					if (twoCuts.equals(smallerWord))
+						return true;
 				}
-				
-			} else if (cutDownWord.equals(smallerWord)) return true;
+
+			} else if (cutDownWord.equals(smallerWord))
+				return true;
 		}
 		return false;
 	}
@@ -165,15 +196,17 @@ public class ChatSocket {
 	private boolean checkForSameSize(String message, String chosenWord) {
 		int mismatchCounter = 0;
 		for (int i = 0; i < message.length(); i++) {
-			if (mismatchCounter > 2) return false;
-			
-			if (message.charAt(i) != chosenWord.charAt(i)) mismatchCounter++;
+			if (mismatchCounter > 2)
+				return false;
+
+			if (message.charAt(i) != chosenWord.charAt(i))
+				mismatchCounter++;
 		}
 		return true;
 	}
 
 	@OnError
-    public void onError(Throwable t) {
-        System.out.println(t.getMessage());
-    }
+	public void onError(Throwable t) {
+		System.out.println(t.getMessage());
+	}
 }
