@@ -86,6 +86,12 @@
 		<input type="submit" value="See Notifications">
 	</form>
 	
+	
+	<form action="SeeProfileServlet" method="post">
+		<input type = "text" name = "currAccountUsername">
+		<input type = "submit" value = "Search Account">
+	</form>
+
 	<form action="LogOutServlet" method="post">
 		<input type="submit" value="Log Out">
 	</form>
@@ -99,8 +105,8 @@
 		%>
 		<% Account friend = friends.next(); %>
 		
-		<form id="formId" action="<%=request.getContextPath()%>/SeeFriendProfile" method="post">
-		    <input type="hidden" name="friendName" value=<%=friend.getUsername()%> />
+		<form id="formId" action="<%=request.getContextPath()%>/SeeProfileServlet" method="post">
+		    <input type="hidden" name="currAccountUsername" value=<%=friend.getUsername()%> />
 		    <a href="javascript:myFunction()"><%=friend.getUsername()%></a>
 		</form>
 		<%

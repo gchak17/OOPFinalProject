@@ -11,16 +11,16 @@ import dao.Account;
 import managers.AccountData;
 
 /**
- * Servlet implementation class SeeFriendProfile
+ * Servlet implementation class SeeProfileServlet
  */
-@WebServlet("/SeeFriendProfile")
-public class SeeFriendProfile extends HttpServlet {
+@WebServlet("/SeeProfileServlet")
+public class SeeProfileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SeeFriendProfile() {
+    public SeeProfileServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,7 +30,7 @@ public class SeeFriendProfile extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doPost(request, response);
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -39,10 +39,10 @@ public class SeeFriendProfile extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		String friendName = request.getParameter("friendName");
-		Account friend = accountData.getAccountByUsername(friendName);
-		request.getSession().setAttribute("friend", friend);
-		System.out.println(friendName);
+		String currAccountUsername = request.getParameter("currAccountUsername");
+		Account currAccount = accountData.getAccountByUsername(currAccountUsername);
+		request.getSession().setAttribute("currAccount", currAccount);
+		System.out.println(currAccountUsername);
 		request.getRequestDispatcher("Profile.jsp").forward(request, response);
 	}
 

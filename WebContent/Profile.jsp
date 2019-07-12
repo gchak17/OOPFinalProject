@@ -6,7 +6,7 @@
 
 <% 
 	AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-	Account currAccount = (Account)session.getAttribute("friend");
+	Account currAccount = (Account)session.getAttribute("currAccount");
 %>
 
 <!DOCTYPE html>
