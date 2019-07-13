@@ -1,7 +1,7 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
 var gameSocket = new WebSocket(
-		"ws://localhost:8888/OOPFinalProject/client/game");
+		"ws://192.168.98.14:8888/OOPFinalProject/client/game");
 gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -40,45 +40,45 @@ function onMessage(evt) {
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
 	} else if (json.command === "endgame") {
-		location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
+		location.replace("192.168.98.14:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
 		document.getElementById("word-button1").value = json.one;
 		document.getElementById("word-button2").value = json.two;
 		document.getElementById("word-button3").value = json.three;
-		
+
 		modal.style.display = "block";
 		chooseTheWord(json);
-	} else if (json.command === "startturn"){
+	} else if (json.command === "startturn") {
 		isArtist = true;
 		addCanvasListeners();
-	} else if (json.command === "endturn"){
+	} else if (json.command === "endturn") {
 		isArtist = false;
-	} else if (json.command === "don't choose"){
+	} else if (json.command === "don't choose") {
 		document.getElementById("guesserModal").style.display = "block";
-	} else if (json.command === "wordIsChosen"){
+	} else if (json.command === "wordIsChosen") {
 		document.getElementById("guesserModal").style.display = "none";
 		var word = json.chosen;
 		document.getElementById("word-place").innerHTML = word;
-	} else if (json.command === "autochooseword"){
+	} else if (json.command === "autochooseword") {
 		chooseTheWordAutomatically(json);
-	} else if (json.command === "finalresults"){
-		
-		//finalResultsPopUp
+	} else if (json.command === "finalresults") {
+
+		// finalResultsPopUp
 		var div = document.getElementById("guesserModal");
 		var h2s = div.getElementsByTagName("h2");
-		for(var h = 0; h < h2s.length; h++ ) {
+		for (var h = 0; h < h2s.length; h++) {
 			h2s[h].innerHTML = "game is over";
 		}
 		div.style.display = "block"
 	}
 }
 
-function finalResultsPopUp(json){
-	//make pop up with player scores, highlighting winner;
+function finalResultsPopUp(json) {
+	// make pop up with player scores, highlighting winner;
 }
 
-function chooseTheWordAutomatically(json){
-	var arr = ["one", "two", "three"]; 
+function chooseTheWordAutomatically(json) {
+	var arr = [ "one", "two", "three" ];
 	var el = arr[Math.floor(Math.random() * arr.length)];
 	setTheWordAndSend(json[el], json);
 	document.getElementById("word-place").innerHTML = json[el];
@@ -152,11 +152,11 @@ var mouseMoveFun = function() {
 		"width" : currWidth
 	});
 
-	if(!isArtist) {
+	if (!isArtist) {
 		removeCanvasListeners();
 		return;
 	}
-	
+
 	drawImageText(json);
 	// string aris es json
 	sendText(json);

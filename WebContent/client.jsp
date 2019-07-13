@@ -80,8 +80,7 @@
 		<p id="word-place"></p>
 		<div id="timer-div"></div>
 	</div>
-	<div id="paint-options-panel" class="center-panel">
-		<!--    
+	<div id="paint-options-panel" class="center-panel">   
         <div id="choosecolor">choose color:</div>
         <div id="green" onclick="color(this)" class="paint-options-panel-colors"></div>
         <div id="blue" onclick="color(this)" class="paint-options-panel-colors"></div>
@@ -103,7 +102,6 @@
         <div id="w16" onclick="width(this)"></div>
 
         <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()"> 
-    -->
 	</div>
 	<script src="client.js"></script>
 	<script src="chat.js"></script>
