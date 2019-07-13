@@ -1,5 +1,10 @@
+
 <%@ page import="game.Player"%>
 <%@ page import="dao.Account"%>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+   	pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -10,6 +15,14 @@
 </head>
 <body onresize="changeSizeAndPosition()"
 	onload="changeSizeAndPosition()">
+	
+	<%	
+		String game_id = (String)request.getSession().getAttribute("gameId");
+	%>
+	
+	<script>
+		var game_id = "<%= game_id %>";
+	</script>
 
 	<%
 		Player pl = (Player)request.getSession().getAttribute("player");

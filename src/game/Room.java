@@ -58,11 +58,18 @@ public class Room {
 	}
 
 	public void removePlayer(Player user) {
-		players.remove(user);
+		if(curPlayers > 0) {
+			players.remove(user);
+			curPlayers--;
+		}
 	}
 
 	public String toString() {
 		return "Created by: " + admin.toString() + ", " + players.size() + " players, \n" + "Number of Rounds: "
 				+ Rounds + ", Round Duration: " + roundDuration;
+	}
+	
+	public boolean isEmpty() {
+		return curPlayers == 0;
 	}
 }

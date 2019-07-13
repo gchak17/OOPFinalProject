@@ -77,8 +77,13 @@ public class GameSocket {
 		peers.remove(peer);
 
 		Game g = GameManager.getInstance().getGame(id);
-		g.removePlayerFromGame((Player) httpSession.getAttribute("player"));
 
+		g.removePlayerFromGame((Player) httpSession.getAttribute("player"));
+		Room r = GameManager.getInstance().getRoomById(id);
+		r.removePlayer((Player) httpSession.getAttribute("player"));
+		if(r.isEmpty()) {
+			GameManager.getInstance().removeRoom(id);
+		}
 		JSONObject json = new JSONObject();
 		json.put("command", "showplayers");
 		for (Player p : g.getPoints().keySet()) {
