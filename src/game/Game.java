@@ -39,6 +39,7 @@ public class Game {
 		this.points = new HashMap<Player, Integer>();
 		this.artistIndex = -1;
 		this.roundCounter = 0;
+		this.roundStarterArtist = players.get(0);
 		initMapGame();
 
 		// appear players on canvas
@@ -107,8 +108,9 @@ public class Game {
 	public void startNewRound() {
 		// System.out.println("axali raundi");
 		roundCounter++;
-		if (roundStarterArtist != null) roundStarterArtist.shouldBeArtist(false);
-		chooseStarterPainter();
+		System.out.println(roundCounter + " daa " + numRounds);
+		//if (roundStarterArtist != null) roundStarterArtist.shouldBeArtist(false);
+		//chooseStarterPainter();
 		// System.out.println(roundStarterArtist);
 		// this.round = null; // mgoni garbage collectors vumartivebt saqmes.. tu ara ?
 		// imena moshla xeliT
@@ -117,8 +119,9 @@ public class Game {
 	}
 
 	public void endRound() {
-
+		System.out.println("vai: " + roundCounter);
 		if (roundCounter == numRounds) {
+			System.out.println("aq var: " + roundCounter);
 			endGame();
 		} else {
 
@@ -135,13 +138,14 @@ public class Game {
 
 	private void endGame(){
 		//showfinalresults
+		System.out.println("cocxali var");
 		JSONObject json = new JSONObject();
 		json.put("command", "finalresults");
 		for(Player p : points.keySet()) {
 			json.put(p.toString(), points.get(p));
 		}
 		GameSocket.sendMessage(id, new Message(json));	
-		
+		System.out.println("cocxali va2r");
 		//redirect to main jsp
 		Timer timer1 = new Timer();
 		timer1.schedule(new TimerTask() {
@@ -190,7 +194,7 @@ public class Game {
 			// this.date = new Date(System.currentTimeMillis());
 			this.turnCounter = 0;
 			initMapRound();
-
+			roundStarterArtist = players.get(0);
 			startTurn();
 		}
 		
@@ -223,24 +227,40 @@ public class Game {
 		private void removePlayerFromRound(Player p) {
 			playersGuessedTimesForSingleTurn.remove(p);
 			TurnPoints.remove(p);
-			if (p.equals(roundStarterArtist)) {
-				int index = players.indexOf(p) - 1;
-				if (index == -1) {
-					roundStarterArtist = null;
-				} else {
-					roundStarterArtist = players.get(index);
-				}
-			} else if (p.equals(artist)) {
+//			if (p.equals(roundStarterArtist)) {
+//				int index = players.indexOf(p) - 1;
+//				if (index == -1) {
+//					roundStarterArtist = null;
+//				} else {
+//					roundStarterArtist = players.get(index);
+//				}
+//			} else if (p.equals(artist)) {
+//				endTurn();
+//
+//				int index = players.indexOf(p) - 1;
+//				if (index == -1) {
+//					artist = null;
+//				} else {
+//					artist = players.get(index);
+//				}
+//			}
+//			players.remove(p);
+			if (p.equals(artist)) {
+//				if (p.equals(roundStarterArtist)) {
+//					int index = players.indexOf(p) - 1;
+//					if (index == -1) {
+//						roundStarterArtist = null;
+//					} else {
+//						roundStarterArtist = players.get(index);
+//					}
+//				}
+				
+				endTurnTimer.cancel();
+				players.remove(p);
 				endTurn();
-
-				int index = players.indexOf(p) - 1;
-				if (index == -1) {
-					artist = null;
-				} else {
-					artist = players.get(index);
-				}
+			} else {
+				players.remove(p);
 			}
-			players.remove(p);
 			if (players.size() == 0) {
 				turnOffTimers();
 				if (newRoundTimer != null)
@@ -256,6 +276,7 @@ public class Game {
 					artist = players.get(0);
 				} else {
 					int index = players.indexOf(artist) + 1;
+					//System.out.println(index + " daaa" + players.indexOf(artist));
 					if (index == players.size())
 						index = 0;
 
@@ -427,7 +448,9 @@ public class Game {
 				TurnPoints.put(key, res);
 				key.addScore(res);
 			}
-			TurnPoints.put(artist, (numberOfGuesses == 0) ? 0 : allPoints / numberOfGuesses);
+			if (TurnPoints.containsKey(artist)) {
+				TurnPoints.put(artist, (numberOfGuesses == 0) ? 0 : allPoints / numberOfGuesses);
+			}
 		}
 		
 		public boolean isTurnEnded() {

@@ -63,25 +63,27 @@ public class GameSocket {
 		g.removePlayerFromGame((Player) httpSession.getAttribute("player"));
 		Room r = GameManager.getInstance().getRoomById(id);
 		r.removePlayer((Player) httpSession.getAttribute("player"));
-		if(r.isEmpty()) {
+		if (r.isEmpty()) {
 			GameManager.getInstance().removeRoom(id);
-		}
-		JSONObject json = new JSONObject();
-		json.put("command", "showplayers");
-		for (Player p : g.getPoints().keySet()) {
-			json.put(p.toString(), g.getPoints().get(p));
+		} else {
+			JSONObject json = new JSONObject();
+			json.put("command", "showplayers");
+			for (Player p : g.getPoints().keySet()) {
+				json.put(p.toString(), g.getPoints().get(p));
+			}
+
+			Message message = new Message(json);
+			for (Session s : peers) {
+				s.getBasicRemote().sendObject(message);
+			}
 		}
 
-		Message message = new Message(json);
-		for (Session s : peers) {
-			s.getBasicRemote().sendObject(message);
-		}
-		
-		//removing session attributes for user
+	
 		httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		httpSession.removeAttribute("session");
 		httpSession.removeAttribute("player");
 		httpSession.removeAttribute("gameId");
+
 	}
 
 	@OnMessage
@@ -115,7 +117,7 @@ public class GameSocket {
 			Game.Round round = game.getRound();
 			round.setChosenWord(word);
 			round.setChosenWordTime(new Date(System.currentTimeMillis()));
-			
+
 			JSONObject js = new JSONObject();
 			js.put("command", command);
 			js.put("chosen", hideTheWord(word));
