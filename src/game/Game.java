@@ -160,9 +160,9 @@ public class Game {
 		return players;
 	}
 
-	public void removePlayer(Player cur) {
+	public void removePlayerFromGame(Player cur) {
 		points.remove(cur);
-		round.removePlayer(cur);
+		round.removePlayerFromRound(cur);
 	}
 
 	public HashMap<Player, Integer> getPoints() {
@@ -220,7 +220,7 @@ public class Game {
 			}
 		}
 
-		private void removePlayer(Player p) {
+		private void removePlayerFromRound(Player p) {
 			playersGuessedTimesForSingleTurn.remove(p);
 			TurnPoints.remove(p);
 			if (p.equals(roundStarterArtist)) {

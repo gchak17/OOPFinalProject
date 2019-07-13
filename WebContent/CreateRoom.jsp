@@ -1,3 +1,4 @@
+<%@ page import="dao.Account"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +7,14 @@
 <script type="text/javascript" src="notificationSocket.js"></script>
 </head>
 <body>
+
+	<%
+		Account acc = (Account) request.getSession().getAttribute("user");
+		if (acc == null) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+	%>
 
  <form action="PublishRoom" method="post">
  

@@ -44,7 +44,7 @@ public class DeleteAccountServlet extends HttpServlet {
 			
 		}
 		request.getSession().removeAttribute("user");
-		request.getRequestDispatcher("login.html").forward(request, response);
+		request.getRequestDispatcher("login.jsp").forward(request, response);
 		
 	}
 
