@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import org.json.*;
 import dao.Account;
@@ -21,21 +22,21 @@ public class FriendNotificationEndpoint {
 	public void onOpen(Session session) {
 		HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
 		Account user = (Account)httpSession.getAttribute("user");
+		session.getUserProperties().put("user_id", user.getID());
 		online.put(user.getID(), session);
 	}
 	
 	@OnClose
 	public void onClose(Session session){
-		HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
-		Account user = (Account)httpSession.getAttribute("user");
-		online.remove(user.getID());
+		Long user_id = (Long)session.getUserProperties().get("user_id");
+		session.getUserProperties().remove("user_id");
+		online.remove(user_id);
 	}
 	
 	
 	@OnMessage
 	public void onMessage(Message message, Session session) throws IOException, EncodeException {
 		JSONObject request = message.getJson();
-		HttpSession user = (HttpSession)session.getUserProperties().get("HttpSession");
 		Long senderID = request.getLong("senderID");
 		Long receiverID = request.getLong("receiverID");
 		

@@ -78,6 +78,7 @@ public class GameSocket {
 
 		Game g = GameManager.getInstance().getGame(id);
 		g.removePlayer((Player) httpSession.getAttribute("player"));
+		
 		Room r = GameManager.getInstance().getRoomById(id);
 		r.removePlayer((Player) httpSession.getAttribute("player"));
 		if(r.isEmpty()) {
@@ -96,10 +97,10 @@ public class GameSocket {
 		}
 		
 		//removing session attributes for user
-		//httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
-		//httpSession.removeAttribute("session");
-		//httpSession.removeAttribute("player");
-		//httpSession.removeAttribute("gameId");
+		httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+		httpSession.removeAttribute("session");
+		httpSession.removeAttribute("player");
+		httpSession.removeAttribute("gameId");
 	}
 
 	@OnMessage
