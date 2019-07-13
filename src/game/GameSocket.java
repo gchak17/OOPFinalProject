@@ -89,7 +89,12 @@ public class GameSocket {
 		for (Session s : peers) {
 			s.getBasicRemote().sendObject(message);
 		}
-
+		
+		//removing session attributes for user
+		//httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+		//httpSession.removeAttribute("session");
+		//httpSession.removeAttribute("player");
+		//httpSession.removeAttribute("gameId");
 	}
 
 	@OnMessage
