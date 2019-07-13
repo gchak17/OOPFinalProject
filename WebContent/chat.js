@@ -1,4 +1,4 @@
-var chatSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/chat");
+var chatSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/chat/" + game_id);
 
 chatSocket.onmessage = function(evt){
 	onChatMessage(evt)
