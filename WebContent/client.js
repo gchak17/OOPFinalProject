@@ -61,7 +61,13 @@ function onMessage(evt) {
 		document.getElementById("word-place").innerHTML = word;
 	} else if (json.command === "autochooseword"){
 		chooseTheWordAutomatically(json);
+	} else if (json.command === "finalresultspopup"){
+		finalResultsPopUp(json);
 	}
+}
+
+function finalResultsPopUp(json){
+	//make pop up with player scores, highlighting winner;
 }
 
 function chooseTheWordAutomatically(json){

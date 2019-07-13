@@ -88,23 +88,22 @@ public class ChatSocket {
 		Game.Round round = game.getRound();
 		if (round != null && !round.isTurnEnded()) {
 			Map<Player, Long> times = round.guessedTimes();
+			
+			//System.out.println(times.get(user) + " aaaa " + game.secsPerTurn());
+			
+			
 			if (times.get(user) == (long) game.secsPerTurn()) {
 				if (message.toLowerCase().equals(round.getChosenWord().toLowerCase())) {
 					Date roundDate = round.getDate();
 
 					long diff = playerDate.getTime() - roundDate.getTime();
-					try {
-						if (!user.isArtist()) {
-							round.smbdGuessed(user, diff);
-							System.out.println(diff);
-							message = "guessed the word";
-						} else {
-							prevetnOthersFromSeeing(session, "The artist shouldn't reveal the word", username);
-							return;
-						}
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					if (!user.isArtist()) {
+						round.smbdGuessed(user, diff);
+						//System.out.println(diff);
+						message = "guessed the word";
+					} else {
+						prevetnOthersFromSeeing(session, "The artist shouldn't reveal the word", username);
+						return;
 					}
 				} else if (stringsAreSimilar(message.toLowerCase(), round.getChosenWord().toLowerCase())) {
 					if (!user.isArtist()) {
