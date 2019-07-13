@@ -96,11 +96,12 @@ public class GameSocket {
 			}
 		}
 
-		// removing session attributes for user
-		// httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
-		// httpSession.removeAttribute("session");
-		// httpSession.removeAttribute("player");
-		// httpSession.removeAttribute("gameId");
+	
+		httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+		httpSession.removeAttribute("session");
+		httpSession.removeAttribute("player");
+		httpSession.removeAttribute("gameId");
+
 	}
 
 	@OnMessage
