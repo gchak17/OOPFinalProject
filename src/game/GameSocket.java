@@ -24,24 +24,6 @@ public class GameSocket {
 	public void onError(Throwable t) {
 		System.out.println(t.getMessage());
 	}
-//	@OnError
-//	public void onError(Throwable t) throws Throwable {
-//	    // Most likely cause is a user closing their browser. Check to see if
-//	    // the root cause is EOF and if it is ignore it.
-//	    // Protect against infinite loops.
-//	    int count = 0;
-//	    Throwable root = t;
-//	    while (root.getCause() != null && count < 20) {
-//	        root = root.getCause();
-//	        count ++;
-//	    }
-//	    if (root instanceof EOFException) {
-//	        // Assume this is triggered by the user closing their browser and
-//	        // ignore it.
-//	    } else {
-//	        throw t;
-//	    }
-//	}
 
 	@OnOpen
 	public void onOpen(Session curS, EndpointConfig config) {
