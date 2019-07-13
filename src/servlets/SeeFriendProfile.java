@@ -30,7 +30,12 @@ public class SeeFriendProfile extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doPost(request, response);
+		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
+		String friendName = request.getParameter("friendName");
+		Account friend = accountData.getAccountByUsername(friendName);
+		request.getSession().setAttribute("friend", friend);
+		request.getRequestDispatcher("Profile.jsp").forward(request, response);
+		
 	}
 
 	/**
@@ -38,12 +43,7 @@ public class SeeFriendProfile extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		String friendName = request.getParameter("friendName");
-		Account friend = accountData.getAccountByUsername(friendName);
-		request.getSession().setAttribute("friend", friend);
-		System.out.println(friendName);
-		request.getRequestDispatcher("Profile.jsp").forward(request, response);
+		doGet(request, response);
 	}
 
 }

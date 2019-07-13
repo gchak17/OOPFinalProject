@@ -99,9 +99,9 @@
 		%>
 		<% Account friend = friends.next(); %>
 		
-		<form id="formId" action="<%=request.getContextPath()%>/SeeFriendProfile" method="post">
+		<form id="formId" action="SeeFriendProfile" method="get">
 		    <input type="hidden" name="friendName" value=<%=friend.getUsername()%> />
-		    <a href="javascript:myFunction()"><%=friend.getUsername()%></a>
+		    <a href="javascript:;" onclick = "parentNode.submit();"><%=friend.getUsername()%></a>
 		</form>
 		<%
 	}%>
