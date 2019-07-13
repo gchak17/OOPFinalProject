@@ -194,7 +194,7 @@ public class Game {
 			// this.date = new Date(System.currentTimeMillis());
 			this.turnCounter = 0;
 			initMapRound();
-			roundStarterArtist = players.get(0);
+			//roundStarterArtist = players.get(0);
 			startTurn();
 		}
 		
@@ -257,6 +257,7 @@ public class Game {
 				
 				endTurnTimer.cancel();
 				players.remove(p);
+				//if (p.equals(roundStarterArtist)) roundStarterArtist = players.get(0);
 				endTurn();
 			} else {
 				players.remove(p);
@@ -282,11 +283,13 @@ public class Game {
 
 					artist = players.get(index);
 					if (artist.equals(roundStarterArtist)) {
+						System.out.println("fooork");
 						artist.shouldBeArtist(false);
 						turnOffTimers();
 						endRound();
 						roundIsnotEnded = false;
 					}
+					roundStarterArtist = players.get(0);
 				}
 			}
 		}
