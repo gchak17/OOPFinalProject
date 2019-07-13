@@ -62,7 +62,7 @@ public class AccountCreationServlet extends HttpServlet {
 			request.getSession().setAttribute("user", account);
 			request.getRequestDispatcher("Main.jsp").forward(request, response);
 		} else {
-			request.getRequestDispatcher("NameInUse.html").forward(request, response);
+			request.getRequestDispatcher("NameInUse.jsp").forward(request, response);
 		}
 	}
 

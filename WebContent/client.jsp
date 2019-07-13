@@ -1,3 +1,5 @@
+<%@ page import="game.Player"%>
+<%@ page import="dao.Account"%>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -9,11 +11,25 @@
 <body onresize="changeSizeAndPosition()"
 	onload="changeSizeAndPosition()">
 
+	<%
+		Player pl = (Player)request.getSession().getAttribute("player");
+		if (pl == null) {
+			Account acc = (Account) session.getAttribute("user");
+			if (acc == null) {
+				response.sendRedirect("login.jsp");
+			}else{
+				response.sendRedirect("main.jsp");
+			}
+			return;
+		}
+	%>
+
 	<div id="users-panel" class="side-panel"></div>
 	<div id="chat-panel" class="side-panel">
 		<div id="chat-box-div" class="chat-box-class"></div>
 		<input type="text" placeholder=" type message" id="chat-text"
-			size="30" required="required" onkeydown="if (event.keyCode == 13) clickOnSend()"/>
+			size="30" required="required"
+			onkeydown="if (event.keyCode == 13) clickOnSend()" />
 		<button onclick="clickOnSend()" class="send-button">Send</button>
 	</div>
 

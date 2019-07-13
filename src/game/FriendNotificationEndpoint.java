@@ -28,7 +28,9 @@ public class FriendNotificationEndpoint {
 	public void onClose(Session session){
 		HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
 		Account user = (Account)httpSession.getAttribute("user");
-		online.remove(user.getID());
+		if (user != null) {
+			online.remove(user.getID());
+		}
 	}
 	
 	

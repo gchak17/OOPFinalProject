@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="game.Room"%>
 <%@ page import="game.GameManager"%>
+<%@ page import="dao.Account"%>
 <%@	page import="java.util.ArrayList"%>
 <%@	page import="java.util.Iterator"%>
 <%@ page import="java.util.List"%>
@@ -16,6 +17,15 @@
 <body>
 	<% 
 		ArrayList<String> roomIDs = GameManager.getInstance().getWaitingRooms();
+	
+	%>
+	
+		<%
+		Account acc = (Account) session.getAttribute("user");
+		if (acc == null) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
 	%>
 	
 		<ul>

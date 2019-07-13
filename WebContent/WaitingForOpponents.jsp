@@ -13,6 +13,14 @@
 </head>
 <body>
 
+	<%
+		Player pl = (Player) session.getAttribute("player");
+		if (pl == null) {
+			response.sendRedirect("main.jsp");
+			return;
+		}
+	%>
+
 	<button onclick="startGame()">Start Game</button>
 
 	<p id="demo"></p>
@@ -35,7 +43,8 @@
 			} else if (json.type === "start") {
 				if (json.admin) {
 					if (json.forward) {
-						location.replace("http://localhost:8888/OOPFinalProject/client.html");
+						location
+								.replace("http://localhost:8888/OOPFinalProject/client.jsp");
 					}
 				} else {
 					alert("ar xar adzmini dzmao");

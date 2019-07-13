@@ -77,7 +77,7 @@ public class GameSocket {
 		peers.remove(peer);
 
 		Game g = GameManager.getInstance().getGame(id);
-		g.removePlayer((Player) httpSession.getAttribute("player"));
+		g.removePlayerFromGame((Player) httpSession.getAttribute("player"));
 
 		JSONObject json = new JSONObject();
 		json.put("command", "showplayers");
