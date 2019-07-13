@@ -138,13 +138,14 @@ public class Game {
 
 	private void endGame(){
 		//showfinalresults
-		System.out.println("cocxali var");
+		//System.out.println("cocxali var");
 		JSONObject json = new JSONObject();
 		json.put("command", "finalresults");
 		for(Player p : points.keySet()) {
 			json.put(p.toString(), points.get(p));
 		}
 		GameSocket.sendMessage(id, new Message(json));	
+		
 		System.out.println("cocxali va2r");
 		//redirect to main jsp
 		Timer timer1 = new Timer();
@@ -300,6 +301,11 @@ public class Game {
 		}
 
 		public void endTurn() {
+			JSONObject json1 = new JSONObject();
+			json1.put("command", "revealword");
+			json1.put("word", chosenWord);
+			GameSocket.sendMessage(artist.getGame().getId(), new Message(json1));
+			
 			turnIsEnded = true;
 			chosenWord = "";
 			JSONObject json = new JSONObject();

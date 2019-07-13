@@ -1,7 +1,7 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var gameSocket = new WebSocket(
-		"ws://192.168.98.14:8888/OOPFinalProject/client/game");
+//var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
+var gameSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/game");
 gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -40,7 +40,8 @@ function onMessage(evt) {
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
 	} else if (json.command === "endgame") {
-		location.replace("192.168.98.14:8888/OOPFinalProject/Main.jsp");
+		//location.replace("192.168.98.14:8888/OOPFinalProject/Main.jsp");
+		location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
 		document.getElementById("word-button1").value = json.one;
 		document.getElementById("word-button2").value = json.two;
@@ -62,19 +63,40 @@ function onMessage(evt) {
 	} else if (json.command === "autochooseword") {
 		chooseTheWordAutomatically(json);
 	} else if (json.command === "finalresults") {
-
-		// finalResultsPopUp
-		var div = document.getElementById("guesserModal");
-		var h2s = div.getElementsByTagName("h2");
-		for (var h = 0; h < h2s.length; h++) {
-			h2s[h].innerHTML = "game is over";
-		}
-		div.style.display = "block"
+		finalResultsPopUp(json);
+	} else if (json.command === "revealword") {
+		revealWord(json);
 	}
 }
 
+function revealWord(json) {
+	delete json.command;
+	
+	var div = document.getElementById("guesserModal");
+	var h2s = div.getElementsByTagName("h2");
+	h2s[0].innerHTML = "word was " + json["word"];
+	
+	div.style.display = "block"
+		
+	setTimeout(function(){
+		div.style.display = "none";
+		h2s[0].innerHTML = "The Artist Is Choosing The Word";
+	}, 2 * 1000);
+}
+
 function finalResultsPopUp(json) {
-	// make pop up with player scores, highlighting winner;
+	delete json.command;
+	
+	var div = document.getElementById("guesserModal");
+	var h2s = div.getElementsByTagName("h2");
+	h2s[0].innerHTML = "game is over";
+	
+	for (var k in json) {
+		var v = json[k];
+		h2s[0].innerHTML += "<br/>" + k + " " + v;
+	}
+	
+	div.style.display = "block"
 }
 
 function chooseTheWordAutomatically(json) {
@@ -293,7 +315,7 @@ function showPlayerResults(json) {
 function appearPlayers(json) {
 	var userPanel = document.getElementById("users-panel");
 
-	for ( var k in json) {
+	for (var k in json) {
 		var v = json[k];
 		var newP = document.createElement("P");
 		var t = document.createTextNode(k + " : " + v);
