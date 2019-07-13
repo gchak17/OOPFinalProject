@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.websocket.Session;
+
 import org.json.JSONObject;
 import managers.ConnectionManager;
 import message.Message;
@@ -134,15 +136,11 @@ public class Game {
 	private void endGame(){
 		//showfinalresults
 		JSONObject json = new JSONObject();
-		json.put("command", "finalresultspopup");
+		json.put("command", "finalresults");
 		for(Player p : points.keySet()) {
 			json.put(p.toString(), points.get(p));
 		}
-		GameSocket.sendMessage(id, new Message(json));
-		
-		//remove session attributes
-		
-		//remove room object
+		GameSocket.sendMessage(id, new Message(json));	
 		
 		//redirect to main jsp
 		Timer timer1 = new Timer();
@@ -152,6 +150,8 @@ public class Game {
 				JSONObject json = new JSONObject();
 				json.put("command", "endgame");
 				GameSocket.sendMessage(id, new Message(json));
+				
+				//remove room and game object
 			}
 		}, 3 * 1000);
 	}
@@ -424,11 +424,10 @@ public class Game {
 				int seconds = (int) (playersGuessedTimesForSingleTurn.get(key) / 1000);
 				int res = 100 * seconds/secondsPerTurn;
 				allPoints += res;
-				//System.out.println(res);
 				TurnPoints.put(key, res);
 				key.addScore(res);
 			}
-			TurnPoints.put(artist, allPoints / numberOfGuesses);
+			TurnPoints.put(artist, (numberOfGuesses == 0) ? 0 : allPoints / numberOfGuesses);
 		}
 		
 		public boolean isTurnEnded() {

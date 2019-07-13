@@ -61,8 +61,15 @@ function onMessage(evt) {
 		document.getElementById("word-place").innerHTML = word;
 	} else if (json.command === "autochooseword"){
 		chooseTheWordAutomatically(json);
-	} else if (json.command === "finalresultspopup"){
-		finalResultsPopUp(json);
+	} else if (json.command === "finalresults"){
+		
+		//finalResultsPopUp
+		var div = document.getElementById("guesserModal");
+		var h2s = div.getElementsByTagName("h2");
+		for(var h = 0; h < h2s.length; h++ ) {
+			h2s[h].innerHTML = "game is over";
+		}
+		div.style.display = "block"
 	}
 }
 
@@ -75,7 +82,6 @@ function chooseTheWordAutomatically(json){
 	var el = arr[Math.floor(Math.random() * arr.length)];
 	setTheWordAndSend(json[el], json);
 	document.getElementById("word-place").innerHTML = json[el];
-	//console.log("random word: " + json[el]);
 }
 
 function chooseTheWord(json) {
