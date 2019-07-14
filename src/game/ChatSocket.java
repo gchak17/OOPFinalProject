@@ -17,6 +17,7 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import org.json.JSONObject;
 import dao.Account;
@@ -24,7 +25,7 @@ import message.Message;
 import message.MessageDecoder;
 import message.MessageEncoder;
 
-@ServerEndpoint(value = "/client/chat", encoders = { MessageEncoder.class }, decoders = {
+@ServerEndpoint(value = "/client/chat/{game_id}", encoders = { MessageEncoder.class }, decoders = {
 		MessageDecoder.class }, configurator = Configuration.class)
 public class ChatSocket {
 	// public static List<Session> sessionList = Collections.synchronizedList(new
@@ -33,9 +34,9 @@ public class ChatSocket {
 	private static ConcurrentHashMap<String, List<Session>> sessions = new ConcurrentHashMap<>();
 
 	@OnOpen
-	public void onOpen(Session session, EndpointConfig config) {
+	public void onOpen(@PathParam("game_id") String gameId, Session session, EndpointConfig config) {
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
-		String gameId = (String) httpSession.getAttribute("gameId");
+		
 
 		Player user = (Player) httpSession.getAttribute("player");
 		Account acc = user.getAccount();
@@ -55,20 +56,17 @@ public class ChatSocket {
 	}
 
 	@OnClose
-	public void onClose(Session session) {
-		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
-		String gameId = (String) httpSession.getAttribute("gameId");
+	public void onClose(@PathParam("game_id") String gameId, Session session) {
 
 		if (sessions.containsKey(gameId)) {
 			List<Session> sessionLst = sessions.get(gameId);
 			sessionLst.remove(session);
 		}
-		// sessionList.remove(session);
 
 	}
 
 	@OnMessage
-	public void sendMessage(Message msg, Session session) throws IOException, EncodeException {
+	public void sendMessage(@PathParam("game_id") String gameId, Message msg, Session session) throws IOException, EncodeException {
 		Date playerDate = new Date(System.currentTimeMillis());
 		JSONObject json = msg.getJson();
 		if (!json.getString("command").equals("receiveMessage"))
@@ -78,7 +76,7 @@ public class ChatSocket {
 			return;
 
 		HttpSession httpSession = ((HttpSession) session.getUserProperties().get("HttpSession"));
-		String gameId = (String) httpSession.getAttribute("gameId");
+		
 
 		Game game = GameManager.getInstance().getGame(gameId);
 
@@ -88,23 +86,22 @@ public class ChatSocket {
 		Game.Round round = game.getRound();
 		if (round != null && !round.isTurnEnded()) {
 			Map<Player, Long> times = round.guessedTimes();
+			
+			//System.out.println(times.get(user) + " aaaa " + game.secsPerTurn());
+			
+			
 			if (times.get(user) == (long) game.secsPerTurn()) {
 				if (message.toLowerCase().equals(round.getChosenWord().toLowerCase())) {
 					Date roundDate = round.getDate();
 
 					long diff = playerDate.getTime() - roundDate.getTime();
-					try {
-						if (!user.isArtist()) {
-							round.smbdGuessed(user, diff);
-							System.out.println(diff);
-							message = "guessed the word";
-						} else {
-							prevetnOthersFromSeeing(session, "The artist shouldn't reveal the word", username);
-							return;
-						}
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					if (!user.isArtist()) {
+						round.smbdGuessed(user, diff);
+						//System.out.println(diff);
+						message = "guessed the word";
+					} else {
+						prevetnOthersFromSeeing(session, "The artist shouldn't reveal the word", username);
+						return;
 					}
 				} else if (stringsAreSimilar(message.toLowerCase(), round.getChosenWord().toLowerCase())) {
 					if (!user.isArtist()) {

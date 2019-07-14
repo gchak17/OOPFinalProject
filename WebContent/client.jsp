@@ -1,3 +1,10 @@
+
+<%@ page import="game.Player"%>
+<%@ page import="dao.Account"%>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+   	pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -8,12 +15,34 @@
 </head>
 <body onresize="changeSizeAndPosition()"
 	onload="changeSizeAndPosition()">
+	
+	<%	
+		String game_id = (String)request.getSession().getAttribute("gameId");
+	%>
+	
+	<script>
+		var game_id = "<%= game_id %>";
+	</script>
+
+	<%
+		Player pl = (Player)request.getSession().getAttribute("player");
+		if (pl == null) {
+			Account acc = (Account) session.getAttribute("user");
+			if (acc == null) {
+				response.sendRedirect("login.jsp");
+			}else{
+				response.sendRedirect("main.jsp");
+			}
+			return;
+		}
+	%>
 
 	<div id="users-panel" class="side-panel"></div>
 	<div id="chat-panel" class="side-panel">
 		<div id="chat-box-div" class="chat-box-class"></div>
 		<input type="text" placeholder=" type message" id="chat-text"
-			size="30" required="required" onkeydown="if (event.keyCode == 13) clickOnSend()"/>
+			size="30" required="required"
+			onkeydown="if (event.keyCode == 13) clickOnSend()" />
 		<button onclick="clickOnSend()" class="send-button">Send</button>
 	</div>
 
@@ -51,8 +80,7 @@
 		<p id="word-place"></p>
 		<div id="timer-div"></div>
 	</div>
-	<div id="paint-options-panel" class="center-panel">
-		<!--    
+	<div id="paint-options-panel" class="center-panel">   
         <div id="choosecolor">choose color:</div>
         <div id="green" onclick="color(this)" class="paint-options-panel-colors"></div>
         <div id="blue" onclick="color(this)" class="paint-options-panel-colors"></div>
@@ -74,7 +102,6 @@
         <div id="w16" onclick="width(this)"></div>
 
         <input type="button" value="clear canvas" id="clr" size="23" onclick="clearCanvas()"> 
-    -->
 	</div>
 	<script src="client.js"></script>
 	<script src="chat.js"></script>

@@ -24,24 +24,6 @@ public class GameSocket {
 	public void onError(Throwable t) {
 		System.out.println(t.getMessage());
 	}
-//	@OnError
-//	public void onError(Throwable t) throws Throwable {
-//	    // Most likely cause is a user closing their browser. Check to see if
-//	    // the root cause is EOF and if it is ignore it.
-//	    // Protect against infinite loops.
-//	    int count = 0;
-//	    Throwable root = t;
-//	    while (root.getCause() != null && count < 20) {
-//	        root = root.getCause();
-//	        count ++;
-//	    }
-//	    if (root instanceof EOFException) {
-//	        // Assume this is triggered by the user closing their browser and
-//	        // ignore it.
-//	    } else {
-//	        throw t;
-//	    }
-//	}
 
 	@OnOpen
 	public void onOpen(Session curS, EndpointConfig config) {
@@ -77,19 +59,29 @@ public class GameSocket {
 		peers.remove(peer);
 
 		Game g = GameManager.getInstance().getGame(id);
-		g.removePlayer((Player) httpSession.getAttribute("player"));
 
-		JSONObject json = new JSONObject();
-		json.put("command", "showplayers");
-		for (Player p : g.getPoints().keySet()) {
-			json.put(p.toString(), g.getPoints().get(p));
+		g.removePlayerFromGame((Player) httpSession.getAttribute("player"));
+		Room r = GameManager.getInstance().getRoomById(id);
+		r.removePlayer((Player) httpSession.getAttribute("player"));
+		if (r.isEmpty()) {
+			GameManager.getInstance().removeRoom(id);
+		} else {
+			JSONObject json = new JSONObject();
+			json.put("command", "showplayers");
+			for (Player p : g.getPoints().keySet()) {
+				json.put(p.toString(), g.getPoints().get(p));
+			}
+
+			Message message = new Message(json);
+			for (Session s : peers) {
+				s.getBasicRemote().sendObject(message);
+			}
 		}
-
-		Message message = new Message(json);
-		for (Session s : peers) {
-			s.getBasicRemote().sendObject(message);
-		}
-
+	
+		//httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
+		//httpSession.removeAttribute("session");
+		//httpSession.removeAttribute("player");
+		//httpSession.removeAttribute("gameId");
 	}
 
 	@OnMessage
@@ -123,7 +115,7 @@ public class GameSocket {
 			Game.Round round = game.getRound();
 			round.setChosenWord(word);
 			round.setChosenWordTime(new Date(System.currentTimeMillis()));
-			
+
 			JSONObject js = new JSONObject();
 			js.put("command", command);
 			js.put("chosen", hideTheWord(word));

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
 import managers.AccountData;
 
 /**
@@ -40,7 +41,8 @@ public class CreateRoom extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("CreateRoom.html").forward(request, response);
+		
+		request.getRequestDispatcher("CreateRoom.jsp").forward(request, response);
 	}
 
 }

@@ -1,7 +1,7 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-var gameSocket = new WebSocket(
-		"ws://localhost:8888/OOPFinalProject/client/game");
+//var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
+var gameSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/game");
 gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };
@@ -40,36 +40,70 @@ function onMessage(evt) {
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
 	} else if (json.command === "endgame") {
+		//location.replace("192.168.98.14:8888/OOPFinalProject/Main.jsp");
 		location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
 		document.getElementById("word-button1").value = json.one;
 		document.getElementById("word-button2").value = json.two;
 		document.getElementById("word-button3").value = json.three;
-		
+
 		modal.style.display = "block";
 		chooseTheWord(json);
-	} else if (json.command === "startturn"){
+	} else if (json.command === "startturn") {
 		isArtist = true;
 		addCanvasListeners();
-	} else if (json.command === "endturn"){
+	} else if (json.command === "endturn") {
 		isArtist = false;
-	} else if (json.command === "don't choose"){
+	} else if (json.command === "don't choose") {
 		document.getElementById("guesserModal").style.display = "block";
-	} else if (json.command === "wordIsChosen"){
+	} else if (json.command === "wordIsChosen") {
 		document.getElementById("guesserModal").style.display = "none";
 		var word = json.chosen;
 		document.getElementById("word-place").innerHTML = word;
-	} else if (json.command === "autochooseword"){
+	} else if (json.command === "autochooseword") {
 		chooseTheWordAutomatically(json);
+	} else if (json.command === "finalresults") {
+		finalResultsPopUp(json);
+	} else if (json.command === "revealword") {
+		revealWord(json);
 	}
 }
 
-function chooseTheWordAutomatically(json){
-	var arr = ["one", "two", "three"]; 
+function revealWord(json) {
+	delete json.command;
+	
+	var div = document.getElementById("guesserModal");
+	var h2s = div.getElementsByTagName("h2");
+	h2s[0].innerHTML = "word was " + json["word"];
+	
+	div.style.display = "block"
+		
+	setTimeout(function(){
+		div.style.display = "none";
+		h2s[0].innerHTML = "The Artist Is Choosing The Word";
+	}, 2 * 1000);
+}
+
+function finalResultsPopUp(json) {
+	delete json.command;
+	
+	var div = document.getElementById("guesserModal");
+	var h2s = div.getElementsByTagName("h2");
+	h2s[0].innerHTML = "game is over";
+	
+	for (var k in json) {
+		var v = json[k];
+		h2s[0].innerHTML += "<br/>" + k + " " + v;
+	}
+	
+	div.style.display = "block"
+}
+
+function chooseTheWordAutomatically(json) {
+	var arr = [ "one", "two", "three" ];
 	var el = arr[Math.floor(Math.random() * arr.length)];
 	setTheWordAndSend(json[el], json);
 	document.getElementById("word-place").innerHTML = json[el];
-	//console.log("random word: " + json[el]);
 }
 
 function chooseTheWord(json) {
@@ -140,11 +174,11 @@ var mouseMoveFun = function() {
 		"width" : currWidth
 	});
 
-	if(!isArtist) {
+	if (!isArtist) {
 		removeCanvasListeners();
 		return;
 	}
-	
+
 	drawImageText(json);
 	// string aris es json
 	sendText(json);
@@ -281,7 +315,7 @@ function showPlayerResults(json) {
 function appearPlayers(json) {
 	var userPanel = document.getElementById("users-panel");
 
-	for ( var k in json) {
+	for (var k in json) {
 		var v = json[k];
 		var newP = document.createElement("P");
 		var t = document.createTextNode(k + " : " + v);

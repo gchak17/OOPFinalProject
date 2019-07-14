@@ -39,6 +39,13 @@ public class ChangeAvatarServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		Account acc = (Account) request.getSession().getAttribute("user");
+		if (acc == null) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+		
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		Account account = (Account) request.getSession().getAttribute("user");
 		AvatarManager avatarManager = (AvatarManager) getServletContext().getAttribute("avatarManager");

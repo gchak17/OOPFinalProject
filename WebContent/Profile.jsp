@@ -3,11 +3,20 @@
 <%@ page import="managers.AccountData"%>
 <%@ page import="dao.Account"%>
 <%@	page import="java.util.Iterator"%>
+<%@ page import="dao.Account"%>
 
 <% 
 	AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 	Account currAccount = (Account)session.getAttribute("currAccount");
 %>
+
+	<%
+		Account acc = (Account) session.getAttribute("user");
+		if (acc == null || (Account)session.getAttribute("friend") == null) {
+			response.sendRedirect("login.jsp");
+			return;
+		} 
+	%>
 
 <!DOCTYPE html>
 <html>

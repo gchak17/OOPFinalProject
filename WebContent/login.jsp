@@ -15,6 +15,6 @@
 		<input type="submit" value="Login">
 	</form>
     
-    <a href="CreateAccount.html">Create new Account</a>
+    <a href="CreateAccount.jsp">Create new Account</a>
 </body>
 </html>

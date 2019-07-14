@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.Account;
+
 /**
  * Servlet implementation class LogOutServlet
  */
@@ -35,8 +37,8 @@ public class LogOutServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getSession().removeAttribute("userName");
-
-		request.getRequestDispatcher("login.html").forward(request, response);
+		request.getSession().removeAttribute("user");
+		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
 }
