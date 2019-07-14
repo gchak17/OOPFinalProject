@@ -18,7 +18,7 @@
  
 .roomName {
     text-align: center;
-    font-size: 35px;
+    font-size: 30px;
     color: purple;
 }
  
@@ -193,7 +193,12 @@ title {
 }
 
 body{
-	background-color: #611da1;
+/* 	background: #a64bf4; */
+  background: -webkit-linear-gradient(right, #21d4fd, #b721ff, #21d4fd);
+  background: -o-linear-gradient(right, #21d4fd, #b721ff, #21d4fd);
+  background: -moz-linear-gradient(right, #21d4fd, #b721ff,  #21d4fd);
+  background: linear-gradient(right, #21d4fd, #b721ff  #21d4fd);
+/*   background: transparent; */
 }
 
 .containerSettings {
