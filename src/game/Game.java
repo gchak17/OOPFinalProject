@@ -122,7 +122,7 @@ public class Game {
 
 	public void endRound() {
 		System.out.println("vai: " + roundCounter);
-		if (roundCounter == numRounds) {
+		if (roundCounter == numRounds || players.size() <= 1) {
 			System.out.println("aq var: " + roundCounter);
 			endGame();
 		} else {
@@ -284,7 +284,7 @@ public class Game {
 						index = 0;
 
 					artist = players.get(index);
-					if (artist.equals(roundStarterArtist)) {
+					if (artist.equals(roundStarterArtist) || players.size() <= 1) {
 						System.out.println("fooork");
 						artist.shouldBeArtist(false);
 						turnOffTimers();
