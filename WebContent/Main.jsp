@@ -138,10 +138,44 @@
 	<form action="NotificationsServlet" method="post">
 		<input type="submit" value="See Notifications">
 	</form>
+<<<<<<< HEAD
+	
+	
+	<form action="SeeProfileServlet" method="post">
+		<input type = "text" name = "currAccountUsername">
+		<input type = "submit" value = "Search Account">
+	</form>
+=======
+>>>>>>> e9b67ae7c8432ee23a09507d3b2b7d3feeaf532b
 
 	<form action="LogOutServlet" method="post">
 		<input type="submit" value="Log Out">
 	</form>
+<<<<<<< HEAD
+	
+	
+	<p>Friends:<br></p>
+	
+	<% Iterator<Account> friends = currAccount.getFriendList(); %>
+
+	<% while(friends.hasNext())  {
+		%>
+		<% Account friend = friends.next(); %>
+		
+<<<<<<< HEAD
+		<form id="formId" action="<%=request.getContextPath()%>/SeeProfileServlet" method="post">
+		    <input type="hidden" name="currAccountUsername" value=<%=friend.getUsername()%> />
+		    <a href="javascript:myFunction()"><%=friend.getUsername()%></a>
+=======
+		<form id="formId" action="SeeFriendProfile" method="get">
+		    <input type="hidden" name="friendName" value=<%=friend.getUsername()%> />
+		    <a href="javascript:;" onclick = "parentNode.submit();"><%=friend.getUsername()%></a>
+>>>>>>> 05d02e715fff1027bac19cf50318b947c254101d
+		</form>
+		<%
+	}%>
+	
+=======
 
 
 	<p>
@@ -167,6 +201,7 @@
 		}
 	%>
 
+>>>>>>> e9b67ae7c8432ee23a09507d3b2b7d3feeaf532b
 	<script>
 		function myFunction() {
 			document.getElementById("formId").submit();

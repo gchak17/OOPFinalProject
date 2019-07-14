@@ -9,7 +9,10 @@
 <% 
 	AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 	Account currAccount = (Account)session.getAttribute("currAccount");
+<<<<<<< HEAD
 	ReviewsManager reviewsManager = (ReviewsManager) getServletContext().getAttribute("reviewsManager");
+=======
+>>>>>>> 74927bf8bba2886d7260c2a8d5bccbdfbef4a29b
 %>
 
 	<%
