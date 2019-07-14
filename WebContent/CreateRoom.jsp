@@ -68,10 +68,14 @@
 								</select>
 							</div>
 						</div>
-						<div class="settingsButton">
-							<button type="submit" class="buttonToPublish" id="publish-button">Publish
+						
+						<div class="container-form-button">
+							<div class="wrap-form-button">
+								<div class="form-button"></div>
+							<button type="submit" class="button" id="publish-button">Publish
 								Room</button>
-
+							
+							</div>
 						</div>
 					</div>
 
