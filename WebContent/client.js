@@ -23,7 +23,7 @@ function sendText(json) {
 	gameSocket.send(json);
 }
 
-var timerVar, seconds;
+//var timerVar, seconds;
 var modal = document.getElementById("myModal");
 
 function onMessage(evt) {
@@ -39,7 +39,7 @@ function onMessage(evt) {
 	} else if (json.command === "clear") {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 	} else if (json.command === "newturn") {
-		seconds = json.seconds + 1;
+		//seconds = json.seconds + 1;
 		// timerVar = setInterval(timerFun, 2000);
 
 		delete json.seconds;
@@ -48,7 +48,7 @@ function onMessage(evt) {
 		delete json.command;
 		appearPlayers(json);
 	} else if (json.command === "startgametimer") {
-		seconds = 5 + 1;
+		//seconds = 5 + 1;
 		// timerVar = setInterval(timerFun, 1000);
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
@@ -57,19 +57,27 @@ function onMessage(evt) {
 		//location.replace('http://' + window.location.host + '/OOPFinalProject/Main.jsp');
 		//location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
+		document.getElementById("chat-text").disabled = true;
+		
 		document.getElementById("word-button1").value = json.one;
 		document.getElementById("word-button2").value = json.two;
 		document.getElementById("word-button3").value = json.three;
 
 		modal.style.display = "block";
 		chooseTheWord(json);
+
+		document.getElementById("chat-text").disabled = false;
 	} else if (json.command === "startturn") {
 		isArtist = true;
 		addCanvasListeners();
 	} else if (json.command === "endturn") {
 		isArtist = false;
 	} else if (json.command === "don't choose") {
+		document.getElementById("chat-text").disabled = true;
+		
 		document.getElementById("guesserModal").style.display = "block";
+		
+		document.getElementById("chat-text").disabled = false;
 	} else if (json.command === "wordIsChosen") {
 		document.getElementById("guesserModal").style.display = "none";
 		var word = json.chosen;
@@ -149,14 +157,13 @@ function setTheWordAndSend(word, json) {
 
 var canvas = document.getElementById("canvas-panel");
 var context = canvas.getContext("2d");
-var offsetLeft, offsetTop;
 
 var drawing = false;
 var isArtist = false;
 var lastPos = null;
 
 var currCol = "black";
-var currWidth = 4;
+//var currWidth = 4;
 
 var mouseUpFun = function() {
 	drawing = false;
@@ -185,7 +192,7 @@ var mouseMoveFun = function() {
 			"y" : p[1] //divide by height
 		},
 		"color" : currCol,
-		"width" : currWidth
+		"width" : document.getElementById("myRange").value
 	});
 
 	if (!isArtist) {
@@ -223,9 +230,9 @@ function color(obj) {
 	currCol = obj.id;
 }
 
-function width(obj) {
-	currWidth = parseInt((obj.id).substring(1));
-}
+//function width(obj) {
+//	currWidth = parseInt((obj.id).substring(1));
+//}
 
 function clearCanvas() {
 	checkIfIsArtist();
@@ -255,14 +262,19 @@ function getPos(event) {
 	return [x, y];
 }
 
-function changeSizeAndPosition() {
+function loadResizeFun() {
 	// canvas-panel
 	canvas.width = innerWidth * 0.6;
 	canvas.height = innerHeight * 0.6;
 	canvas.style.top = innerHeight * 0.2 + "px";
 	canvas.style.left = innerWidth * 0.2 + "px";
 	
-	// rescaling painting
+	offsetLeft = canvas.offsetLeft;
+	offsetTop = canvas.offsetTop;
+}
+
+	
+// rescaling painting
 //	var data = canvas.toDataURL();	
 //	var img = new Image();
 //    img.onload = function(){
@@ -270,44 +282,41 @@ function changeSizeAndPosition() {
 //    }
 //    img.src = data;
 	
-	// center-panel class
-	var x = document.getElementsByClassName("center-panel");
-	for (var i = 0; i < x.length; i++) {
-		x[i].style.width = innerWidth * 0.6 + "px";
-		x[i].style.height = innerHeight * 0.2 + "px";
-		x[i].style.left = innerWidth * 0.2 + "px";
-	}
+// center-panel class
+//	var x = document.getElementsByClassName("center-panel");
+//	for (var i = 0; i < x.length; i++) {
+//		x[i].style.width = innerWidth * 0.6 + "px";
+//		x[i].style.height = innerHeight * 0.2 + "px";
+//		x[i].style.left = innerWidth * 0.2 + "px";
+//	}
 
-	// word-panel
-	document.getElementById("word-panel").style.top = "0px";
+// word-panel
+//	document.getElementById("word-panel").style.top = "0px";
 
-	// paint-options-panel
-	document.getElementById("paint-options-panel").style.top = innerHeight * 0.8 + "px";
+// paint-options-panel
+//	document.getElementById("paint-options-panel").style.top = innerHeight * 0.8 + "px";
 
-	// side-panel class
-	var x = document.getElementsByClassName("side-panel");
-	for (var i = 0; i < x.length; i++) {
-		x[i].style.width = innerWidth * 0.2 + "px";
-		x[i].style.height = innerHeight + "px";
-		x[i].style.top = "0px";
-	}
+// side-panel class
+//	var x = document.getElementsByClassName("side-panel");
+//	for (var i = 0; i < x.length; i++) {
+//		x[i].style.width = innerWidth * 0.2 + "px";
+//		x[i].style.height = innerHeight + "px";
+//		x[i].style.top = "0px";
+//	}
 
-	// users-panel
-	document.getElementById("users-panel").style.left = "0px";
+// users-panel
+//	document.getElementById("users-panel").style.left = "0px";
 
-	// chat-panel
-	document.getElementById("chat-panel").style.left = innerWidth * 0.8 + "px";
+// chat-panel
+//	document.getElementById("chat-panel").style.left = innerWidth * 0.8 + "px";
 
-	// chat-box class
-	var x = document.getElementsByClassName("chat-box-class");
-	for (var i = 0; i < x.length; i++) {
-		x[i].style.width = innerWidth * 0.18 + "px";
-		x[i].style.height = innerHeight * 0.87 + "px";
-	}
-
-	offsetLeft = canvas.offsetLeft;
-	offsetTop = canvas.offsetTop;
-}
+// chat-box class
+//	var x = document.getElementsByClassName("chat-box-class");
+//	for (var i = 0; i < x.length; i++) {
+//		x[i].style.width = innerWidth * 0.18 + "px";
+//		x[i].style.height = innerHeight * 0.87 + "px";
+//	}
+//}
 
 function showPlayerResults(json) {
 	delete json.command;

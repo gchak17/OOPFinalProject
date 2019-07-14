@@ -10,6 +10,7 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <script type="text/javascript" src="notificationSocket.js"></script>
+<link href="login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -20,8 +21,21 @@
 			return;
 		}
 	%>
-
-	<button onclick="startGame()">Start Game</button>
+	<div class = "limiter">
+		<div class = "container">
+			<div class = "wrap">
+				
+				<div class="container-form-button">
+					<div class="wrap-form-button">
+						<div class="form-button"></div>
+						<button class = "button" onclick="startGame()">Start Game</button>
+					</div>
+				</div>
+				
+				<p class = "txt" id="demo"></p>						
+			</div>
+		</div>
+	</div>
 
 	<p id="demo"></p>
 
@@ -52,7 +66,7 @@
 				}
 			} else if (json.type == "redirect"){
 				//location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
-				location.replace("http://192.168.98.14:8888/OOPFinalProject/Main.jsp");
+				location.replace('http://' + window.location.host + '/OOPFinalProject/Main.jsp');
 			}
 		}
 

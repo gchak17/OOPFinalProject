@@ -40,9 +40,13 @@
 	<br>
 	
 	<%= currAccount.getUsername() %>
-	
+
+
 	<% if(user.isFriendsWith(currAccount.getID())) { %>
 		<p>Your Friend!</p>
+		<form action="RemoveFriend.jsp">
+			<input type = "submit" value = "Remove Friend">
+		</form>
 	<%} else {%>
 		<form action="AddFriend.jsp">
 			<input type = "submit" value = "Add Friend">

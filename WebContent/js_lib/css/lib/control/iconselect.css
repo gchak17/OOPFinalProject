@@ -10,6 +10,7 @@ and open the template in the editor.
 
 .icon-select{
     width:0px;
+    z-index:1000;
  }
 
  .icon-select .selected-box {
@@ -24,6 +25,7 @@ and open the template in the editor.
      -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
      border-radius: 3px;
+     z-index = 1000;
 
  }
 

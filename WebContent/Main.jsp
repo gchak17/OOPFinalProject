@@ -35,6 +35,7 @@
 			return;
 		}
 	%>
+
 	<div class="image">
 		<img src="<%=user.getAvatar().getFullPath()%>" id="img">
 
@@ -67,6 +68,12 @@
 
 		</div>
 	</div>
+
+	
+
+	
+	<p> <%= user.getUsername() %> </p>
+
 
 
 	<script>
@@ -133,23 +140,20 @@
 		};
 	</script>
 
-	<%
-		double avgPoint = reviewsManager.getAvgReviewPoint(user.getID());
-	%>
-	<%
-		if (avgPoint == -1) {
-	%>
-	<p>You have not received any reviews yet</p>
-	<%
-		} else {
-	%>
-	<p>
-		Your Average Review Point is
-		<%=avgPoint%>
-	</p>
-	<%
-		}
-	%>
+
+	
+	<form action = "ChangeUsernameServlet" method = "post">
+		<input type = "text" name = "newUsername">
+		<input type = "submit" value = "Change Username">
+	</form>
+	
+	<% double avgPoint = reviewsManager.getAvgReviewPoint(user.getID()); %>
+	<% if (avgPoint == -1) {%>
+		<p>You have not received any reviews yet</p>
+	 <%} else { %>
+	 	<p> Your Average Review Point is <%= avgPoint %> </p>
+	 <%} %>
+	
 
 	<form action="DeleteAccountServlet" method="post">
 		<input type="submit" value="Delete Account">

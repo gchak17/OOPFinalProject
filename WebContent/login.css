@@ -26,7 +26,7 @@ textarea {
   margin: 0 auto;
 }
 
-.container-login {
+.container{
   width: 100%;  
   min-height: 100vh;
   display: -webkit-box;
@@ -41,7 +41,7 @@ textarea {
   background: #f2f2f2; <!-- this controls the background color -->  
 }
 
-.wrap-login {
+.wrap {
   width: 390px;
   background: #fff;
   border-radius: 10px;
@@ -55,13 +55,14 @@ textarea {
   -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
-.login-form-title {
+.form-title {
   display: block;
   font-family: Poppins-Bold;
   font-size: 30px;
   color: #333333;
   line-height: 1.2;
   text-align: center;
+  padding-bottom: 13px;
 }
 
 .login-form-title i {
@@ -88,7 +89,7 @@ textarea {
   padding: 0 5px;
 }
 
-.container-login-form-button {
+.container-form-button {
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -97,9 +98,10 @@ textarea {
   flex-wrap: wrap;
   justify-content: center;
   padding-top: 13px;
+  padding-bottom: 13px;
 }
 
-.wrap-login-form-button {
+.wrap-form-button {
   width: 100%;
   display: block;
   position: relative;
@@ -109,7 +111,7 @@ textarea {
   margin: 0 auto;
 }
 
-.login-form-button {
+.form-button {
   position: absolute;
   z-index: -1;
   width: 300%;
@@ -128,7 +130,7 @@ textarea {
   transition: all 0.4s;
 }
 
-.login-button {
+.button {
   outline: none !important;
   border: none;
   background: transparent;
@@ -151,7 +153,7 @@ textarea {
   height: 50px;
 }
 
-.wrap-login100-form-btn:hover .login100-form-bgbtn {
+.wrap-form-button:hover .form-button {
   left: 0;
 }
 
@@ -160,6 +162,73 @@ textarea {
   font-size: 13px;
   color: #666666;
   line-height: 1.5;
+}
+
+.focus-input {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.focus-input::before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+
+  background: #6a7dfe;
+  background: -webkit-linear-gradient(left, #21d4fd, #b721ff);
+  background: -o-linear-gradient(left, #21d4fd, #b721ff);
+  background: -moz-linear-gradient(left, #21d4fd, #b721ff);
+  background: linear-gradient(left, #21d4fd, #b721ff);
+}
+
+.focus-input::after {
+  font-family: Poppins-Regular;
+  font-size: 15px;
+  color: #999999;
+  line-height: 1.2;
+
+  content: attr(data-placeholder);
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 16px;
+  left: 0px;
+  padding-left: 5px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.input:focus + .focus-input::after {
+  top: -15px;
+}
+
+.input:focus + .focus-input::before {
+  width: 100%;
+}
+
+.has-val.input + .focus-input::after {
+  top: -15px;
+}
+
+.has-val.input + .focus-input::before {
+  width: 100%;
 }
 
 

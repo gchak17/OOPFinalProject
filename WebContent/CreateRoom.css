@@ -14,7 +14,11 @@
     flex-shrink: 1;
     flex-basis: auto;
     height: 440px;
-    border-radius: 3%;
+
+/*     border-radius: 3%; */
+
+    border-radius: 25px;
+
 }
  
 .roomName {
@@ -199,7 +203,6 @@ body{
   background: -o-linear-gradient(right, #21d4fd, #b721ff, #21d4fd);
   background: -moz-linear-gradient(right, #21d4fd, #b721ff,  #21d4fd);
   background: linear-gradient(right, #21d4fd, #b721ff  #21d4fd);
-/*   background: transparent; */
 }
 
 .containerSettings {
@@ -210,5 +213,76 @@ body{
     width: 300px;
     ms-transform: translateY(-50%);
     transform: translateY(-50%);
-    border-radius: 3%;
+
+/*     border-radius: 3%; */
+    border-radius:25px;
+}
+
+.container-form-button {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+.wrap-form-button {
+  width: 100%;
+  display: block;
+  position: relative;
+  z-index: 1;
+  border-radius: 25px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.form-button {
+  position: absolute;
+  z-index: -1;
+  width: 300%;
+  height: 100%;
+  background: #a64bf4;
+  background: -webkit-linear-gradient(right, #21d4fd, #b721ff, #21d4fd, #b721ff);
+  background: -o-linear-gradient(right, #21d4fd, #b721ff, #21d4fd, #b721ff);
+  background: -moz-linear-gradient(right, #21d4fd, #b721ff, #21d4fd, #b721ff);
+  background: linear-gradient(right, #21d4fd, #b721ff, #21d4fd, #b721ff);
+  top: 0;
+  left: -100%;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.button {
+  outline: none !important;
+  border: none;
+  background: transparent;
+	
+  font-family: Poppins-Medium;
+  font-size: 15px;
+  color: #fff;
+  line-height: 1.2;
+  text-transform: uppercase;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  width: 100%;
+  height: 50px;
+}
+
+.wrap-form-button:hover .form-button {
+  left: 0;
+
 }

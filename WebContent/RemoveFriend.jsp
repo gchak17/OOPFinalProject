@@ -1,13 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="dao.Account"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript" src="notificationSocket.js"></script>
 <link href="login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+	
 	<%
 		Account acc = (Account) request.getSession().getAttribute("user");
 		if (acc == null) {
@@ -19,7 +21,7 @@
 	<script>
 		var xhr = null;
 
-		function sendRequest() {
+		function removeFriend() {
 			console.log("wow");
 			try {
 				xhr = new XMLHttpRequest();
@@ -32,7 +34,7 @@
 				return;
 			}
 
-			var url = 'SendRequestServlet';
+			var url = 'RemoveFriendServlet';
 
 			xhr.onreadystatechange = handler;
 			xhr.open('POST', url, true);
@@ -56,18 +58,18 @@
 			}
 		};
 	</script>
-
+	
 	<div class = "limiter">
 		<div class = "container">
 			<div class = "wrap">
-				<form action="#" method="post" onsubmit="sendRequest(); return false;">
+				<form action="#" method="post" onsubmit="removeFriend(); return false;">
 					<div class = "wrap-input">
 						User Name:<input class = "input" id="friendusername" type="text" name="friendusername">
 					</div>
 					<div  class="container-form-button">
 						<div class="wrap-form-button">
 							<div class="form-button"></div>
-							<input class = "button" type="submit" value="Send Request">
+							<input class = "button" type="submit" value="Remove Friend">
 						</div>
 					</div>
 				</form>
@@ -84,6 +86,7 @@
 			</div>
 		</div>
 	</div>
+	
 	
 </body>
 </html>
