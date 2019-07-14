@@ -56,12 +56,13 @@ public class Game {
 //		}catch (IOException | EncodeException e) { e.printStackTrace();}
 
 		// game starts in 5 seconds
-		Timer timer = new Timer();
-		timer.schedule(new java.util.TimerTask() {
-			public void run() {
-				startNewRound();
-			}
-		}, 5 * 1000);
+//		Timer timer = new Timer();
+//		timer.schedule(new java.util.TimerTask() {
+//			public void run() {
+//				startNewRound();
+//			}
+//		}, 5 * 1000);
+		startNewRound();
 	}
 	
 	public int secsPerTurn() {
@@ -131,7 +132,7 @@ public class Game {
 				public void run() {
 					startNewRound();
 				}
-			}, 10 * 1000);// aq tavidan minichebuli dro damchirdeba
+			}, secondsPerTurn * 1000);// aq tavidan minichebuli dro damchirdeba
 
 		}
 	}
