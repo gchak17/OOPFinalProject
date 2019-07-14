@@ -54,7 +54,7 @@ function onMessage(evt) {
 		appearArtist(json);
 	} else if (json.command === "endgame") {
 
-		location.replace("http://192.168.98.16:8888/OOPFinalProject/Main.jsp");
+		location.replace('http://' + window.location.host + '/OOPFinalProject/Main.jsp');
 		//location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
 		document.getElementById("word-button1").value = json.one;
