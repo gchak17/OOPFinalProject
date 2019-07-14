@@ -62,7 +62,7 @@ alter table friend_requests
 	add constraint friend_requests_fk2 foreign key (request_reciever_id)
 	references accounts(id);
 	
-	
+-- -----------reviews-----------
 create table reviews
 (id integer not null auto_increment primary key,
 review_reciever_id integer not null,
