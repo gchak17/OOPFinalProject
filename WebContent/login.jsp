@@ -3,18 +3,34 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Welcome</title>
+	<link href="login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<h1>Welcome to Our Game!</h1>
 	
-	<p>Please log in.</p>
-	
-    <form action="LoginServlet" method="post">
-		User Name: <input type="text" name="userName" required="required"><br>
-		Password: <input type="password" name="password" required="required">
-		<input type="submit" value="Login">
-	</form>
+	<div class = "limiter">
+		<div class = "container-login">
+			<div class = "wrap-login">
+			    <form action="LoginServlet" method="post">
+			    		
+			    		<span class = "login-form-title">Welcome to Our Game!</span>
+			    		<div class = "wrap-input">
+							User Name: <input class = "input" type="text" name="userName" required="required"><br>
+						</div>
+						<div class = "wrap-input">
+							Password: <input class = "input" type="password" name="password" required="required">
+						</div>
+						<div class="container-login-form-button">
+							<div class="wrap-login-form-button">
+								<div class="login-form-button"></div>
+								<input class = "login-button" type="submit" value="Login">
+								</div>
+						</div>		
+						<a class = "txt" style = "text-align:center;" href="CreateAccount.jsp">Create new Account</a>
+					
+				</form>
+			</div>
+		</div>
+	</div>
     
-    <a href="CreateAccount.jsp">Create new Account</a>
 </body>
 </html>
