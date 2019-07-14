@@ -27,8 +27,7 @@ public class WaitingRoomSocket {
 	private static boolean gameIsNotStarted = true;
 
 	@OnOpen
-	public void onOpen(Session peer) throws IOException, EncodeException {
-
+	public void onOpen(Session peer) throws IOException, EncodeException { 
 		HttpSession httpSession = (HttpSession) peer.getUserProperties().get("HttpSession");
 		ohHenloFrens(httpSession, peer);
 	}
@@ -51,11 +50,21 @@ public class WaitingRoomSocket {
 				List<Session> sess = sessions.get(id);
 				sess.remove(peer);
 				sessions.put(id, sess);
+				
+				JSONObject json = generateJsonForPlayers(r.getPlayers());
+				for (Session s : sessions.get(id)) {
+					s.getBasicRemote().sendObject(new Message(json));
+				}
 			}
 		}else {
 			List<Session> sess = sessions.get(id);
 			sess.remove(peer);
 			sessions.put(id, sess);
+			
+			JSONObject json = generateJsonForPlayers(r.getPlayers());
+			for (Session s : sessions.get(id)) {
+				s.getBasicRemote().sendObject(new Message(json));
+			}
 		}
 	}
 
@@ -70,7 +79,6 @@ public class WaitingRoomSocket {
 		}
 		sessions.remove(id);
 		GameManager.getInstance().removeRoom(id);
-
 	}
 
 	@OnMessage

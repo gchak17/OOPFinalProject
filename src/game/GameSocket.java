@@ -44,10 +44,9 @@ public class GameSocket {
 
 		if (ses.size() == r.getPlayers().size()) {
 			// System.out.println(r.getRounds() + " " + r.getTime());
-			Game g = new Game(r.getPlayers(), r.getRounds(), r.getTime(), id);
+			Game g = new Game(r.getPlayers(), r.getRounds(), r.getTurnDuration(), id);
 			GameManager.getInstance().addGame(g);
 		}
-
 	}
 
 	@OnClose
