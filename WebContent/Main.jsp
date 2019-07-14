@@ -13,6 +13,7 @@
 <meta charset="UTF-8">
 <title>Welcome to your account</title>
 <link href="Main.css" rel="stylesheet" type="text/css">
+<!-- <link href="login.css" rel="stylesheet" type="text/css"> -->
 <link rel="stylesheet" type="text/css"
 	href="js_lib/css/lib/control/iconselect.css">
 <script type="text/javascript" src="js_lib/control/iconselect.js"></script>
@@ -42,37 +43,50 @@
 		<form action="ChangeAvatarServlet" method="post">
 			<div id="my-icon-select"></div>
 			<input id="avatar_id_field" type="hidden" name="avatar_id" value="">
-			<input type="submit" onclick="getAvatarID()" value="Change Avatar">
-		</form>
-	</div>
-
-	<div class="search-cl">
-		<form action="SeeAccountProfile" method="get">
-			<input type="text" name="accountUsername" id="sarchField" size="50">
-			<input type="submit" value="Search">
+			<input type="submit" onclick="getAvatarID()" value="Change Avatar"
+				class="button-dif">
 		</form>
 
-	</div>
-
-	<div class="center">
-		<div class="room-settings-wind">
-			<div class="name">Room Settings</div>
-				<form action="CreateRoom" method="post">
-				<div class="room-buttons">
-					<input type="submit" value="Create Room" id = "buttons"></div>
-				</form>
-
-				<form action="WaitingRoomsServlet" method="post" id = "buttons">
-					<div class = "room-buttons"><input type="submit" value="Show Rooms"></div>
-				</form>
-
+		<div class="search-cl">
+			<form action="SeeAccountProfile" method="get">
+				<div class="search-part">
+					<input type="text" name="accountUsername" id="sarchField" size="50">
+					<input type="submit" value="Search" class="button-dif">
+				</div>
+			</form>
 		</div>
+
+
 	</div>
 
-	
 
-	
-	<p> <%= user.getUsername() %> </p>
+		<div class="set-container">
+			<div class="room-set-wrap">
+				<span class="wrap-form-title">Round Settings</span>
+				<div class="container-button">
+					<form action="CreateRoom" method="post">
+						<div class="wrap-button">
+							<div class="room-button"></div>
+							<input type="submit" value="Create Room" class="button">
+						</div>
+					</form>
+					<div class="divider"></div>
+					<form action="WaitingRoomsServlet" method="post" id="buttons">
+						<div class="wrap-button">
+							<div class="room-button"></div>
+							<input type="submit" value="Show Rooms" class="button">
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+
+
+
+	<p>
+		<%=user.getUsername()%>
+	</p>
 
 
 
@@ -141,31 +155,35 @@
 	</script>
 
 
-	
-	<form action = "ChangeUsernameServlet" method = "post">
-		<input type = "text" name = "newUsername">
-		<input type = "submit" value = "Change Username">
+
+	<form action="ChangeUsernameServlet" method="post">
+		<input type="text" name="newUsername"> <input type="submit"
+			value="Change Username">
 	</form>
-	
-	<% double avgPoint = reviewsManager.getAvgReviewPoint(user.getID()); %>
-	<% if (avgPoint == -1) {%>
-		<p>You have not received any reviews yet</p>
-	 <%} else { %>
-	 	<p> Your Average Review Point is <%= avgPoint %> </p>
-	 <%} %>
-	
+
+	<%
+		double avgPoint = reviewsManager.getAvgReviewPoint(user.getID());
+	%>
+	<%
+		if (avgPoint == -1) {
+	%>
+	<p>You have not received any reviews yet</p>
+	<%
+		} else {
+	%>
+	<p>
+		Your Average Review Point is
+		<%=avgPoint%>
+	</p>
+	<%
+		}
+	%>
+
 
 	<form action="DeleteAccountServlet" method="post">
 		<input type="submit" value="Delete Account">
 	</form>
 
-	<form action="CreateRoom" method="post">
-		<input type="submit" value="Create Room">
-	</form>
-
-	<form action="WaitingRoomsServlet" method="post">
-		<input type="submit" value="Show Rooms">
-	</form>
 
 	<button onclick="location.href='AddFriend.jsp'" type="button">Add
 		Friend</button>
