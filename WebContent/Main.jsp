@@ -110,7 +110,7 @@
 	
 	<% double avgPoint = reviewsManager.getAvgReviewPoint(user.getID()); %>
 	<% if (avgPoint == -1) {%>
-		<p>You have not recieved any reviews yet</p>
+		<p>You have not received any reviews yet</p>
 	 <%} else { %>
 	 	<p> Your Average Review Point is <%= avgPoint %> </p>
 	 <%} %>
