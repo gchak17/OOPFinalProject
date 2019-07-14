@@ -1,10 +1,21 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-//var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
-var gameSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/game");
+var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
+//var gameSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/game");
 gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };
+
+//gameSocket.onclose = function(evt) {
+//	onClose()
+//};
+//
+//function onClose(){
+//	var json = JSON.stringify({
+//		"command" : "userleft"
+//	});
+//	sendText(json);
+//}
 
 function sendText(json) {
 	gameSocket.send(json);
@@ -40,8 +51,8 @@ function onMessage(evt) {
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
 	} else if (json.command === "endgame") {
-		//location.replace("192.168.98.14:8888/OOPFinalProject/Main.jsp");
-		location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
+		location.replace("192.168.98.14:8888/OOPFinalProject/Main.jsp");
+		//location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
 		document.getElementById("word-button1").value = json.one;
 		document.getElementById("word-button2").value = json.two;
@@ -129,7 +140,7 @@ function setTheWordAndSend(word, json) {
 		"command" : "wordIsChosen",
 		"chosen" : chosenWord
 	});
-	console.log(chosenWord);
+	//console.log(chosenWord);
 	gameSocket.send(newJson)
 }
 
@@ -163,12 +174,12 @@ var mouseMoveFun = function() {
 	var json = JSON.stringify({
 		"command" : "paint",
 		"start" : {
-			"x" : lastPos[0],
-			"y" : lastPos[1]
+			"x" : lastPos[0], //divide by width
+ 			"y" : lastPos[1] //divide by height
 		},
 		"end" : {
-			"x" : p[0],
-			"y" : p[1]
+			"x" : p[0], //divide by width
+			"y" : p[1] //divide by height
 		},
 		"color" : currCol,
 		"width" : currWidth
@@ -238,18 +249,24 @@ function drawImageText(image) {
 function getPos(event) {
 	var x = event.clientX - offsetLeft;
 	var y = event.clientY - offsetTop;
-	return [ x, y ];
+	return [x, y];
 }
 
 function changeSizeAndPosition() {
 	// canvas-panel
-	document.getElementById("canvas-panel").width = innerWidth * 0.6;
-	document.getElementById("canvas-panel").height = innerHeight * 0.6;
-	document.getElementById("canvas-panel").style.top = innerHeight * 0.2
-			+ "px";
-	document.getElementById("canvas-panel").style.left = innerWidth * 0.2
-			+ "px";
-
+	canvas.width = innerWidth * 0.6;
+	canvas.height = innerHeight * 0.6;
+	canvas.style.top = innerHeight * 0.2 + "px";
+	canvas.style.left = innerWidth * 0.2 + "px";
+	
+	// rescaling painting
+//	var data = canvas.toDataURL();	
+//	var img = new Image();
+//    img.onload = function(){
+//        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+//    }
+//    img.src = data;
+	
 	// center-panel class
 	var x = document.getElementsByClassName("center-panel");
 	for (var i = 0; i < x.length; i++) {
@@ -262,8 +279,7 @@ function changeSizeAndPosition() {
 	document.getElementById("word-panel").style.top = "0px";
 
 	// paint-options-panel
-	document.getElementById("paint-options-panel").style.top = innerHeight
-			* 0.8 + "px";
+	document.getElementById("paint-options-panel").style.top = innerHeight * 0.8 + "px";
 
 	// side-panel class
 	var x = document.getElementsByClassName("side-panel");

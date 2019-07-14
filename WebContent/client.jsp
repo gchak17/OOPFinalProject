@@ -14,7 +14,7 @@
 <script type="text/javascript" src="notificationSocket.js"></script>
 </head>
 <body onresize="changeSizeAndPosition()"
-	onload="changeSizeAndPosition()">
+	onload="changeSizeAndPosition();">
 	
 	<%	
 		String game_id = (String)request.getSession().getAttribute("gameId");
