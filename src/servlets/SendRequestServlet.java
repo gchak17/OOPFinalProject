@@ -56,6 +56,7 @@ public class SendRequestServlet extends HttpServlet {
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		FriendRequestManager friendRequestManager = (FriendRequestManager) getServletContext().getAttribute("friendRequestManager");
 		Account user = (Account)request.getSession().getAttribute("user");
+		Account friendAccount = accountData.getAccountByUsername(friendUserName);
 		
 		PrintWriter out = response.getWriter(); 
 		
@@ -66,7 +67,7 @@ public class SendRequestServlet extends HttpServlet {
 		if(user.getUsername().equals(friendUserName)) {
 			resp.put("responseText", "that's your username.");
 		}else if(accountData.nameInUse(friendUserName)){
-			if(user.getFriendByUsername(friendUserName) != null){
+			if(user.isFriendsWith(friendAccount.getID())){
 				resp.put("responseText", friendUserName + " is already your friend.");
 			} else if(friendRequestManager.alreadySent(user.getID(), accountData.getAccountByUsername(friendUserName).getID())) {
 				resp.put("responseText", "Request to " + friendUserName + " already sent.");
