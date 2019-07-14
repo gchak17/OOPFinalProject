@@ -3,18 +3,32 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Incorrect Information</title>
+	<link href="login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<h1>Please try again</h1>
-	
-	<p>Either your user name or password is incorrect. Please try <br> again.</p>
-	
-	<form action="LoginServlet" method="post">
-		User Name: <input type="text" name="userName"/><br>
-		Password: <input type="password" name="password"/>
-		<input type="submit" value="Login">
-	</form>
-    
-    <a href="CreateAccount.jsp">Create new Account</a>
+	<div class = "limiter">
+		<div class = "container">
+			<div class = "wrap">
+			    <form action="LoginServlet" method="post">
+			    		
+			    		<span class = "form-title">Incorrect login, Please try again.</span>
+			    		<div class = "wrap-input">
+							User Name: <input class = "input" type="text" name="userName" required="required" pattern="[A-Za-z0-9]{1,20}"><br>
+						</div>
+						<div class = "wrap-input">
+							Password: <input class = "input" type="password" name="password" required="required" pattern="[A-Za-z0-9]{1,20}">
+						</div>
+						<div class="container-form-button">
+							<div class="wrap-form-button">
+								<div class="form-button"></div>
+								<input class = "button" type="submit" value="Login">
+							</div>
+						</div>		
+						<a class = "txt" style = "text-align:center;z-index:1000;" href="CreateAccount.jsp">Create new Account</a>
+					
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
