@@ -83,4 +83,27 @@ public class FriendRequestManager {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * 
+	 */
+	public boolean alreadySent (long requestSenderId, long requestRecieverId) {
+		boolean res = false;
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select r.request_sender_id from friend_requests r where r.request_reciever_id = " + requestRecieverId + " and\n"
+					+ "r.request_sender_id = " + requestSenderId + ";");
+			
+			if(rs.next())
+				res = true;
+			else
+				res = false;
+			
+			rs.close();
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 }
