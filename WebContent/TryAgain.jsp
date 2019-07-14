@@ -13,7 +13,7 @@
 			    		
 			    		<span class = "form-title">Incorrect login, Please try again.</span>
 			    		<div class = "wrap-input">
-							User Name: <input class = "input" type="text" name="userName" required="required" pattern="[A-Za-z0-9]{1,20}"><br>
+							User Name: <input class = "input" type="text" name="userName" required="required" pattern="[A-Za-z0-9]{1,20}">
 						</div>
 						<div class = "wrap-input">
 							Password: <input class = "input" type="password" name="password" required="required" pattern="[A-Za-z0-9]{1,20}">

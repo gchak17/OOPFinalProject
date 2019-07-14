@@ -5,6 +5,7 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 <script type="text/javascript" src="notificationSocket.js"></script>
+<link href="login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<%
@@ -14,11 +15,6 @@
 			return;
 		}
 	%>
-	<form action="BackToProfileServlet" method="post">
-		<input type="submit" value="Back to profile">
-	</form>
-
-	<br>
 
 	<script>
 		var xhr = null;
@@ -61,10 +57,33 @@
 		};
 	</script>
 
-
-	<form action="#" method="post" onsubmit="sendRequest(); return false;">
-		<input id="friendusername" type="text" name="friendusername">
-		<input type="submit" value="Send Request">
-	</form>
+	<div class = "limiter">
+		<div class = "container">
+			<div class = "wrap">
+				<form action="#" method="post" onsubmit="sendRequest(); return false;">
+					<div class = "wrap-input">
+						User Name:<input class = "input" id="friendusername" type="text" name="friendusername">
+					</div>
+					<div  class="container-form-button">
+						<div class="wrap-form-button">
+							<div class="form-button"></div>
+							<input class = "button" type="submit" value="Send Request">
+						</div>
+					</div>
+				</form>
+				
+				<form action="BackToProfileServlet" method="post">
+					<div  class="container-form-button">
+						<div class="wrap-form-button">
+							<div class="form-button"></div>
+							<input class = "button" type="submit" value="Back to profile">
+						</div>
+					</div>
+								
+				</form>
+			</div>
+		</div>
+	</div>
+	
 </body>
 </html>

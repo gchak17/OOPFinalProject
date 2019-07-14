@@ -8,23 +8,41 @@
         
         <script type="text/javascript" src="js_lib/iscroll.js"></script>
     
-        
+        <link href="login.css" rel="stylesheet" type="text/css">
     </head>
     <body>
         
-        <h1>Name in Use.</h1>
-	
-		<p>The Username you entered is already in use. <br> 
-			Please enter proposed name and password</p>
-        
-        
-        <form action="AccountCreationServlet" method="post">
-			User Name: <input type="text" name="userName"/><br>
-			Password: <input type="password" name="password"/><br>
-			<div id="my-icon-select"></div>
-			<input id = "avatar_id_field" type = "hidden" name = "avatar_id" value = "">
-			<input type="submit" onclick = "getAvatarID()" value="Sign Up">
-		</form>
+        <div class = "limiter">
+			<div class = "container">
+				<div class = "wrap">
+			        <form action="AccountCreationServlet" method="post">
+			        	<span class = "form-title">The Username you entered is already in use.</span>
+			    		<div class = "wrap-input">
+							User Name: <input class = "input" type="text" name="userName" required="required" pattern="[A-Za-z0-9]{1,20}">
+						</div>
+						<div class = "wrap-input">
+							Password: <input class = "input" type="password" name="password" required="required" pattern="[A-Za-z0-9]{1,20}">
+						</div>
+						<input id = "avatar_id_field" type = "hidden" name = "avatar_id" value = "">
+						<div>
+							
+							<div style = "display:inline-block;right-padding:25px">
+								<div  class="container-form-button">
+									<div class="wrap-form-button">
+										<div class="form-button"></div>
+										<input  class = "button" type="submit" onclick = "getAvatarID()" value="Sign Up">
+									</div>
+								</div>
+							</div>
+							<div style = "display:inline-block;text-align:center;" >
+								<div id="my-icon-select"></div>
+							</div>	
+						</div>
+						
+					</form>
+				</div>
+			</div>
+		</div>
 
         <script>
 			var iconSelect = new IconSelect("my-icon-select", 

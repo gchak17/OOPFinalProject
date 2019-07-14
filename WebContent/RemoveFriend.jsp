@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	
@@ -16,11 +17,6 @@
 			return;
 		}
 	%>
-	<form action="BackToProfileServlet" method="post">
-		<input type="submit" value="Back to profile">
-	</form>
-
-	<br>
 
 	<script>
 		var xhr = null;
@@ -62,11 +58,35 @@
 			}
 		};
 	</script>
-
-
-	<form action="#" method="post" onsubmit="removeFriend(); return false;">
-		<input id="friendusername" type="text" name="friendusername">
-		<input type="submit" value="Remove Friend">
-	</form>
+	
+	<div class = "limiter">
+		<div class = "container">
+			<div class = "wrap">
+				<form action="#" method="post" onsubmit="removeFriend(); return false;">
+					<div class = "wrap-input">
+						User Name:<input class = "input" id="friendusername" type="text" name="friendusername">
+					</div>
+					<div  class="container-form-button">
+						<div class="wrap-form-button">
+							<div class="form-button"></div>
+							<input class = "button" type="submit" value="Remove Friend">
+						</div>
+					</div>
+				</form>
+				
+				<form action="BackToProfileServlet" method="post">
+					<div  class="container-form-button">
+						<div class="wrap-form-button">
+							<div class="form-button"></div>
+							<input class = "button" type="submit" value="Back to profile">
+						</div>
+					</div>
+								
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
 </body>
 </html>
