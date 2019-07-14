@@ -16,6 +16,15 @@ public class Account {
 	private ArrayList<Long> friendList;
 	private AccountData accountData;
 	
+	
+	public Account(long userID, String username, String password, Avatar avatar) {
+		this.userID = userID;
+		this.username = username;
+		this.password = password;
+		this.avatar = avatar;
+		accountData = AccountData.getInstance();
+	}
+	
 	public Account(long userID, String username, String password, Avatar avatar, ArrayList<Long> friends) {
 		this.userID = userID;
 		this.username = username;
@@ -48,9 +57,9 @@ public class Account {
 		username = newUserName;
 	}
 	
-	public void addFriend(Account friend) {
-		friendList.add(friend.getID());
-		accountData.addFriend(this, friend.getID());
+	public void addFriend(Long friendID) {
+		friendList.add(friendID);
+		accountData.addFriend(this, friendID);
 	}
 	
 	public Account getFriendByID(long userID) {
@@ -92,7 +101,8 @@ public class Account {
 		
 		Account otherAcc = (Account) other;
 		
-		return this.username.equals(otherAcc.username);
+		return this.username.equals(otherAcc.username) && this.userID == otherAcc.userID && 
+							this.password.equals(otherAcc.password) && this.avatar.equals(otherAcc.avatar);
 	}
 	
 	public String toString() {
