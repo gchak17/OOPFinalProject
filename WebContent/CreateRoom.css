@@ -14,6 +14,7 @@
     flex-shrink: 1;
     flex-basis: auto;
     height: 440px;
+    border-radius: 3%;
 }
  
 .roomName {
@@ -209,4 +210,5 @@ body{
     width: 300px;
     ms-transform: translateY(-50%);
     transform: translateY(-50%);
+    border-radius: 3%;
 }
