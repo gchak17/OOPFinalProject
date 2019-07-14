@@ -37,6 +37,8 @@
 	%>
 	
 	<img src="<%=user.getAvatar().getFullPath()%>">
+	
+	<p> <%= user.getUsername() %> </p>
 
 	<form action="ChangeAvatarServlet" method="post">
 		<div id="my-icon-select"></div>
@@ -107,6 +109,11 @@
 					.getSelectedValue();
 		};
 	</script>
+	
+	<form action = "ChangeUsernameServlet" method = "post">
+		<input type = "text" name = "newUsername">
+		<input type = "submit" value = "Change Username">
+	</form>
 	
 	<% double avgPoint = reviewsManager.getAvgReviewPoint(user.getID()); %>
 	<% if (avgPoint == -1) {%>

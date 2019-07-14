@@ -110,6 +110,18 @@ public class AccountData {
 	/*
 	 * 
 	 */
+	public void changeAccountUsername(long accountId, String newUsername) {
+		try {
+			Statement st = conn.createStatement();
+			st.executeUpdate("update accounts set user_name = '" + newUsername + "' where accounts.id = " + accountId + ";");
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	/*
+	 * 
+	 */
 	public void addFriend(Account account, long friendId) {
 		if(friendId <= 0 || account.getID() == friendId)return;
 		try {
@@ -117,6 +129,21 @@ public class AccountData {
 			Statement st = conn.createStatement();
 			st.executeUpdate("insert into friend_connections(id, user1_id, user2_id) values\n" + 
 					"(" + generator.generateID() + ", " + account.getID() + ", " + friendId + ");");
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public void removeFriend(Account account, long friendId) {
+		if(friendId <= 0 || account.getID() == friendId)return;
+		try {
+			Statement st = conn.createStatement();
+			st.executeUpdate("delete from friend_connections where (user1_id = " + account.getID() + " and user2_id = " + friendId + ")\n"
+					+ " or (user1_id = " + friendId + " and user2_id = " + account.getID() + ");");
 			st.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
