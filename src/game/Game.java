@@ -26,6 +26,7 @@ public class Game {
 	private int numRounds;
 	private Timer startTurnTimer;
 	private Timer newRoundTimer;
+	private Timer endTurnTimer;
 	private Round round;
 	private int roundCounter;
 	private int artistIndex;
@@ -125,14 +126,13 @@ public class Game {
 			System.out.println("aq var: " + roundCounter);
 			endGame();
 		} else {
-
 			newRoundTimer = new Timer();
 			newRoundTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					startNewRound();
 				}
-			}, secondsPerTurn * 1000);// aq tavidan minichebuli dro damchirdeba
+			}, 3 * 1000);// aq tavidan minichebuli dro damchirdeba
 
 		}
 	}
@@ -185,7 +185,7 @@ public class Game {
 		private String chosenWord = "";
 		private Connection conn;
 		private ArrayList<String> randomWords = new ArrayList<String>();
-		private Timer endTurnTimer;
+	//	private Timer endTurnTimer;
 		private boolean turnIsEnded;
 		private Date wordChosenTime;
 		private int numberOfGuesses;
