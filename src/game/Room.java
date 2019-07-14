@@ -3,29 +3,26 @@ package game;
 import java.util.ArrayList;
 
 public class Room {
-
 	private Player admin;
-	private int curPlayers;
 	private int Rounds;
-	private int roundDuration;
+	private int turnDuration;
 	private int MaxPlayer;
 	private String roomId;
 	private ArrayList<Player> players = new ArrayList<Player>();
+	private boolean isWaiting;
 
-	public Room(Player admin, int Rounds, int roundDuration, int MaxPlayer) {
+	public Room(Player admin, int Rounds, int turnDuration, int MaxPlayer){
 		this.admin = admin;
 		this.Rounds = Rounds;
-		this.roundDuration = roundDuration;
+		this.turnDuration = turnDuration;
 		this.MaxPlayer = MaxPlayer;
-		this.curPlayers = 1;
 		this.players.add(admin);
+		this.isWaiting = true;
 	}
 
 	public boolean addPlayer(Player newPlayer) {
-		if (curPlayers < MaxPlayer) {
-			if (players.contains(newPlayer))
-				return false;
-			curPlayers++;
+		if (players.size() < MaxPlayer) {
+			if (players.contains(newPlayer)) return false;
 			newPlayer.setRoom(this);
 			players.add(newPlayer);
 			return true;
@@ -45,8 +42,8 @@ public class Room {
 		return this.Rounds;
 	}
 
-	public int getTime() {
-		return this.roundDuration;
+	public int getTurnDuration() {
+		return this.turnDuration;
 	}
 
 	public void setRoomId(String roomId) {
@@ -58,18 +55,25 @@ public class Room {
 	}
 
 	public void removePlayer(Player user) {
-		if(curPlayers > 0) {
+		if(!players.isEmpty()) {
 			players.remove(user);
-			curPlayers--;
 		}
 	}
 
 	public String toString() {
 		return "Created by: " + admin.toString() + ", " + players.size() + " players, \n" + "Number of Rounds: "
-				+ Rounds + ", Round Duration: " + roundDuration;
+				+ Rounds + ", Turn Duration: " + turnDuration;
 	}
 	
 	public boolean isEmpty() {
-		return curPlayers == 0;
+		return players.isEmpty();
+	}
+	
+	public boolean isWaitingRoom() {
+		return isWaiting;
+	}
+	
+	public void setStarted() {
+		isWaiting = false;
 	}
 }

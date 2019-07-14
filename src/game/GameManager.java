@@ -18,6 +18,7 @@ public class GameManager {
 
 	public void addGame(Game game) {
 		games.put(game.getId(), game);
+		getRoomById(game.getId()).setStarted();
 	}
 
 	private String generateRandomCode() {
@@ -41,7 +42,7 @@ public class GameManager {
 		return games.get(id);
 	}
 
-	public void endGame(String gameID) {
+	public void removeGame(String gameID) {
 		games.remove(gameID);
 	}
 
@@ -56,7 +57,7 @@ public class GameManager {
 	public ArrayList<String> getWaitingRooms() {
 		ArrayList<String> rooms = new ArrayList<String>();
 		for (String key : waitingRooms.keySet()) {
-			rooms.add(key);
+			if(waitingRooms.get(key).isWaitingRoom()) rooms.add(key);
 		}
 		return rooms;
 	}
