@@ -36,6 +36,21 @@ public class Avatar {
 		this.path = path;
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		if(this == other) {
+			return true;
+		}
+		
+		if(!(other instanceof Avatar)) {
+			return false;
+		}
+		
+		Avatar otherAv = (Avatar)other;
+		return this.avatarID == otherAv.avatarID && this.filename.equals(otherAv.filename)
+							&& this.path.equals(otherAv.path);
+	}
+	
 	
 	
 }

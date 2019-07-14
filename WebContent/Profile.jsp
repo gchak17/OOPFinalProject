@@ -9,6 +9,7 @@
 <% 
 	AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 	Account currAccount = (Account)session.getAttribute("currAccount");
+	Account user = (Account)session.getAttribute("user");
 	ReviewsManager reviewsManager = (ReviewsManager) getServletContext().getAttribute("reviewsManager");
 %>
 
@@ -28,6 +29,8 @@
 </head>
 
 <body>
+	
+
 	<form action="BackToProfileServlet" method="post">
 		<input type="submit" value="Back to profile">
 	</form>
@@ -38,7 +41,7 @@
 	
 	<%= currAccount.getUsername() %>
 	
-	<% if(((Account) session.getAttribute("user")).getFriendByID(currAccount.getID()) != null) { %>
+	<% if(user.isFriendsWith(currAccount.getID())) { %>
 		<p>Your Friend!</p>
 	<%} else {%>
 		<form action="AddFriend.jsp">
@@ -69,7 +72,7 @@
     
 	<p>Friends:<br></p>
 	
-	<% Iterator<Account> friends = currAccount.getFriendList(); %>
+	<% Iterator<Account> friends = accountData.getFriendAccounts(currAccount.getID()); %>
 	<ul>
 		<% while(friends.hasNext()){
 			%>

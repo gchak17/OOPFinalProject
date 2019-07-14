@@ -9,12 +9,20 @@ import managers.AccountData;
 import managers.PasswordHasher;
 
 public class Account {
-	private long userID;
+	private Long userID;
 	private String username;
 	private String password;
 	private Avatar avatar;
 	private ArrayList<Long> friendList;
-	private AccountData accountData;
+	
+	
+	public Account(long userID, String username, String password, Avatar avatar) {
+		this.userID = userID;
+		this.username = username;
+		this.password = password;
+		this.avatar = avatar;
+		friendList = new ArrayList<Long>();
+	}
 	
 	public Account(long userID, String username, String password, Avatar avatar, ArrayList<Long> friends) {
 		this.userID = userID;
@@ -22,12 +30,11 @@ public class Account {
 		this.password = password;
 		this.avatar = avatar;
 		friendList = friends;
-		accountData = AccountData.getInstance();
 	}
 	
 	
 	
-	public long getID() {
+	public Long getID() {
 		return userID; 
 	}
 	
@@ -48,36 +55,19 @@ public class Account {
 		username = newUserName;
 	}
 	
-	public void addFriend(Account friend) {
-		friendList.add(friend.getID());
-		accountData.addFriend(this, friend.getID());
+	public void addFriend(Long friendID) {
+		if(friendID > 0 && friendID != this.getID()) {
+			friendList.add(friendID);
+		}
 	}
 	
-	public Account getFriendByID(long userID) {
-		for(int i = 0; i < friendList.size(); i++) {
-			if(friendList.get(i) == userID) {
-				return accountData.getAccountByID(userID);
-			}
-		}
-		return null;
+	public void removeFriend(Long friendID) {
+		friendList.remove(friendID);
 	}
 	
-	public Account getFriendByUsername(String username) {
-		for(int i = 0; i < friendList.size(); i++) {
-			Account account = accountData.getAccountByID(friendList.get(i));
-			if(account.getUsername().equals(username)) {
-				return account;
-			}
-		}
-		return null;
-	}
 	
-	public Iterator<Account> getFriendList(){
-		List<Account> res = new ArrayList<>();
-		for(int i = 0; i < friendList.size(); i++) {
-			res.add(accountData.getAccountByID(friendList.get(i)));
-		}
-		return res.iterator();
+	public boolean isFriendsWith(Long friendID) {
+		return  friendList.contains(friendID);
 	}
 	
 	@Override
@@ -92,7 +82,8 @@ public class Account {
 		
 		Account otherAcc = (Account) other;
 		
-		return this.username.equals(otherAcc.username);
+		return this.username.equals(otherAcc.username) && this.userID == otherAcc.userID && 
+							this.password.equals(otherAcc.password) && this.avatar.equals(otherAcc.avatar);
 	}
 	
 	public String toString() {

@@ -28,7 +28,8 @@
 	<script>
 		//var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 		//var websocket = new WebSocket("ws://localhost:8888/OOPFinalProject/PublishRoom");
-		var websocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/PublishRoom");
+		//var websocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/PublishRoom");
+		var websocket = new WebSocket('ws://' + window.location.host + '/OOPFinalProject/PublishRoom');
 		websocket.onmessage = function(evt) {
 			updatePage(evt)
 		};
@@ -43,11 +44,15 @@
 				if (json.admin) {
 					if (json.forward) {
 						//location.replace("http://localhost:8888/OOPFinalProject/client.jsp");
-						location.replace("http://192.168.98.14:8888/OOPFinalProject/client.jsp");
+						location.replace('http://' + window.location.host + '/OOPFinalProject/client.jsp');
+						
 					}
 				} else {
 					alert("ar xar adzmini dzmao");
 				}
+			} else if (json.type == "redirect"){
+				//location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
+				location.replace("http://192.168.98.14:8888/OOPFinalProject/Main.jsp");
 			}
 		}
 
