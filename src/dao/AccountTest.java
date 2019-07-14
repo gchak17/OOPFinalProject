@@ -21,7 +21,7 @@ class AccountTest {
 		assertEquals(1, account.getID());
 		assertTrue("username".equals(account.getUsername()));
 		assertTrue("password".equals(account.getPassword()));
-		assertEquals(avatar.getID(), account.getAvatar().getID());
+		assertTrue(avatar.equals(account.getAvatar()));
 	}
 	
 	@Test
@@ -51,6 +51,33 @@ class AccountTest {
 		assertTrue(!account.equals(otherAcc5));
 		assertTrue(!account.equals(otherAcc6));
 		
+	}
+	
+	
+	@Test
+	void testAddFriend() {
+		Account account = new Account(1, "username", "password", avatar);
+		account.addFriend(Long.valueOf((long)1));
+		account.addFriend(Long.valueOf((long)2));
+		account.addFriend(Long.valueOf((long)10));
+		
+		assertTrue(!account.isFriendsWith(Long.valueOf((long)1)));
+		assertTrue(account.isFriendsWith(Long.valueOf((long)2)));
+		assertTrue(account.isFriendsWith(Long.valueOf((long)10)));
+	}
+	
+	@Test 
+	void testRemoveFriend(){
+		Account account = new Account(1, "username", "password", avatar);
+		account.addFriend(Long.valueOf((long)1));
+		account.addFriend(Long.valueOf((long)2));
+		account.addFriend(Long.valueOf((long)10));
+		
+		account.removeFriend(Long.valueOf((long)10));
+		assertTrue(!account.isFriendsWith(Long.valueOf((long)10)));
+		
+		account.removeFriend(Long.valueOf((long)1));
+		assertTrue(!account.isFriendsWith(Long.valueOf((long)1)));
 	}
 
 }
