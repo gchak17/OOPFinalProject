@@ -14,7 +14,6 @@ public class Account {
 	private String password;
 	private Avatar avatar;
 	private ArrayList<Long> friendList;
-	private AccountData accountData;
 	
 	
 	public Account(long userID, String username, String password, Avatar avatar) {
@@ -22,7 +21,6 @@ public class Account {
 		this.username = username;
 		this.password = password;
 		this.avatar = avatar;
-		accountData = AccountData.getInstance();
 	}
 	
 	public Account(long userID, String username, String password, Avatar avatar, ArrayList<Long> friends) {
@@ -31,7 +29,6 @@ public class Account {
 		this.password = password;
 		this.avatar = avatar;
 		friendList = friends;
-		accountData = AccountData.getInstance();
 	}
 	
 	
@@ -58,35 +55,41 @@ public class Account {
 	}
 	
 	public void addFriend(Long friendID) {
-		friendList.add(friendID);
-		accountData.addFriend(this, friendID);
+		if(friendID > 0 && friendID != this.getID()) {
+			friendList.add(friendID);
+		}
 	}
 	
-	public Account getFriendByID(long userID) {
-		for(int i = 0; i < friendList.size(); i++) {
-			if(friendList.get(i) == userID) {
-				return accountData.getAccountByID(userID);
-			}
-		}
-		return null;
-	}
+//	public Account getFriendByID(long userID) {
+//		for(int i = 0; i < friendList.size(); i++) {
+//			if(friendList.get(i) == userID) {
+//				return accountData.getAccountByID(userID);
+//			}
+//		}
+//		return null;
+//	}
 	
-	public Account getFriendByUsername(String username) {
-		for(int i = 0; i < friendList.size(); i++) {
-			Account account = accountData.getAccountByID(friendList.get(i));
-			if(account.getUsername().equals(username)) {
-				return account;
-			}
-		}
-		return null;
-	}
+//	public Account getFriendByUsername(String username) {
+//		for(int i = 0; i < friendList.size(); i++) {
+//			Account account = accountData.getAccountByID(friendList.get(i));
+//			if(account.getUsername().equals(username)) {
+//				return account;
+//			}
+//		}
+//		return null;
+//	}
+//	
+//	public Iterator<Account> getFriendList(){
+//		List<Account> res = new ArrayList<>();
+//		for(int i = 0; i < friendList.size(); i++) {
+//			res.add(accountData.getAccountByID(friendList.get(i)));
+//		}
+//		return res.iterator();
+//	}
 	
-	public Iterator<Account> getFriendList(){
-		List<Account> res = new ArrayList<>();
-		for(int i = 0; i < friendList.size(); i++) {
-			res.add(accountData.getAccountByID(friendList.get(i)));
-		}
-		return res.iterator();
+	
+	public boolean isFriendsWith(long friendID) {
+		return  friendList.contains(friendID);
 	}
 	
 	@Override

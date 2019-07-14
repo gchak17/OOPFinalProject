@@ -45,6 +45,10 @@ public class AcceptFriendRequestServlet extends HttpServlet {
 		String requestSenderUsername = request.getParameter("requestSenderUsername");
 		Account requestSender = accountData.getAccountByUsername(requestSenderUsername);
 		accountData.addFriend(requestSender, requestReciever.getID());
+		
+		requestReciever.addFriend(requestSender.getID());
+		requestSender.addFriend(requestReciever.getID());
+		
 		friendRequestManager.deleteFriendRequest(requestSender.getID(), requestReciever.getID());
 		request.removeAttribute("requestSenderUsername");
 		request.getRequestDispatcher("NotificationPage.jsp").forward(request, response);

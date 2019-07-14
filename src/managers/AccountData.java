@@ -111,6 +111,7 @@ public class AccountData {
 	 * 
 	 */
 	public void addFriend(Account account, long friendId) {
+		if(friendId <= 0 || account.getID() == friendId)return;
 		try {
 			FriendConnectionsIDGenerator generator = FriendConnectionsIDGenerator.getInstance();
 			Statement st = conn.createStatement();
@@ -125,7 +126,7 @@ public class AccountData {
 	/*
 	 * 
 	 */
-	public ArrayList<Long> getFriends(long id) {
+	public ArrayList<Long> getFriendIDs(long id) {
 		ArrayList<Long> res = new ArrayList<>();
 		try {
 			Statement st = conn.createStatement();
@@ -143,6 +144,26 @@ public class AccountData {
 		}
 		return res;
 	}
+	
+	public Iterator<Account> getFriendAccounts(long id){
+		ArrayList<Account> res = new ArrayList<>();
+		try {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select f.user1_id from friend_connections f where f.user2_id = " + id + " union select fr.user2_id from friend_connections fr where fr.user1_id = " + id + ";");
+			
+			while(rs.next()) {
+				long currId = rs.getInt(1);
+				res.add(getAccountByID(currId));
+			}
+			
+			rs.close();
+			st.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return res.iterator();
+	}
+	
 
 	/*
 	 * 
@@ -154,7 +175,7 @@ public class AccountData {
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery("select a.id, a.user_name, a.authentication_string, a.avatar_id from accounts a where a.id = "  + userID + ";");
 			while(rs.next()) {
-				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)), getFriends(rs.getInt(1)));
+				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)), getFriendIDs(rs.getInt(1)));
 			}
 			
 			rs.close();
@@ -175,7 +196,7 @@ public class AccountData {
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery("select a.id, a.user_name, a.authentication_string, a.avatar_id from accounts a where a.user_name = '"  + username + "';");
 			while(rs.next()) {
-				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)), getFriends(rs.getInt(1)));
+				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)), getFriendIDs(rs.getInt(1)));
 			}
 			
 			rs.close();
@@ -199,7 +220,7 @@ public class AccountData {
 												"where a.user_name = '" + username + "' and a.authentication_string = '" + hashedPassword + "';");
 			
 			while(rs.next()) {
-				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)), getFriends(rs.getInt(1)));
+				account = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), avatarManager.getAvatarByID(rs.getInt(4)), getFriendIDs(rs.getInt(1)));
 			}
 			
 			rs.close();

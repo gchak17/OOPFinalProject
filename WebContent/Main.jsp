@@ -148,7 +148,7 @@
 	</p>
 
 	<%
-		Iterator<Account> friends = user.getFriendList();
+		Iterator<Account> friends = accountData.getFriendAccounts(user.getID());
 	%>
 
 	<%
