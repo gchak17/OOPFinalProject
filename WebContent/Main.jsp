@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="managers.AccountData"%>
+<%@ page import="managers.ReviewsManager"%>
 <%@ page import="dao.Account"%>
 <%@	page import="java.util.ArrayList"%>
 <%@	page import="java.util.Iterator"%>
@@ -23,7 +24,8 @@
 
 	<%
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
-		Account currAccount = (Account) session.getAttribute("user");
+		Account user = (Account) session.getAttribute("user");
+		ReviewsManager reviewsManager = (ReviewsManager) getServletContext().getAttribute("reviewsManager");
 	%>
 
 	<%
@@ -33,8 +35,8 @@
 			return;
 		}
 	%>
-
-	<img src="<%=currAccount.getAvatar().getFullPath()%>">
+	
+	<img src="<%=user.getAvatar().getFullPath()%>">
 
 	<form action="ChangeAvatarServlet" method="post">
 		<div id="my-icon-select"></div>
@@ -105,7 +107,14 @@
 					.getSelectedValue();
 		};
 	</script>
-
+	
+	<% double avgPoint = reviewsManager.getAvgReviewPoint(user.getID()); %>
+	<% if (avgPoint == -1) {%>
+		<p>You have not recieved any reviews yet</p>
+	 <%} else { %>
+	 	<p> Your Average Review Point is <%= avgPoint %> </p>
+	 <%} %>
+	
 	<form action="DeleteAccountServlet" method="post">
 		<input type="submit" value="Delete Account">
 	</form>
@@ -118,6 +127,11 @@
 		<input type="submit" value="Show Rooms">
 	</form>
 
+	<form action="SeeAccountProfile" method="get">
+		<input type = "text" name = "accountUsername">
+		<input type="submit" value="Search">
+	</form>
+	
 	<button onclick="location.href='AddFriend.jsp'" type="button">Add
 		Friend</button>
 
@@ -129,13 +143,12 @@
 		<input type="submit" value="Log Out">
 	</form>
 
-
 	<p>
-		Friends:<br>
+		My Friends:<br>
 	</p>
 
 	<%
-		Iterator<Account> friends = currAccount.getFriendList();
+		Iterator<Account> friends = user.getFriendList();
 	%>
 
 	<%
@@ -145,8 +158,8 @@
 		Account friend = friends.next();
 	%>
 
-	<form id="formId" action="SeeFriendProfile" method="get">
-		<input type="hidden" name="friendName" value=<%=friend.getUsername()%> />
+	<form id="formId" action="SeeAccountProfile" method="get">
+		<input type="hidden" name="accountUsername" value=<%=friend.getUsername()%> />
 		<a href="javascript:;" onclick="parentNode.submit();"><%=friend.getUsername()%></a>
 	</form>
 	<%

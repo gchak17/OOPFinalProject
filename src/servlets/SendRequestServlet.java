@@ -68,7 +68,9 @@ public class SendRequestServlet extends HttpServlet {
 		}else if(accountData.nameInUse(friendUserName)){
 			if(user.getFriendByUsername(friendUserName) != null){
 				resp.put("responseText", friendUserName + " is already your friend.");
-			}else{
+			} else if(friendRequestManager.alreadySent(user.getID(), accountData.getAccountByUsername(friendUserName).getID())) {
+				resp.put("responseText", "Request to " + friendUserName + " already sent.");
+			} else{
 				//call send request method
 				friendRequestManager.sendFriendRequest(user.getID(), accountData.getAccountByUsername(friendUserName).getID());
 				resp.put("responseText", "friend request to " + friendUserName + " is sent.");
