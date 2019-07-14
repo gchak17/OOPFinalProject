@@ -41,9 +41,9 @@ public class WaitingRoomSocket {
 		Player user = (Player) httpSession.getAttribute("player");
 
 		if (gameIsNotStarted) {
-			if (user.equals(
-					GameManager.getInstance().getRoomById((String) httpSession.getAttribute("gameId")).getAdmin())) {
-				//System.out.println("admini gavida");
+			if(r == null) {
+				return;
+			}else if(user.equals(r.getAdmin())){
 				removeEveryone(peer, id);
 			} else {
 				r.removePlayer(user);
@@ -70,12 +70,11 @@ public class WaitingRoomSocket {
 
 	private void removeEveryone(Session peer, String id) throws IOException, EncodeException {
 		JSONObject json = new JSONObject();// es unda iyos show roomze rom gadartos egeti
-
+		json.put("type", "redirect");
 		Message message = new Message(json);
 		List<Session> peers = sessions.get(id);
 		for (Session s : peers) {
-			if (!s.equals(peer))
-				s.getBasicRemote().sendObject(message);
+			if(!s.equals(peer)) s.getBasicRemote().sendObject(message);
 		}
 		sessions.remove(id);
 		GameManager.getInstance().removeRoom(id);
