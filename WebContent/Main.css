@@ -1,0 +1,47 @@
+@charset "ISO-8859-1";
+
+.image {
+	display: flex;
+	/* 	justify-content: center; */
+	margin-left: 40%;
+	width: 100%;
+}
+
+.center{
+	display: flex;
+		justify-content: center;
+	
+	width: 100%;
+}
+
+.name {
+	    display: block;
+    font-family: Poppins-Bold;
+    font-size: 30px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.room-settings-wind {
+	display: flex;
+	position: absolute;
+    top: 50%;
+    height: 300px;
+    width: 300px;
+	background-color: purple;
+}
+
+.room-buttons {
+    height: 30%;
+	flex: 0 0 auto;
+	width: 100%;
+	display: flex;
+	margin-bottom: 10%;
+}
+
+.search-cl {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
