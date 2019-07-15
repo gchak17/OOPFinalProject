@@ -15,7 +15,6 @@ function onChatMessage(evt) {
 	node.appendChild(textnode);
 
 	document.getElementById("chat-box-div").appendChild(node);
-//	document.getElementById("chat-text").value = "";
 	document.getElementById("chat-box-div").scrollTop = document.getElementById("chat-box-div").scrollHeight
 }
 
