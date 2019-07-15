@@ -1,5 +1,6 @@
 package game;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Date;
 import java.sql.ResultSet;
@@ -11,9 +12,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
 
 import org.json.JSONObject;
+
+import dao.Avatar;
 import managers.ConnectionManager;
 import message.Message;
 
@@ -46,8 +50,10 @@ public class Game {
 		// appear players on canvas
 		JSONObject json = new JSONObject();
 		json.put("command", "appearplayers");
-		for (Player p : players)
+		
+		for (Player p : players) {
 			json.put(p.toString(), 0);
+		}
 		GameSocket.sendMessage(getId(), new Message(json));
 
 		// javascript starts countdown from 5
@@ -438,14 +444,13 @@ public class Game {
 
 		private void sendPointsToWebSocket() {
 			JSONObject json = new JSONObject();
-
+			
 			json.put("command", "showResults");
 			for (Player p : TurnPoints.keySet()) {
-				int turenPoint = TurnPoints.get(p);
-				json.put(p.toString(), points.get(p) + " + " + turenPoint);
-				points.put(p, points.get(p) + turenPoint);
+				int turnPoint = TurnPoints.get(p);
+				json.put(p.toString(), points.get(p) + " + " + turnPoint);
+				points.put(p, points.get(p) + turnPoint);
 			}
-
 			GameSocket.sendMessage(getId(), new Message(json));
 		}
 

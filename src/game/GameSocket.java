@@ -13,6 +13,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.json.JSONObject;
 
+import dao.Avatar;
 import message.*;
 
 @ServerEndpoint(value = "/client/game", encoders = { MessageEncoder.class }, decoders = {
@@ -41,7 +42,7 @@ public class GameSocket {
 
 		ses.add(curS);
 		sessions.put(id, ses);
-
+		
 		if (ses.size() == r.getPlayers().size()) {
 			// System.out.println(r.getRounds() + " " + r.getTime());
 			Game g = new Game(r.getPlayers(), r.getRounds(), r.getTurnDuration(), id);

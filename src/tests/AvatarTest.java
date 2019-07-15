@@ -1,10 +1,12 @@
-package dao;
+package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import dao.Avatar;
 
 class AvatarTest {
 
