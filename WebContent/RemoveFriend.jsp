@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="login.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="notificationSocket.js"></script>
 </head>
 <body>
 	
