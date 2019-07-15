@@ -237,6 +237,5 @@
 			document.getElementById("formId").submit();
 		}
 	</script>
-
 </body>
 </html>
