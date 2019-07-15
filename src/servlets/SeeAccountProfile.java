@@ -33,8 +33,12 @@ public class SeeAccountProfile extends HttpServlet {
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
 		String currAccountUsername = request.getParameter("accountUsername");
 		Account currAccount = accountData.getAccountByUsername(currAccountUsername);
-		request.getSession().setAttribute("currAccount", currAccount);
-		request.getRequestDispatcher("Profile.jsp").forward(request, response);
+		if(currAccount != null) {
+			request.getSession().setAttribute("currAccount", currAccount);
+			request.getRequestDispatcher("Profile.jsp").forward(request, response);
+		}else {
+			request.getRequestDispatcher("Main.jsp").forward(request, response);
+		}
 		
 	}
 

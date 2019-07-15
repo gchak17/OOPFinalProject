@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="managers.AccountData"%>
@@ -13,6 +14,7 @@
 <meta charset="UTF-8">
 <title>Your Notifications</title>
 <script type="text/javascript" src="notificationSocket.js"></script>
+<link href="login.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -24,9 +26,7 @@
 			return;
 		}
 	%>
-	<form action="BackToProfileServlet" method="post">
-		<input type="submit" value="Back to profile">
-	</form>
+	
 
 	<%
 		AccountData accountData = (AccountData) getServletContext().getAttribute("accountData");
@@ -39,27 +39,59 @@
 		Iterator<Long> requests = friendRequestManager.getRequests(currAccount.getID());
 	%>
 
+	<div class = "limiter">
+		<div class = "container">
+			<div class = "wrap">
+	
+				
+				<form action="BackToProfileServlet" method="post">
+					<div class="container-form-button">
+						<div class="wrap-form-button">
+							<div class="form-button"></div>
+							<input class = "button" type="submit" value="Back to profile">
+						</div>
+					</div>
+				</form>
 
-	<%
-		while (requests.hasNext()) {
-	%>
-	<%
-		Account requestSender = accountData.getAccountByID(requests.next());
-	%>
-	<%=requestSender.getUsername() + " sent a friend request"%>
-	<form action="AcceptFriendRequestServlet" method="post">
-		<input type="submit" value="Accept"> <input
-			name="requestSenderUsername" type="hidden"
-			value=<%=requestSender.getUsername()%>>
-	</form>
-	<form action="RejectFriendRequestServlet" method="post">
-		<input type="submit" value="Reject"> <input
-			name="requestSenderUsername" type="hidden"
-			value=<%=requestSender.getUsername()%>>
-	</form>
-	<%
-		}
-	%>
+				<%
+					while (requests.hasNext()) {
+				%>
+				<%
+					Account requestSender = accountData.getAccountByID(requests.next());
+				%>
+				
+				<div class = "txt" style = "font-size:25px;">
+					<%=requestSender.getUsername() + " sent a friend request"%>
+				</div>
+				
+				<form action="AcceptFriendRequestServlet" method="post">
+					<div class="container-form-button">
+						<div class="wrap-form-button">
+							<div class="form-button"></div>
+							<input class = "button" type="submit" value="Accept"> <input
+								name="requestSenderUsername" type="hidden"
+								value=<%=requestSender.getUsername()%>>
+						</div>
+					</div>
+				</form>
+				
+				<form action="RejectFriendRequestServlet" method="post">
+				<div class="container-form-button">
+					<div class="wrap-form-button">
+						<div class="form-button"></div>
+						<input class = "button" type="submit" value="Reject"> <input
+							name="requestSenderUsername" type="hidden"
+							value=<%=requestSender.getUsername()%>>
+					</div>
+				</div>
+				</form>
+				<%
+					}
+				%>
+				
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>
