@@ -7,11 +7,48 @@
 	width: 100%;
 }
 
+.manage-not {
+	position: absolute;
+	top: 350px
+}
+
+.acc-manage {
+	/* 	position: absolute; */
+	/* 	margin-left: 260px; */
+	margin-top: 11px;
+}
+
+.username {
+	font-size: 30px;
+	margin-top: 240px;
+	position: absolute;
+	font-family: Poppins-Bold;
+	color: #2d215f;
+}
+
 .search-part {
 	display: flex;
-/* 	justify-content: center; */
-	margin-left: 0%; 
+	/* 	justify-content: center; */
+	margin-left: 110px;
 	width: 100%;
+}
+
+.change {
+	display: flex;
+	width: 100%;
+}
+
+.icon-select .selected-box {
+    background-color: white;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    width: 70px;
+    height: 60px;
+    border: 1px solid #999999;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
 .center {
@@ -32,11 +69,15 @@
 }
 
 body {
-	background: #dd7cde;
+	/* 	background: #dd7cde; */
+	background: #ddc7ec;
 }
 
 .set-container {
-	width: 100%;
+	position: absolute;
+	left: 540px;
+	bottom: 170px;
+	width: 300px;
 	height: 300px;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -47,7 +88,11 @@ body {
 	justify-content: center;
 	align-items: center;
 	padding: 15px;
-	background: #dd7cde;
+	background: #bba0f3;
+	left: 540px;
+	bottom: 170px;
+	width: 300px;
+	height: 300px;
 }
 
 .container-button {
@@ -131,9 +176,9 @@ body {
 	/* 	display: flex; */
 	outline: none !important;
 	border: none;
-/* 	text-transform: uppercase; */
+	/* 	text-transform: uppercase; */
 	color: #fff;
-		font-size: 15px;
+	font-size: 15px;
 	height: 30px;
 	border-radius: 7%;
 }
@@ -159,8 +204,58 @@ body {
 	height: 50px;
 }
 
+#img {
+	border-radius: 60%
+}
+
 .search-cl {
 	display: flex;
-/* 	justify-content: center; */
-/* 	width: 100%; */
+	/* 	justify-content: center; */
+	/* 	width: 100%; */
+	margin-left: 110px;
+}
+
+.manage-username {
+	position: absolute;
+	top: 300px;
+}
+
+.friendlist {
+	background-color: #bba0f3;
+	width: 300px;
+	height: auto;
+	border-radius: 5%;
+}
+
+.manage-friends {
+	background-color: transparent;
+	margin-left: 50px;
+}
+
+.found-friend {
+	font-size: 20px;
+	color: #5904c5;
+}
+
+.for-beauty {
+	position: absolute;
+	left: 280px;
+}
+
+.points {
+	position: absolute;
+	top: 400px;
+	background-color: #bba0f3;
+}
+
+.friends-inf {
+	color: #3d0684;
+	font-size: 20px;
+	background-color: #8067ea;
+	height: 40px;
+}
+
+.points-inf {
+	color: #3d0684;
+	font-size: 20px;
 }
