@@ -15,7 +15,7 @@ function onChatMessage(evt) {
 	node.appendChild(textnode);
 
 	document.getElementById("chat-box-div").appendChild(node);
-	document.getElementById("chat-text").value = "";
+//	document.getElementById("chat-text").value = "";
 	document.getElementById("chat-box-div").scrollTop = document.getElementById("chat-box-div").scrollHeight
 }
 
@@ -25,5 +25,6 @@ function clickOnSend() {
 		"message" : document.getElementById("chat-text").value
 	});
 	//console.log("got here");
+	document.getElementById("chat-text").value = "";
 	chatSocket.send(json);
 }
