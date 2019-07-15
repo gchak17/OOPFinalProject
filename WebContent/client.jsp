@@ -25,9 +25,9 @@
 	<%
 		Account acc = (Account) session.getAttribute("user");
 		Player pl = (Player)request.getSession().getAttribute("player");
-		if (acc == null || pl == null) {
+		if (acc == null) {
 			response.sendRedirect("login.jsp");
-		}else{
+		}else if (pl == null){
 			response.sendRedirect("Main.jsp");
 		}
 	%>

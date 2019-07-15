@@ -37,9 +37,13 @@ class AvatarTest {
 		Avatar otherAv4 = new Avatar(1, "otherFilename", "somePath");
 		
 		assertTrue(avatar.equals(otherAv1));
-		assertTrue(!avatar.equals(otherAv2));
-		assertTrue(!avatar.equals(otherAv3));
-		assertTrue(!avatar.equals(otherAv4));
+		assertFalse(avatar.equals(otherAv2));
+		assertFalse(avatar.equals(otherAv3));
+		assertFalse(avatar.equals(otherAv4));
+		
+		String bla = "bla";
+		assertFalse(avatar.equals(bla));
+		assertTrue(avatar.equals(avatar));
 	}
 
 }

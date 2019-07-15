@@ -22,6 +22,11 @@ class AccountTest {
 		assertTrue("username".equals(account.getUsername()));
 		assertTrue("password".equals(account.getPassword()));
 		assertTrue(avatar.equals(account.getAvatar()));
+		String accountToString = "User: " + "username" + " Pass: " + "password";
+		assertTrue(accountToString.equals(account.toString()));
+		
+		Account acc = new Account(2, "myname", "myname", avatar, null);
+		assertTrue("myname".equals(acc.getUsername()));
 	}
 	
 	@Test
@@ -44,12 +49,15 @@ class AccountTest {
 		Account otherAcc5 = new Account(1, "username", "otherPassword", avatar);
 		Account otherAcc6 = new Account(2, "username", "password", avatar);
 		
+		assertTrue(account.equals(account));
+		assertFalse(account.equals("bla"));
 		assertTrue(account.equals(otherAcc1));
-		assertTrue(!account.equals(otherAcc2));
-		assertTrue(!account.equals(otherAcc3));
-		assertTrue(!account.equals(otherAcc4));
-		assertTrue(!account.equals(otherAcc5));
-		assertTrue(!account.equals(otherAcc6));
+		
+		assertFalse(account.equals(otherAcc2));
+		assertFalse(account.equals(otherAcc3));
+		assertFalse(account.equals(otherAcc4));
+		assertFalse(account.equals(otherAcc5));
+		assertFalse(account.equals(otherAcc6));
 		
 	}
 	
@@ -61,9 +69,12 @@ class AccountTest {
 		account.addFriend(Long.valueOf((long)2));
 		account.addFriend(Long.valueOf((long)10));
 		
-		assertTrue(!account.isFriendsWith(Long.valueOf((long)1)));
+		assertFalse(account.isFriendsWith(Long.valueOf((long)1)));
 		assertTrue(account.isFriendsWith(Long.valueOf((long)2)));
 		assertTrue(account.isFriendsWith(Long.valueOf((long)10)));
+		
+		account.addFriend(Long.valueOf((long)0));
+		assertFalse(account.isFriendsWith(Long.valueOf((long) 0 )));
 	}
 	
 	@Test 
@@ -74,10 +85,10 @@ class AccountTest {
 		account.addFriend(Long.valueOf((long)10));
 		
 		account.removeFriend(Long.valueOf((long)10));
-		assertTrue(!account.isFriendsWith(Long.valueOf((long)10)));
+		assertFalse(account.isFriendsWith(Long.valueOf((long)10)));
 		
 		account.removeFriend(Long.valueOf((long)1));
-		assertTrue(!account.isFriendsWith(Long.valueOf((long)1)));
+		assertFalse(account.isFriendsWith(Long.valueOf((long)1)));
 	}
 
 }
