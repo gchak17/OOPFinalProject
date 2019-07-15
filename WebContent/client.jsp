@@ -25,14 +25,15 @@
 	<%
 		Account acc = (Account) session.getAttribute("user");
 		Player pl = (Player)request.getSession().getAttribute("player");
-		if (acc == null || pl == null) {
+		if (acc == null) {
 			response.sendRedirect("login.jsp");
-		}else{
+		}else if (pl == null){
 			response.sendRedirect("Main.jsp");
 		}
 	%>
 
-	<div id="users-panel" class="side-panel"></div>
+	<div id="users-panel" class="side-panel">
+	</div>
 	<div id="chat-panel" class="side-panel">
 		<div id="chat-box-div" class="chat-box-class"></div>
 		<input type="text" placeholder=" type message" id="chat-text"
@@ -72,7 +73,7 @@
 	<canvas id="canvas-panel"></canvas>
 
 	<div id="word-panel" class="center-panel">
-		<p id="word-place"></p>
+		<p id="word-place" style="left:50vw;top:50vh"></p>
 		<div id="timer-div"></div>
 	</div>
 	<div id="paint-options-panel" class="center-panel">      

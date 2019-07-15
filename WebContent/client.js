@@ -1,7 +1,16 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "websocket";
 
-//var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
+var canvas = document.getElementById("canvas-panel");
+var context = canvas.getContext("2d");
 
+var drawing = false;
+var isArtist = false;
+var lastPos = null;
+
+var currCol = "black";
+var modal = document.getElementById("myModal");
+
+//var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
 //var gameSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/game");
 var gameSocket = new WebSocket('ws://' + window.location.host + '/OOPFinalProject/client/game');
 gameSocket.onmessage = function(evt) {
@@ -24,11 +33,10 @@ function sendText(json) {
 }
 
 //var timerVar, seconds;
-var modal = document.getElementById("myModal");
 
 function onMessage(evt) {
 	var json = JSON.parse(evt.data);
-	console.log(json.command);
+	//console.log(json.command);
 	if (json.command === "paint") {
 		drawImageText(evt.data);
 	} else if (json.command === "checkStatus") {
@@ -53,7 +61,7 @@ function onMessage(evt) {
 	} else if (json.command === "appearartist") {
 		appearArtist(json);
 	} else if (json.command === "endgame") {
-		location.replace('http://' + window.location.host + '/OOPFinalProject/Main.jsp');
+		location.replace('http://192.168.98.14:8888/OOPFinalProject/Main.jsp');
 		//location.replace("http://localhost:8888/OOPFinalProject/Main.jsp");
 	} else if (json.command === "chooseWord") {
 		document.getElementById("chat-text").disabled = true;
@@ -87,7 +95,7 @@ function onMessage(evt) {
 		finalResultsPopUp(json);
 	} else if (json.command === "revealword") {
 		revealWord(json);
-	}
+	} 
 }
 
 function revealWord(json) {
@@ -153,16 +161,6 @@ function setTheWordAndSend(word, json) {
 	//console.log(chosenWord);
 	gameSocket.send(newJson)
 }
-
-var canvas = document.getElementById("canvas-panel");
-var context = canvas.getContext("2d");
-
-var drawing = false;
-var isArtist = false;
-var lastPos = null;
-
-var currCol = "black";
-//var currWidth = 4;
 
 var mouseUpFun = function() {
 	drawing = false;
@@ -328,26 +326,34 @@ function showPlayerResults(json) {
 
 	var newArtist = json.artist;
 	delete json.artist;
-	for ( var k in json) {
-		var v = json[k];
-		var newP = document.createElement("P");
-		var t = document.createTextNode(k + " : " + v);
-		newP.appendChild(t);
-		if (k === newArtist)
-			newP.style.color = "yellow";
-		userPanel.appendChild(newP);
+	for (var k in json) {
+		var v = json[k];	
+		var div = document.createElement("div");
+		div.setAttribute("id", k + "id")
+		div.style.width = userPanel.width;
+		div.style.height = "8vh";
+		div.style.border = "1px solid black";
+		div.innerHTML = k + " : " + v;
+		
+		userPanel.appendChild(div);
+		
+		if (k === newArtist) div.style.color = "yellow";
 	}
 }
 
 function appearPlayers(json) {
 	var userPanel = document.getElementById("users-panel");
 
-	for (var k in json) {
-		var v = json[k];
-		var newP = document.createElement("P");
-		var t = document.createTextNode(k + " : " + v);
-		newP.appendChild(t);
-		userPanel.appendChild(newP);
+	for(var k in json) {
+		var v = json[k];	
+		var div = document.createElement("div");
+		div.setAttribute("id", k + "id")
+		div.style.width = userPanel.width;
+		div.style.height = "8vh";
+		div.style.border = "1px solid black";
+		div.innerHTML = k + " : " + v;
+		
+		userPanel.appendChild(div);
 	}
 }
 

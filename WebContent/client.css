@@ -201,7 +201,7 @@ body{
 	margin-right: 5vw;
 	margin-left: 2vw;
 	top:10vh;
-	left:25vw;
+	left:24.5vw;
 	background:white;
 	border:1px solid;
 }
@@ -268,7 +268,7 @@ body{
   -webkit-appearance: none;
   width: 10vw;
   height: 0.5vh;
-  background: gray;
+  background: black;
   outline: none;
   opacity: 0.7;
   -webkit-transition: .2s;
@@ -285,7 +285,7 @@ body{
   width: 1.5vw;
   height: 1.5vw;
   border-radius: 50%;
-  background: green;
+  background: magenta;
   cursor: pointer;
 }
 

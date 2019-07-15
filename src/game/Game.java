@@ -1,5 +1,6 @@
 package game;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Date;
 import java.sql.ResultSet;
@@ -11,9 +12,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
 
 import org.json.JSONObject;
+
+import dao.Avatar;
 import managers.ConnectionManager;
 import message.Message;
 
@@ -46,8 +50,10 @@ public class Game {
 		// appear players on canvas
 		JSONObject json = new JSONObject();
 		json.put("command", "appearplayers");
-		for (Player p : players)
+		
+		for (Player p : players) {
 			json.put(p.toString(), 0);
+		}
 		GameSocket.sendMessage(getId(), new Message(json));
 
 		// javascript starts countdown from 5
@@ -110,7 +116,7 @@ public class Game {
 	public void startNewRound() {
 		// System.out.println("axali raundi");
 		roundCounter++;
-		System.out.println(roundCounter + " daa " + numRounds);
+		//System.out.println(roundCounter + " daa " + numRounds);
 		//if (roundStarterArtist != null) roundStarterArtist.shouldBeArtist(false);
 		//chooseStarterPainter();
 		// System.out.println(roundStarterArtist);
@@ -121,9 +127,9 @@ public class Game {
 	}
 
 	public void endRound() {
-		System.out.println("vai: " + roundCounter);
+		//System.out.println("vai: " + roundCounter);
 		if (roundCounter == numRounds || players.size() <= 1) {
-			System.out.println("aq var: " + roundCounter);
+			//System.out.println("aq var: " + roundCounter);
 			endGame();
 		} else {
 			newRoundTimer = new Timer();
@@ -147,7 +153,7 @@ public class Game {
 		}
 		GameSocket.sendMessage(id, new Message(json));	
 		
-		System.out.println("cocxali va2r");
+		//System.out.println("cocxali va2r");
 		//redirect to main jsp
 		Timer timer1 = new Timer();
 		timer1.schedule(new TimerTask() {
@@ -285,7 +291,7 @@ public class Game {
 
 					artist = players.get(index);
 					if (artist.equals(roundStarterArtist) || players.size() <= 1) {
-						System.out.println("fooork");
+						//System.out.println("fooork");
 						artist.shouldBeArtist(false);
 						turnOffTimers();
 						endRound();
@@ -318,7 +324,7 @@ public class Game {
 			GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
 			
 			setChosenWordTime(null);
-			artist.endDrawing();
+			artist.shouldBeArtist(false);
 
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
@@ -356,7 +362,7 @@ public class Game {
 							if(chosenWord.isEmpty()) sendWordsToArtist("autochooseword");
 						}
 					}, 10 * 1000);
-				artist.startDrawing();
+				artist.shouldBeArtist(true);
 
 				JSONObject json = new JSONObject();
 				json.put("command", "startturn");
@@ -438,14 +444,13 @@ public class Game {
 
 		private void sendPointsToWebSocket() {
 			JSONObject json = new JSONObject();
-
+			
 			json.put("command", "showResults");
 			for (Player p : TurnPoints.keySet()) {
-				int turenPoint = TurnPoints.get(p);
-				json.put(p.toString(), points.get(p) + " + " + turenPoint);
-				points.put(p, points.get(p) + turenPoint);
+				int turnPoint = TurnPoints.get(p);
+				json.put(p.toString(), points.get(p) + " + " + turnPoint);
+				points.put(p, points.get(p) + turnPoint);
 			}
-
 			GameSocket.sendMessage(getId(), new Message(json));
 		}
 
@@ -459,7 +464,8 @@ public class Game {
 				key.addScore(res);
 			}
 			if (TurnPoints.containsKey(artist)) {
-				TurnPoints.put(artist, (numberOfGuesses == 0) ? 0 : allPoints / numberOfGuesses);
+				//TurnPoints.put(artist, (numberOfGuesses == 0) ? 0 : allPoints / numberOfGuesses);
+				TurnPoints.put(artist,(players.size() == 0) ? 0 : allPoints / players.size());
 			}
 		}
 		

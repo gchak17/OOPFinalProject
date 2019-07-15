@@ -16,16 +16,6 @@ public class Player {
 		score = 0;
 	}
 
-	public void startDrawing() {
-		isArtist = true;
-		//System.out.println(account.getUsername() + " started turn, time remaining:" );
-	}
-	
-	public void endDrawing() {
-		isArtist = false;
-		//System.out.println(account.getUsername() + " ended turn, time remaining:");
-	}
-
 	public void setGame(Game game) {
 		this.game = game;
 	}
@@ -76,6 +66,4 @@ public class Player {
 	public void shouldBeArtist(boolean shouldBe) {
 		isArtist = shouldBe;
 	}
-	
-	
 }

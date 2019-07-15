@@ -1,5 +1,9 @@
 use paint;
+
+drop TABLE if exists words;
+
 CREATE TABLE words(
+	id integer auto_increment primary key not null,
 	word varchar(255) unique not null
 );
 insert into words(word) values ("Bird");
