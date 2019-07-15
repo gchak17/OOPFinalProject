@@ -42,8 +42,9 @@ public class AcceptFriendRequestServlet extends HttpServlet {
 		FriendRequestManager friendRequestManager = (FriendRequestManager) getServletContext().getAttribute("friendRequestManager");
 		AccountData accountData = (AccountData)getServletContext().getAttribute("accountData");
 		Account requestReciever = (Account) request.getSession().getAttribute("user");
-		String requestSenderUsername = request.getParameter("requestSenderUsername");
-		Account requestSender = accountData.getAccountByUsername(requestSenderUsername);
+		System.out.println(request.getParameter("requestSenderID"));
+		Long requestSenderID = Long.parseLong(request.getParameter("requestSenderID"));
+		Account requestSender = accountData.getAccountByID(requestSenderID);
 		accountData.addFriend(requestSender, requestReciever.getID());
 		
 		requestReciever.addFriend(requestSender.getID());

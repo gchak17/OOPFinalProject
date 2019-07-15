@@ -69,8 +69,8 @@
 						<div class="wrap-form-button">
 							<div class="form-button"></div>
 							<input class = "button" type="submit" value="Accept" > <input
-								name="requestSenderUsername" type="hidden"
-								value=<%=requestSender.getUsername()%>>
+								name="requestSenderID" type="hidden"
+								value=<%=requestSender.getID()%>>
 						</div>
 					</div>
 				</form>
@@ -80,8 +80,8 @@
 					<div class="wrap-form-button">
 						<div class="form-button"></div>
 						<input class = "button" type="submit" value="Reject"> <input
-							name="requestSenderUsername" type="hidden"
-							value=<%=requestSender.getUsername()%>>
+							name="requestSenderID" type="hidden"
+							value=<%=requestSender.getID()%>>
 					</div>
 				</div>
 				</form>

@@ -42,9 +42,15 @@ public class RejectFriendRequestServlet extends HttpServlet {
 		FriendRequestManager friendRequestManager = (FriendRequestManager) getServletContext().getAttribute("friendRequestManager");
 		AccountData accountData = (AccountData)getServletContext().getAttribute("accountData");
 		Account requestReciever = (Account) request.getSession().getAttribute("user");
-		String requestSenderUsername = request.getParameter("requestSenderUsername");
-		Account requestSender = accountData.getAccountByUsername(requestSenderUsername);
+		
+		Long requestSenderID = Long.parseLong(request.getParameter("requestSenderID"));
+		Account requestSender = accountData.getAccountByID(requestSenderID);
+		
 		friendRequestManager.deleteFriendRequest(requestSender.getID(), requestReciever.getID());
+		
+		requestSender.removeFriend(requestReciever.getID());
+		requestReciever.removeFriend(requestSender.getID());
+		
 		request.getSession().removeAttribute("requestSender");
 		request.getRequestDispatcher("NotificationPage.jsp").forward(request, response);
 	}
