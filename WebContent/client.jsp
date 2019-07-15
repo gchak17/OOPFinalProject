@@ -23,15 +23,12 @@
 	</script>
 
 	<%
+		Account acc = (Account) session.getAttribute("user");
 		Player pl = (Player)request.getSession().getAttribute("player");
-		if (pl == null) {
-			Account acc = (Account) session.getAttribute("user");
-			if (acc == null) {
-				response.sendRedirect("login.jsp");
-			}else{
-				response.sendRedirect("main.jsp");
-			}
-			return;
+		if (acc == null || pl == null) {
+			response.sendRedirect("login.jsp");
+		}else{
+			response.sendRedirect("Main.jsp");
 		}
 	%>
 
