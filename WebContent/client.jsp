@@ -29,7 +29,7 @@
 			if (acc == null) {
 				response.sendRedirect("login.jsp");
 			}else{
-				response.sendRedirect("main.jsp");
+				response.sendRedirect("Main.jsp");
 			}
 			return;
 		}
