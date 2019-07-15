@@ -10,9 +10,9 @@ var lastPos = null;
 var currCol = "black";
 var modal = document.getElementById("myModal");
 
-var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
+//var gameSocket = new WebSocket("ws://192.168.98.14:8888/OOPFinalProject/client/game");
 //var gameSocket = new WebSocket("ws://localhost:8888/OOPFinalProject/client/game");
-//var gameSocket = new WebSocket('ws://' + window.location.host + '/OOPFinalProject/client/game');
+var gameSocket = new WebSocket('ws://' + window.location.host + '/OOPFinalProject/client/game');
 gameSocket.onmessage = function(evt) {
 	onMessage(evt)
 };

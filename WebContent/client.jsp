@@ -27,7 +27,7 @@
 		Player pl = (Player)request.getSession().getAttribute("player");
 		if (acc == null) {
 			response.sendRedirect("login.jsp");
-		}else if(pl == null){
+		}else if (pl == null){
 			response.sendRedirect("Main.jsp");
 		}
 	%>

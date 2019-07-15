@@ -116,7 +116,7 @@ public class Game {
 	public void startNewRound() {
 		// System.out.println("axali raundi");
 		roundCounter++;
-		System.out.println(roundCounter + " daa " + numRounds);
+		//System.out.println(roundCounter + " daa " + numRounds);
 		//if (roundStarterArtist != null) roundStarterArtist.shouldBeArtist(false);
 		//chooseStarterPainter();
 		// System.out.println(roundStarterArtist);
@@ -127,9 +127,9 @@ public class Game {
 	}
 
 	public void endRound() {
-		System.out.println("vai: " + roundCounter);
+		//System.out.println("vai: " + roundCounter);
 		if (roundCounter == numRounds || players.size() <= 1) {
-			System.out.println("aq var: " + roundCounter);
+			//System.out.println("aq var: " + roundCounter);
 			endGame();
 		} else {
 			newRoundTimer = new Timer();
@@ -153,7 +153,7 @@ public class Game {
 		}
 		GameSocket.sendMessage(id, new Message(json));	
 		
-		System.out.println("cocxali va2r");
+		//System.out.println("cocxali va2r");
 		//redirect to main jsp
 		Timer timer1 = new Timer();
 		timer1.schedule(new TimerTask() {
@@ -291,7 +291,7 @@ public class Game {
 
 					artist = players.get(index);
 					if (artist.equals(roundStarterArtist) || players.size() <= 1) {
-						System.out.println("fooork");
+						//System.out.println("fooork");
 						artist.shouldBeArtist(false);
 						turnOffTimers();
 						endRound();
