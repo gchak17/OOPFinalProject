@@ -324,7 +324,7 @@ public class Game {
 			GameSocket.sendMessage(artist.getGame().getId(), new Message(json));
 			
 			setChosenWordTime(null);
-			artist.endDrawing();
+			artist.shouldBeArtist(false);
 
 			generatePointsForPlayers();
 			sendPointsToWebSocket();
@@ -362,7 +362,7 @@ public class Game {
 							if(chosenWord.isEmpty()) sendWordsToArtist("autochooseword");
 						}
 					}, 10 * 1000);
-				artist.startDrawing();
+				artist.shouldBeArtist(true);
 
 				JSONObject json = new JSONObject();
 				json.put("command", "startturn");
