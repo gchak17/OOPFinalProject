@@ -459,7 +459,8 @@ public class Game {
 				key.addScore(res);
 			}
 			if (TurnPoints.containsKey(artist)) {
-				TurnPoints.put(artist, (numberOfGuesses == 0) ? 0 : allPoints / numberOfGuesses);
+				//TurnPoints.put(artist, (numberOfGuesses == 0) ? 0 : allPoints / numberOfGuesses);
+				TurnPoints.put(artist,(players.size() == 0) ? 0 : allPoints / players.size());
 			}
 		}
 		
