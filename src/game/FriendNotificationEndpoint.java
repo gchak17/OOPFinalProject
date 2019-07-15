@@ -23,6 +23,8 @@ public class FriendNotificationEndpoint {
 		HttpSession httpSession = (HttpSession) session.getUserProperties().get("HttpSession");
 		Account user = (Account)httpSession.getAttribute("user");
 		session.getUserProperties().put("user_id", user.getID());
+		
+		session.getUserProperties().put("user", user);
 		online.put(user.getID(), session);
 	}
 	
@@ -30,6 +32,7 @@ public class FriendNotificationEndpoint {
 	public void onClose(Session session){
 		Long user_id = (Long)session.getUserProperties().get("user_id");
 		session.getUserProperties().remove("user_id");
+		session.getUserProperties().remove("user");
 		online.remove(user_id);
 	}
 	
@@ -42,7 +45,8 @@ public class FriendNotificationEndpoint {
 		
 		JSONObject notification = new JSONObject();
 		
-		notification.put("sender", senderID);
+		Account user = (Account)(session.getUserProperties().get("user"));
+		notification.put("sender", user.getUsername());
 		
 		if(online.containsKey(receiverID)) {
 			Session reciever = online.get(receiverID);
