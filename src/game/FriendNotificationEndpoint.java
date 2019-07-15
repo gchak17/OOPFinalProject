@@ -46,7 +46,11 @@ public class FriendNotificationEndpoint {
 		JSONObject notification = new JSONObject();
 		
 		Account user = (Account)(session.getUserProperties().get("user"));
-		notification.put("sender", user.getUsername());
+		if((request.getString("notificationType")).equals("friendRequest")) {
+			notification.put("message", user.getUsername() + " has sent you a friend request!");
+		}else if((request.getString("notificationType")).equals("friendRemoval")) {
+			notification.put("message", user.getUsername() + " has unfriended you!");
+		}
 		
 		if(online.containsKey(receiverID)) {
 			Session reciever = online.get(receiverID);

@@ -68,7 +68,7 @@
 					<div class="container-form-button">
 						<div class="wrap-form-button">
 							<div class="form-button"></div>
-							<input class = "button" type="submit" value="Accept"> <input
+							<input class = "button" type="submit" value="Accept" > <input
 								name="requestSenderUsername" type="hidden"
 								value=<%=requestSender.getUsername()%>>
 						</div>
@@ -88,6 +88,8 @@
 				<%
 					}
 				%>
+				
+				
 				
 			</div>
 		</div>

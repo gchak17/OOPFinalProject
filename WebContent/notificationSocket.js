@@ -4,8 +4,8 @@ var notificationSocket = new WebSocket('ws://' + window.location.host + '/OOPFin
 		
 notificationSocket.onmessage = function(evt){
 	var notification = JSON.parse(evt.data);
-	var sender = notification.sender;
-	alert(sender + ' has sent you a friend request');
+	var message = notification.message;
+	alert(message);
 };
 
 function sendNotificationMessage(message){

@@ -73,6 +73,11 @@ public class RemoveFriendServlet extends HttpServlet {
 				accountData.removeFriend(user, friendAccount.getID());
 				resp.put("responseText", "friend " + friendUserName + " was removed.");
 				resp.put("success", true);
+				JSONObject notificationLog = new JSONObject();
+				notificationLog.put("notificationType", "friendRemoval");
+				notificationLog.put("senderID", user.getID());
+				notificationLog.put("receiverID", accountData.getAccountByUsername(friendUserName).getID());
+				resp.put("notificationLog", notificationLog);
 			}
 		}else{
 			resp.put("responseText", "user with that name does not exist.");
